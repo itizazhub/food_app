@@ -1,4 +1,4 @@
-import 'package:food_app/features/auth/domain/entities/user.dart';
+import 'package:food_app/features/user/domain/entities/user.dart';
 
 abstract class UserRepository {
   Future<void> addUser(User user);

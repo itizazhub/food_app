@@ -1,0 +1,47 @@
+I want to build food app with flutter.
+
+First of all check the following entities and relationships find errors and mistakes, rewrite all of them:
+1. User
+	id, user_name, password
+2. Product
+	id, product_name, description, category_id, quantity, image_url, 
+3. Category
+	id, category_name
+4. Orders
+	id, date, user_id, list_of_products(user_cart_details), total, pickup/delivery, payment_method_id, status_id, address_id
+5. Cart
+	id, user_id, product_list(product_id, quantity), total
+6. PaymentMethod
+	id, name	
+7. Status
+	id, name
+8. Address
+	id, user_id, address
+9. Rating
+	id, product_id, rating(out of 5), user_id
+10. Review
+	id, product_id, review, user_id
+11. Item
+	product_id, quantity
+
+Second thing is:
+For folder structure i want to use clean architecture(datasource/domain/presentaion per feature)
+For state management i want to use riverpod
+For backend i want to use firebase(no sdk and cloud simple realtime database to which i can send http requests)
+
+Now i am super confused, how i can divide my app into features(how many features should be)?
+If one feature is depended on another feature how i can hanndle them?
+
+Main features of app:
+Authorization and authentication (admin user)
+admin manages products users and orders
+users can place order login signup and view orders
+
+// use equatable for object comparision
+// dartz for Either
+
+
+
+
+
+

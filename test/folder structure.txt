@@ -1,0 +1,36 @@
+lib/
+│
+├── core/                      # Shared utilities, errors, constants
+│   ├── network/
+│   ├── exceptions/
+│   ├── widgets/
+│   └── utils/
+│
+├── features/
+│   ├── auth/                  # Authentication (Login, Signup)
+│   │   ├── data/
+│   │   │   ├── datasources/
+│   │   │   ├── models/
+│   │   │   └── repositories/
+│   │   ├── domain/
+│   │   │   ├── entities/
+│   │   │   ├── repositories/
+│   │   │   └── usecases/
+│   │   └── presentation/
+│   │       ├── providers/
+│   │       ├── views/
+│   │       └── widgets/
+│   │
+│   ├── product/
+│   ├── cart/
+│   ├── order/
+│   ├── user/
+│   ├── category/
+│   ├── payment/
+│   ├── review/
+│   ├── rating/
+│   ├── address/
+│   └── admin/                 # Optional: shared admin panel
+│
+├── main.dart
+└── bootstrap.dart             # App init and providers

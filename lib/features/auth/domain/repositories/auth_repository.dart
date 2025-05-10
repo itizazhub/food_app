@@ -1,6 +1,10 @@
-import 'package:food_app/features/user/domain/entities/user.dart';
+import 'package:food_app/features/core/error/failures.dart';
+import 'package:food_app/features/auth/domain/entities/user.dart';
+import 'dart:core';
+import 'package:dartz/dartz.dart';
 
 abstract class AuthRepository {
-  Future<User> login({required String username, required String password});
+  Future<Either<Failure, User>> login(
+      {required String username, required String password});
   Future<void> signup({required User user});
 }

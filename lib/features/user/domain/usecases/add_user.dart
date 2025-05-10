@@ -5,6 +5,6 @@ class AddUser {
   AddUser({required this.userRepository});
   UserRepository userRepository;
   Future<void> call(User user) async {
-    userRepository.addUser(user);
+    userRepository.addUser(user: user);
   }
 }

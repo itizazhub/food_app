@@ -1,5 +1,5 @@
 import 'package:food_app/features/auth/domain/repositories/auth_repository.dart';
-import 'package:food_app/features/user/domain/entities/user.dart';
+import 'package:food_app/features/auth/domain/entities/user.dart';
 
 class Signup {
   Signup({required this.authRepository});

@@ -20,3 +20,10 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+// use go router for navigation
+// equatable for object comparision
+// rectofar for api requests
+// either(righ left)
+//

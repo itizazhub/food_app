@@ -5,7 +5,6 @@ class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     super.key,
     this.width = 200,
-    this.height = 26,
     this.fontSize = 12,
     this.radius = 30,
     this.fontColor = const Color.fromARGB(255, 57, 23, 19),
@@ -19,7 +18,6 @@ class CustomTextFormField extends StatelessWidget {
   });
 
   final double width;
-  final double height;
   final double fontSize;
   final double radius;
   final Color background;

@@ -165,7 +165,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           controller: _usernameController,
                           background: const Color.fromARGB(255, 243, 233, 181),
                           radius: 12,
-                          height: 45,
                           width: double.infinity,
                           fontSize: 20,
                           validator: (value) {
@@ -191,7 +190,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         CustomTextFormField(
                           background: const Color.fromARGB(255, 243, 233, 181),
                           radius: 12,
-                          height: 45,
                           width: double.infinity,
                           fontSize: 20,
                           suffixIcon: const Icon(

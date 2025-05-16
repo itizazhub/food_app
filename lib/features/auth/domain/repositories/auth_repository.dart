@@ -6,5 +6,5 @@ import 'package:dartz/dartz.dart';
 abstract class AuthRepository {
   Future<Either<Failure, User>> login(
       {required String username, required String password});
-  Future<void> signup({required User user});
+  Future<Either<Failure, User>> signup({required User user});
 }

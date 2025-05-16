@@ -13,7 +13,7 @@ class UserFirebaseDatasource {
           await http.get(url, headers: {"Content-Type": "application/json"});
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        print("login get request status code ${response.statusCode}");
+        print("Get users request status code ${response.statusCode}");
 
         // Decode the response body and map it to TaskModel
         Map<String, dynamic> result = jsonDecode(response.body);
@@ -22,12 +22,33 @@ class UserFirebaseDatasource {
           return UserModel.fromJson(jsonUser.key, jsonUser.value);
         }).toList();
       } else {
-        print("login get request error status code ${response.statusCode}");
+        print("Get users request error status code ${response.statusCode}");
         return [];
       }
     } catch (e) {
-      print("login get request Something bad happened $e");
+      print("Get users request Something bad happened $e");
       return [];
+    }
+  }
+
+  Future<void> createUser(UserModel user) async {
+    final url = Uri.https(
+        "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app",
+        "users.json");
+
+    try {
+      final response = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: json.encode(user.toJson()));
+
+      // Correcting the status code check
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        print("Post user created successfully ${response.statusCode}");
+      } else {
+        print("Post create user error happened ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Post create user Something bad happened $e");
     }
   }
 }

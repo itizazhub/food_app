@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
 import 'package:food_app/features/auth/data/datasources/user_firebase_datasource.dart';
 import 'package:food_app/features/auth/data/models/user_model.dart';
@@ -24,8 +25,27 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> signup({required User user}) {
-    // TODO: implement signup
-    throw UnimplementedError();
+  Future<Either<Failure, User>> signup({required User user}) async {
+    try {
+      List<UserModel> users = await userFirebaseDatasource.getUsers();
+
+      // Check if a user with the same username already exists
+      UserModel? existingUser =
+          users.firstWhereOrNull((u) => u.username == user.username);
+
+      if (existingUser != null) {
+        return Left(SomeSpecificError(
+            "User ${existingUser.username} is already available"));
+      }
+
+      // User doesn't exist, create a new one
+      UserModel newUser = UserModel.fromEntity(user);
+      await userFirebaseDatasource.createUser(newUser);
+
+      return Right(newUser.toEntity());
+    } catch (error) {
+      print("Something went wrong during signup: $error");
+      return Left(SomeSpecificError(error.toString()));
+    }
   }
 }

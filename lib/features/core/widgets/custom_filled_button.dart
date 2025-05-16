@@ -1,23 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-/*
----colors---
-yellow 245, 203, 88
-light yellow 243, 233, 181
-orange 233, 83, 34
-light orange 255, 222, 207
-font 1 57, 23, 19 darkone
-font 2 248, 248, 248 lightone
----font sizes---
-paragraph 14 league spartan light
-title 24 26 league spartan bold
-subtitle 20 league spartan medium 
-screen title 28 league spartan bold
-*/
-
 class CustomFilledButton extends StatelessWidget {
-  CustomFilledButton({
+  const CustomFilledButton({
     super.key,
     this.text = "",
     this.widht = 207,
@@ -28,42 +13,49 @@ class CustomFilledButton extends StatelessWidget {
     this.fontWeight = FontWeight.w500,
     this.backgroundColor = const Color.fromARGB(255, 233, 83, 34),
     this.foregroundcolor = const Color.fromARGB(255, 248, 248, 248),
-    required this.callBack,
+    this.callBack,
+    this.isLoading = false,
   });
-  String text;
-  double widht;
-  double height;
-  double fontSize;
-  FontWeight fontWeight;
-  Color backgroundColor;
-  Color foregroundcolor;
-  double horizental;
-  double vertical;
-  final Function callBack;
+
+  final String text;
+  final double widht;
+  final double height;
+  final double fontSize;
+  final FontWeight fontWeight;
+  final Color backgroundColor;
+  final Color foregroundcolor;
+  final double horizental;
+  final double vertical;
+  final bool isLoading;
+
+  /// Nullable async callback
+  final Future<void> Function()? callBack;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: widht,
       height: height,
       child: FilledButton(
-        onPressed: () {
-          callBack();
-        },
+        onPressed: callBack == null
+            ? null
+            : () async {
+                await callBack!(); // safe to call now
+              },
         style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.all<Color>(
-            backgroundColor,
-          ),
-          foregroundColor: WidgetStateProperty.all<Color>(
-            foregroundcolor,
-          ),
+          backgroundColor: WidgetStateProperty.all<Color>(backgroundColor),
+          foregroundColor: WidgetStateProperty.all<Color>(foregroundcolor),
         ),
-        child: Text(
-          text,
-          style: GoogleFonts.leagueSpartan(
-              color: foregroundcolor,
-              fontSize: fontSize,
-              fontWeight: fontWeight),
-        ),
+        child: isLoading
+            ? const CircularProgressIndicator(color: Colors.white)
+            : Text(
+                text,
+                style: GoogleFonts.leagueSpartan(
+                  color: foregroundcolor,
+                  fontSize: fontSize,
+                  fontWeight: fontWeight,
+                ),
+              ),
       ),
     );
   }

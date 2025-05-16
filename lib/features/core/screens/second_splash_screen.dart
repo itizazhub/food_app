@@ -28,14 +28,14 @@ class SecondSplashScreen extends StatefulWidget {
 }
 
 class _SecondSplashScreenState extends State<SecondSplashScreen> {
-  void _navigateToLogInPage() {
+  Future<void> _navigateToLogInPage() async {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => LoginScreen()),
     );
   }
 
-  void _navigateToSignUpPage() {
+  Future<void> _navigateToSignUpPage() async {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SignUpScreen()),

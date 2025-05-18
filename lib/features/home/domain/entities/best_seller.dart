@@ -1,4 +1,5 @@
 class BestSeller {
-  BestSeller();
-  final productId;
+  BestSeller({required this.bestSellerId, required this.productId});
+  String bestSellerId;
+  String productId;
 }

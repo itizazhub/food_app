@@ -53,7 +53,7 @@ class _SecondSplashScreenState extends State<SecondSplashScreen> {
             children: [
               SvgPicture.asset(
                 color: const Color.fromARGB(255, 245, 203, 88),
-                "assets/logo-icons/logo.svg",
+                "logo-icons/logo.svg",
                 width: 200,
                 height: 180,
               ),

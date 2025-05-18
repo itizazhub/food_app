@@ -3,10 +3,10 @@ import 'package:food_app/features/core/error/failures.dart';
 import 'package:food_app/features/home/domain/entities/recommended.dart';
 import 'package:food_app/features/home/domain/repositories/recommended_respository.dart';
 
-class GetRecommended {
-  GetRecommended({required this.recommendedRespository});
+class GetRecommendeds {
+  GetRecommendeds({required this.recommendedRespository});
   RecommendedRespository recommendedRespository;
   Future<Either<Failure, List<Recommended>>> call() {
-    return recommendedRespository.getRecommended();
+    return recommendedRespository.getRecommendeds();
   }
 }

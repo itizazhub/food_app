@@ -31,7 +31,7 @@ class _FirstSplashScreenState extends State<FirstSplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset(
-                "assets/logo.svg",
+                "assets/logo-icons/logo.svg",
                 width: 200,
                 height: 180,
               ),

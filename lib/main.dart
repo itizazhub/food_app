@@ -23,6 +23,10 @@ class MyApp extends StatelessWidget {
 }
 
 
+
+
+
+
 // use go router for navigation
 // equatable for object comparision
 // retrofit for api requests

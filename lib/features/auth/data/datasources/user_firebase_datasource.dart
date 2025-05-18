@@ -1,7 +1,6 @@
 import 'dart:convert';
-
-import 'package:food_app/features/auth/data/models/user_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:food_app/features/auth/data/models/user_model.dart';
 
 class UserFirebaseDatasource {
   Future<List<UserModel>> getUsers() async {

@@ -71,5 +71,65 @@
       "user_id": "user_id_123",
       "rating": 5
     }
-  }
+  },
+"recommended" : {
+	"recommeded_id":{
+	"product_id": "",
+	}
+},
+"best_seller": {
+	"best_seller_id": {
+	"product_id": "",	
+	}
+},
+"favorites":{
+	"favorites_id"{
+	"user_id": "",
+	"product_id": "",}
+	}
+
 }
+
+
+
+
+//products
+// "product_name": "1",
+// "description": "Lorem ipsum dolor sit amet, consectetur...",
+// "price": 9.99,
+// "category_id": "-OQS-N30cMiRV2rTy02g",
+// "stock_quantity": 30,
+// "image_url": "assets/drinks-images/1.jpg"
+
+//category
+// "category": "drinks",
+// "image_url": "assets/categories-icons/drinks.svg",
+
+//favorties
+// "user_id": "",
+// "product_id": "",
+
+//recommended
+// "product_id": "-OQRy9bWNQ9b_NyW20FM",
+
+
+
+
+
+// use go router for navigation
+// equatable for object comparision
+// retrofit for api requests
+// either(righ left)
+//
+
+
+
+
+
+
+
+
+
+
+
+

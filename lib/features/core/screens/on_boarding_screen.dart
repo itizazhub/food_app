@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:food_app/features/product/presentation/screens/home_screen.dart';
+import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   // If you want to use key, then use this, but it's not mandatory unless you need to use the key.
@@ -42,7 +42,7 @@ class _OnBoardingScreen extends State<OnBoardingScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SvgPicture.asset(
-                        "assets/order.svg",
+                        "order.svg",
                         width: 50,
                         height: 50,
                       ),

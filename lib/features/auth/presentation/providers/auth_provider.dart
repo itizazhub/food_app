@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/auth/data/datasources/user_firebase_datasource.dart';
 import 'package:food_app/features/auth/data/repositories/auth_repository_impl.dart';
@@ -43,7 +42,7 @@ class AuthUserNotifier extends StateNotifier<User?> {
           await loginUser(password: password, username: username);
       state =
           userOrFailure.fold((error) => state = null, (user) => state = user);
-    } catch (e, st) {
+    } catch (e) {
       state = null;
     }
   }
@@ -62,7 +61,7 @@ class AuthUserNotifier extends StateNotifier<User?> {
               isAdmin: false));
       state =
           userOrFailure.fold((error) => state = null, (user) => state = user);
-    } catch (e, st) {
+    } catch (e) {
       state = null;
     }
   }

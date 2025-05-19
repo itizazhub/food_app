@@ -15,7 +15,7 @@ class CategoryModel {
     return CategoryModel(
       categoryId: key,
       category: json["category"],
-      imageUrl: json["imageUrl"],
+      imageUrl: json["image_url"],
     );
   }
   factory CategoryModel.fromEntity({required Category category}) {
@@ -28,14 +28,12 @@ class CategoryModel {
   Map<String, dynamic> toJson({required CategoryModel category}) {
     return {
       "category": category.category,
-      "imageUrl": category.imageUrl,
+      "image_url": category.imageUrl,
     };
   }
 
-  Category toEntity({required CategoryModel category}) {
+  Category toEntity() {
     return Category(
-        categoryId: category.categoryId,
-        category: category.category,
-        imageUrl: category.imageUrl);
+        categoryId: category, category: category, imageUrl: category);
   }
 }

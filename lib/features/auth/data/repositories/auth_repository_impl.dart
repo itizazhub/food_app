@@ -40,9 +40,10 @@ class AuthRepositoryImpl implements AuthRepository {
 
       // User doesn't exist, create a new one
       UserModel newUser = UserModel.fromEntity(user);
-      await userFirebaseDatasource.createUser(newUser);
+      final userOrFailure = await userFirebaseDatasource.createUser(newUser);
 
-      return Right(newUser.toEntity());
+      return userOrFailure
+          .map((createdUserModel) => createdUserModel.toEntity());
     } catch (error) {
       print("Something went wrong during signup: $error");
       return Left(SomeSpecificError(error.toString()));

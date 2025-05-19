@@ -7,7 +7,10 @@ class BestSellerModel {
 
   factory BestSellerModel.fromJson(
       {required String key, required Map<String, dynamic> json}) {
-    return BestSellerModel(bestSellerId: key, productId: json["prodductId"]);
+    return BestSellerModel(
+      bestSellerId: key,
+      productId: json["prodduct_id"],
+    );
   }
   factory BestSellerModel.fromEntity({required BestSeller bestSeller}) {
     return BestSellerModel(
@@ -18,7 +21,7 @@ class BestSellerModel {
 
   Map<String, dynamic> toJson() {
     return {
-      "productId": productId,
+      "product_id": productId,
     };
   }
 

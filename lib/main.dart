@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
 }
 
 
-
-
+// things to do // 
+// handle get request for one or more elements
 
 
 // use go router for navigation

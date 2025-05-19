@@ -9,7 +9,7 @@ class RecommendedModel {
       {required String key, required Map<String, dynamic> json}) {
     return RecommendedModel(
       recommendedId: key,
-      productId: json["productId"],
+      productId: json["product_id"],
     );
   }
   factory RecommendedModel.fromEntity({required Recommended recommended}) {
@@ -21,7 +21,7 @@ class RecommendedModel {
 
   Map<String, dynamic> toJson() {
     return {
-      "productId": productId,
+      "product_id": productId,
     };
   }
 

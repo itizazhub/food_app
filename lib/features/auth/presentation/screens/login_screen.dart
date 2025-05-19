@@ -56,8 +56,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Welcome, ${user.username}!")),
       );
-
-      // Navigate to another screen if needed
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Login failed. Please try again.")),
@@ -243,7 +241,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SvgPicture.asset(
-                                    "assets/GoogleIcon.svg",
+                                    "social-media-icons/GoogleIcon.svg",
                                     width: 40,
                                     height: 40,
                                   ),
@@ -251,7 +249,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     width: 5,
                                   ),
                                   SvgPicture.asset(
-                                    "assets/FacebookIcon.svg",
+                                    "social-media-icons/FacebookIcon.svg",
                                     width: 40,
                                     height: 40,
                                   ),
@@ -259,7 +257,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     width: 5,
                                   ),
                                   SvgPicture.asset(
-                                    "assets/FingerprintIcon.svg",
+                                    "social-media-icons/FingerprintIcon.svg",
                                     width: 40,
                                     height: 40,
                                   ),
@@ -296,27 +294,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           items: [
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "assets/home.svg",
+                  "bottom-navigation-icons/home.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "assets/categories.svg",
+                  "bottom-navigation-icons/categories.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "assets/favorites.svg",
+                  "bottom-navigation-icons/favorites.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "assets/list.svg",
+                  "bottom-navigation-icons/list.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "assets/help.svg",
+                  "bottom-navigation-icons/help.svg",
                 ),
                 label: "")
           ],

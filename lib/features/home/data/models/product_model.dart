@@ -22,12 +22,12 @@ class ProductModel {
       {required String key, required Map<String, dynamic> json}) {
     return ProductModel(
       productId: key,
-      categoryId: json["categoryId"],
+      categoryId: json["category_id"],
       description: json["description"],
-      imageUrl: json["imageUrl"],
+      imageUrl: json["image_url"],
       price: json["price"],
-      productName: json["productName"],
-      stockQuantity: json["stockQuantity"],
+      productName: json["product_name"],
+      stockQuantity: json["stock_quantity"],
     );
   }
 
@@ -44,12 +44,12 @@ class ProductModel {
   }
   Map<String, dynamic> toJson() {
     return {
-      "categoryId": categoryId,
+      "category_id": categoryId,
       "description": description,
-      "imageUrl": imageUrl,
+      "image_url": imageUrl,
       "price": price,
-      "productName": productName,
-      "stockQuantity": stockQuantity,
+      "product_name": productName,
+      "stock_quantity": stockQuantity,
     };
   }
 

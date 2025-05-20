@@ -9,7 +9,7 @@ class BestSellerModel {
       {required String key, required Map<String, dynamic> json}) {
     return BestSellerModel(
       bestSellerId: key,
-      productId: json["prodduct_id"],
+      productId: json["product_id"],
     );
   }
   factory BestSellerModel.fromEntity({required BestSeller bestSeller}) {

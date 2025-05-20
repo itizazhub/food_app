@@ -25,9 +25,11 @@ class ProductModel {
       categoryId: json["category_id"],
       description: json["description"],
       imageUrl: json["image_url"],
-      price: json["price"],
+      price: (json["price"] is String)
+          ? double.tryParse(json["price"]) ?? 0.0
+          : (json["price"] as num).toDouble(),
       productName: json["product_name"],
-      stockQuantity: json["stock_quantity"],
+      stockQuantity: json["stock_quantity"].toString(),
     );
   }
 

@@ -15,7 +15,7 @@ class BestSellerFirebasedatasource {
         print("Get best sellers request status code ${response.statusCode}");
 
         Map<String, dynamic> result = jsonDecode(response.body);
-
+        print("result of best sellers: $result");
         return result.entries.map((jsonBestSeller) {
           return BestSellerModel.fromJson(
               key: jsonBestSeller.key, json: jsonBestSeller.value);

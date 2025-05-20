@@ -13,6 +13,7 @@ class FirstSplashScreen extends StatefulWidget {
 class _FirstSplashScreenState extends State<FirstSplashScreen> {
   @override
   initState() {
+    super.initState();
     Future.delayed(const Duration(seconds: 10), () {
       Navigator.pushReplacement(
         context,

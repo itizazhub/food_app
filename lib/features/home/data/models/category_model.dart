@@ -34,6 +34,6 @@ class CategoryModel {
 
   Category toEntity() {
     return Category(
-        categoryId: category, category: category, imageUrl: category);
+        categoryId: categoryId, category: category, imageUrl: imageUrl);
   }
 }

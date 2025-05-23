@@ -16,7 +16,7 @@ class ProductModel {
   String imageUrl;
   double price;
   String productName;
-  String stockQuantity;
+  int stockQuantity;
 
   factory ProductModel.fromJson(
       {required String key, required Map<String, dynamic> json}) {
@@ -29,7 +29,7 @@ class ProductModel {
           ? double.tryParse(json["price"]) ?? 0.0
           : (json["price"] as num).toDouble(),
       productName: json["product_name"],
-      stockQuantity: json["stock_quantity"].toString(),
+      stockQuantity: int.tryParse(json["stock_quantity"].toString()) ?? 0,
     );
   }
 

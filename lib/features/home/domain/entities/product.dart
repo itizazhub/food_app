@@ -15,7 +15,7 @@ class Product {
   String imageUrl;
   double price;
   String productName;
-  String stockQuantity;
+  int stockQuantity;
 
   Product copyWith({
     String? productId,
@@ -24,7 +24,7 @@ class Product {
     String? imageUrl,
     double? price,
     String? productName,
-    String? stockQuantity,
+    int? stockQuantity,
   }) {
     return Product(
       productId: productId ?? this.productId,

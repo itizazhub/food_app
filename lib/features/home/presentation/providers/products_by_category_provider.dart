@@ -2,7 +2,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/home/data/datasources/product_firebasedatasource.dart';
 import 'package:food_app/features/home/data/repositories/product_repository_impl.dart';
 import 'package:food_app/features/home/domain/entities/product.dart';
-import 'package:food_app/features/home/domain/usecases/get_products.dart';
 import 'package:food_app/features/home/domain/usecases/get_products_by_category.dart';
 
 final productsDatasource = Provider<ProductFirebasedatasource>((ref) {
@@ -14,21 +13,25 @@ final productsRepository = Provider<ProductRepositoryImpl>((ref) {
       productFirebasedatasource: ref.read(productsDatasource));
 });
 
-final getProductsProvider = Provider<GetProducts>((ref) {
-  return GetProducts(productRepository: ref.read(productsRepository));
+final getProductsByCategoryProvider = Provider<GetProductsByCategory>((ref) {
+  return GetProductsByCategory(productRepository: ref.read(productsRepository));
 });
 
-final productsNotifierProvider =
-    StateNotifierProvider<ProductsNotifier, List<Product>>((ref) {
-  final getProductsUseCase = ref.read(getProductsProvider);
-  return ProductsNotifier(getProductsUseCase: getProductsUseCase);
+final productsByCategoryNotifierProvider =
+    StateNotifierProvider<ProductsByCategoryNotifier, List<Product>>((ref) {
+  final getProductsByCategory = ref.read(getProductsByCategoryProvider);
+  return ProductsByCategoryNotifier(
+      getProductsByCategoryUseCase: getProductsByCategory);
 });
 
-class ProductsNotifier extends StateNotifier<List<Product>> {
-  ProductsNotifier({required this.getProductsUseCase}) : super([]);
-  GetProducts getProductsUseCase;
-  Future<void> getProducts({required List<String> keys}) async {
-    final productsOrFailure = await getProductsUseCase(keys: keys);
+class ProductsByCategoryNotifier extends StateNotifier<List<Product>> {
+  ProductsByCategoryNotifier({required this.getProductsByCategoryUseCase})
+      : super([]);
+  GetProductsByCategory getProductsByCategoryUseCase;
+
+  Future<void> getProductsByCategory({required String categoryId}) async {
+    final productsOrFailure =
+        await getProductsByCategoryUseCase(categoryId: categoryId);
     productsOrFailure.fold(
       (failure) {
         state = [];

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
+import 'package:food_app/features/home/domain/entities/product.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductScreen extends ConsumerStatefulWidget {
-  const ProductScreen({super.key});
+  ProductScreen({super.key, required this.product});
+  Product product;
 
   @override
   ConsumerState<ProductScreen> createState() => _ProductScreenState();
@@ -106,7 +108,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                           ),
                         ),
                         Text(
-                          "Mexican Appetizer",
+                          widget.product.productName,
                           style: GoogleFonts.leagueSpartan(
                             fontSize: 20,
                             fontWeight: FontWeight.w700,
@@ -152,7 +154,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(18),
                         child: Image.asset(
-                          "meal-images/1.jpg",
+                          widget.product.imageUrl,
                           fit: BoxFit.cover,
                           height: 320,
                           width: double.infinity,
@@ -165,7 +167,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                           Row(
                             children: [
                               Text(
-                                "\$50.00",
+                                "\$${widget.product.price.toString()}",
                                 style: GoogleFonts.leagueSpartan(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w500,
@@ -204,7 +206,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                     if (_quantity > 0) _quantity--;
                                   });
                                 },
-                                child: CircleAvatar(
+                                child: const CircleAvatar(
                                   radius: 10.5,
                                   backgroundColor:
                                       const Color.fromARGB(180, 168, 121, 93),
@@ -224,7 +226,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                     _quantity++;
                                   });
                                 },
-                                child: CircleAvatar(
+                                child: const CircleAvatar(
                                   radius: 10.5,
                                   backgroundColor:
                                       const Color.fromARGB(180, 209, 91, 22),
@@ -240,12 +242,16 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                         ],
                       ),
                       const Divider(),
-                      Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.",
-                        style: GoogleFonts.leagueSpartan(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: const Color.fromARGB(255, 51, 29, 22),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          widget.product.description,
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: const Color.fromARGB(255, 51, 29, 22),
+                          ),
+                          textAlign: TextAlign.start,
                         ),
                       ),
                       const SizedBox(height: 20),

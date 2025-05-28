@@ -59,6 +59,43 @@ class ProductFirebasedatasource {
       return Left(SomeSpecificError("Exception: $e"));
     }
   }
+
+  Future<Either<Failure, List<ProductModel>>> getProductsByCategory(
+      {required String categoryId}) async {
+    final url = Uri.https(
+      "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app",
+      "products.json",
+      {
+        "orderBy": '"category_id"',
+        "equalTo": '"$categoryId"',
+      },
+    );
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        print("Get product by category success: ${response.statusCode}");
+        Map<String, dynamic> result = jsonDecode(response.body);
+        print("product result is: $result");
+
+        return Right(result.entries.map((productJson) {
+          return ProductModel.fromJson(
+              key: productJson.key, json: productJson.value);
+        }).toList());
+      } else {
+        print("Get product by category failed: ${response.statusCode}");
+        return Left(SomeSpecificError(
+            "Failed to fetch product: ${response.statusCode}"));
+      }
+    } catch (e) {
+      print("Exception while fetching product by category: $e");
+      return Left(SomeSpecificError("Exception: $e"));
+    }
+  }
 }
 
   // Future<void> createUser(UserModel user) async {

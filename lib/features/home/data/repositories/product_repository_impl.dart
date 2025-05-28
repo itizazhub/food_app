@@ -26,4 +26,22 @@ class ProductRepositoryImpl implements ProductRepository {
       return Left(SomeSpecificError(error.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<Product>>> getProductsByCategory(
+      {required String categoryId}) async {
+    try {
+      final productsOrFailure = await productFirebasedatasource
+          .getProductsByCategory(categoryId: categoryId);
+
+      return productsOrFailure.fold(
+        (failure) => Left(SomeSpecificError(failure.message)),
+        (products) => Right(
+          products.map((productModel) => productModel.toEntity()).toList(),
+        ),
+      );
+    } catch (error) {
+      return Left(SomeSpecificError(error.toString()));
+    }
+  }
 }

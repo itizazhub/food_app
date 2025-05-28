@@ -9,16 +9,16 @@ import 'package:food_app/features/home/presentation/providers/products_provider.
 import 'package:food_app/features/home/presentation/providers/recommendeds_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeGrid extends ConsumerStatefulWidget {
-  HomeGrid({super.key});
+class BestSellerGrid extends ConsumerStatefulWidget {
+  BestSellerGrid({super.key});
 
   @override
-  ConsumerState<HomeGrid> createState() => _HomeGridState();
+  ConsumerState<BestSellerGrid> createState() => _BestSellerGridState();
 }
 
-class _HomeGridState extends ConsumerState<HomeGrid> {
+class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
   List<Product> recommendedProducts = [];
-  List<Category> categoies = [];
+  List<Category> categories = [];
   @override
   void initState() {
     super.initState();
@@ -26,13 +26,25 @@ class _HomeGridState extends ConsumerState<HomeGrid> {
   }
 
   Future<void> _initializeData() async {
-    recommendedProducts = await getRecommendeds();
-    categoies = await getCategoies();
+    final recommended = await getRecommendeds();
+    final cats = await getCategoies();
+
+    setState(() {
+      recommendedProducts = recommended;
+      categories = cats;
+    });
   }
 
   Future<List<Category>> getCategoies() async {
     await ref.read(categoriesNotifierProvider.notifier).getCategories();
     final categories = ref.watch(categoriesNotifierProvider);
+    print("these are categories length is: ${categories.length}");
+    print(categories[0].categoryId);
+    print(categories[1].categoryId);
+    print(categories[2].categoryId);
+    print(categories[3].categoryId);
+    print(categories[4].categoryId);
+
     return categories;
   }
 
@@ -60,6 +72,16 @@ class _HomeGridState extends ConsumerState<HomeGrid> {
       ),
       itemCount: recommendedProducts.length,
       itemBuilder: (BuildContext context, int index) {
+        final url = categories
+            .firstWhere(
+              (category) =>
+                  category.categoryId == recommendedProducts[index].categoryId,
+              orElse: () => Category(
+                  categoryId: '', category: '', imageUrl: ''), // or show error
+            )
+            .imageUrl;
+        print("This is category url: $url");
+
         return Card(
           elevation: 0,
           color: const Color.fromARGB(255, 248, 248, 248),
@@ -89,10 +111,17 @@ class _HomeGridState extends ConsumerState<HomeGrid> {
                     top: 8,
                     left: 8,
                     child: CustomIcon(
-                      path: categoies.firstWhere((category) {
-                        return category.categoryId ==
-                            recommendedProducts[index].categoryId;
-                      }).imageUrl,
+                      path: categories
+                          .firstWhere(
+                            (category) =>
+                                category.categoryId ==
+                                recommendedProducts[index].categoryId,
+                            orElse: () => Category(
+                                categoryId: '',
+                                category: '',
+                                imageUrl: ''), // or show error
+                          )
+                          .imageUrl,
                     ),
                   ),
                   // Favorite Icon (Top-right)

@@ -2,16 +2,19 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:food_app/features/best-sellers/presentation/screens/best_seller_screen.dart';
+import 'package:food_app/features/categories/presentation/screens/categories_screen.dart';
 import 'package:food_app/features/core/widgets/best_seller_list_view.dart';
 import 'package:food_app/features/core/widgets/custom_input_text_field.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
-import 'package:food_app/features/core/widgets/home_grid.dart';
+import 'package:food_app/features/home/presentation/widgets/recommended_grid.dart';
 import 'package:food_app/features/home/domain/entities/category.dart';
 import 'package:food_app/features/home/domain/entities/product.dart';
 import 'package:food_app/features/home/presentation/providers/best_sellers_provider.dart';
 import 'package:food_app/features/home/presentation/providers/categories_provider.dart';
 import 'package:food_app/features/home/presentation/providers/products_provider.dart';
 import 'package:food_app/features/home/presentation/providers/recommendeds_provider.dart';
+import 'package:food_app/features/recommended/presentation/screens/recommended_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -26,6 +29,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<Product> recommendedProducts = [];
   List<Product> bestSellerProducts = [];
   int _currentIndex = 0;
+
   @override
   void initState() {
     super.initState();
@@ -33,9 +37,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<void> _initializeData() async {
-    categoies = await getCategoies();
-    bestSellerProducts = await getBestSellers();
-    recommendedProducts = await getRecommendeds();
+    final cats = await getCategoies();
+    final bests = await getBestSellers();
+    final recommends = await getRecommendeds();
+
+    setState(() {
+      categoies = cats;
+      bestSellerProducts = bests;
+      recommendedProducts = recommends;
+    });
   }
 
   Future<List<Category>> getCategoies() async {
@@ -77,7 +87,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                Text("recommendations")), //RecommendationsScreen()
+                Text("recommended")), //RecommendationsScreen()
       );
     } else if (_currentIndex == 4) {
       Navigator.push(
@@ -92,6 +102,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       );
     }
     // You can add additional navigation conditions for other indices if needed.
+  }
+
+  void goToBestSellerScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => BestSellerScreen()), //RecommendationsScreen()
+    );
+  }
+
+  void goToRecommendedScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => RecommendedScreen()), //RecommendationsScreen()
+    );
+  }
+
+  void goToCategoriesScreen({required String categoryId}) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CategoriesScreen(
+                categoryId: categoryId,
+              )), //RecommendationsScreen()
+    );
   }
 
   @override
@@ -187,56 +223,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            CustomIcon(
-                              width: 50,
-                              height: 62,
-                              background:
-                                  const Color.fromARGB(255, 255, 222, 207),
-                              path: "categories-icons/Snacks.svg",
-                              label: "Snacks",
-                              padding: 6,
-                              radius: 23,
-                            ),
-                            CustomIcon(
-                              width: 50,
-                              height: 62,
-                              background:
-                                  const Color.fromARGB(255, 255, 222, 207),
-                              path: "categories-icons/Meals.svg",
-                              label: "Meals",
-                              padding: 6,
-                              radius: 23,
-                            ),
-                            CustomIcon(
-                              width: 50,
-                              height: 62,
-                              background:
-                                  const Color.fromARGB(255, 255, 222, 207),
-                              path: "categories-icons/Vegan.svg",
-                              label: "Vegan",
-                              padding: 6,
-                              radius: 23,
-                            ),
-                            CustomIcon(
-                              width: 50,
-                              height: 62,
-                              background:
-                                  const Color.fromARGB(255, 255, 222, 207),
-                              path: "categories-icons/Desserts.svg",
-                              label: "Desserts",
-                              padding: 6,
-                              radius: 23,
-                            ),
-                            CustomIcon(
-                              width: 50,
-                              height: 62,
-                              background:
-                                  const Color.fromARGB(255, 255, 222, 207),
-                              path: "categories-icons/Drinks.svg",
-                              label: "Drinks",
-                              padding: 6,
-                              radius: 23,
-                            ),
+                            for (Category category in categoies)
+                              InkWell(
+                                onTap: () {
+                                  goToCategoriesScreen(
+                                      categoryId: category.categoryId);
+                                },
+                                child: CustomIcon(
+                                  width: 50,
+                                  height: 62,
+                                  background:
+                                      const Color.fromARGB(255, 255, 222, 207),
+                                  path: category.imageUrl,
+                                  label: category.category,
+                                  padding: 6,
+                                  radius: 23,
+                                ),
+                              ),
                           ],
                         ),
                         const Divider(
@@ -254,7 +257,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ),
                             TextButton.icon(
-                              onPressed: null,
+                              onPressed: goToBestSellerScreen,
                               label: Text(
                                 "view all",
                                 style: GoogleFonts.leagueSpartan(
@@ -287,17 +290,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Text(
-                          "Recommended",
-                          textAlign: TextAlign.start,
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: Color.fromARGB(255, 57, 23, 19),
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Recommended",
+                              style: GoogleFonts.leagueSpartan(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromARGB(255, 57, 23, 19),
+                              ),
+                            ),
+                            TextButton.icon(
+                              onPressed: goToRecommendedScreen,
+                              label: Text(
+                                "view all",
+                                style: GoogleFonts.leagueSpartan(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: const Color.fromARGB(255, 233, 83, 34),
+                                ),
+                              ),
+                              icon: const Icon(
+                                Icons.arrow_forward_ios,
+                                color: Color.fromARGB(255, 233, 83, 34),
+                                size: 8,
+                              ),
+                              iconAlignment: IconAlignment.end,
+                            )
+                          ],
                         ),
                         const SizedBox(height: 10),
-                        HomeGrid(),
+                        RecommendedGrid(),
                       ],
                     ),
                   ),
@@ -323,27 +347,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           items: [
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "assets/home.svg",
+                  "bottom-navigation-icons/home.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "assets/categories.svg",
+                  "bottom-navigation-icons/categories.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "assets/favorites.svg",
+                  "bottom-navigation-icons/favorites.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "assets/list.svg",
+                  "bottom-navigation-icons/list.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "assets/help.svg",
+                  "bottom-navigation-icons/help.svg",
                 ),
                 label: "")
           ],

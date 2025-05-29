@@ -2,9 +2,13 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:food_app/features/auth/domain/entities/user.dart';
+import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/best-sellers/presentation/screens/best_seller_screen.dart';
 import 'package:food_app/features/categories/presentation/screens/categories_screen.dart';
-import 'package:food_app/features/core/widgets/best_seller_list_view.dart';
+import 'package:food_app/features/home/domain/entities/favorite.dart';
+import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
+import 'package:food_app/features/home/presentation/widgets/best_seller_list_view.dart';
 import 'package:food_app/features/core/widgets/custom_input_text_field.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/home/presentation/widgets/recommended_grid.dart';
@@ -28,6 +32,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   List<Category> categoies = [];
   List<Product> recommendedProducts = [];
   List<Product> bestSellerProducts = [];
+  List<Product> favorites = [];
   int _currentIndex = 0;
 
   @override
@@ -40,11 +45,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final cats = await getCategoies();
     final bests = await getBestSellers();
     final recommends = await getRecommendeds();
+    final favs = await getFavorites();
 
     setState(() {
       categoies = cats;
       bestSellerProducts = bests;
       recommendedProducts = recommends;
+      favorites = favs;
     });
   }
 
@@ -70,6 +77,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final recommendeds = ref.watch(recommendedNotifierProvider);
     List<String> keys = recommendeds.map((recommendedProduct) {
       return recommendedProduct.productId;
+    }).toList();
+    await ref.read(productsNotifierProvider.notifier).getProducts(keys: keys);
+    final products = ref.watch(productsNotifierProvider);
+    return products;
+  }
+
+  Future<List<Product>> getFavorites() async {
+    User? user = ref.watch(authUserNotifierProvider);
+    await ref
+        .read(favoriteNotifierProvider.notifier)
+        .getUserFavoriteUseCase(user: user!);
+    final favs = ref.watch(favoriteNotifierProvider);
+    List<String> keys = favs.map((fav) {
+      return fav.productId;
     }).toList();
     await ref.read(productsNotifierProvider.notifier).getProducts(keys: keys);
     final products = ref.watch(productsNotifierProvider);

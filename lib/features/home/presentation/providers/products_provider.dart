@@ -3,7 +3,6 @@ import 'package:food_app/features/home/data/datasources/product_firebasedatasour
 import 'package:food_app/features/home/data/repositories/product_repository_impl.dart';
 import 'package:food_app/features/home/domain/entities/product.dart';
 import 'package:food_app/features/home/domain/usecases/get_products.dart';
-import 'package:food_app/features/home/domain/usecases/get_products_by_category.dart';
 
 final productsDatasource = Provider<ProductFirebasedatasource>((ref) {
   return ProductFirebasedatasource();

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/home/domain/entities/category.dart';
+import 'package:food_app/features/home/domain/entities/favorite.dart';
 import 'package:food_app/features/home/domain/entities/product.dart';
 import 'package:food_app/features/home/presentation/providers/best_sellers_provider.dart';
 import 'package:food_app/features/home/presentation/providers/categories_provider.dart';
+import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/providers/products_provider.dart';
 import 'package:food_app/features/home/presentation/providers/recommendeds_provider.dart';
 import 'package:food_app/features/product/presentation/screens/product_screen.dart';
@@ -75,10 +78,10 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
       ),
       itemCount: bestSellerProducts.length,
       itemBuilder: (BuildContext context, int index) {
+        final product = bestSellerProducts[index];
         final url = categories
             .firstWhere(
-              (category) =>
-                  category.categoryId == bestSellerProducts[index].categoryId,
+              (category) => category.categoryId == product.categoryId,
               orElse: () => Category(
                   categoryId: '', category: '', imageUrl: ''), // or show error
             )
@@ -86,7 +89,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
         print("This is category url: $url");
 
         return InkWell(
-          onTap: () => goToProductScreen(product: bestSellerProducts[index]),
+          onTap: () => goToProductScreen(product: product),
           child: Card(
             elevation: 0,
             color: const Color.fromARGB(255, 248, 248, 248),
@@ -105,7 +108,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(18),
                       child: Image.asset(
-                        bestSellerProducts[index].imageUrl,
+                        product.imageUrl,
                         fit: BoxFit.cover,
                         height: 140,
                         width: double.infinity,
@@ -119,8 +122,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                         path: categories
                             .firstWhere(
                               (category) =>
-                                  category.categoryId ==
-                                  bestSellerProducts[index].categoryId,
+                                  category.categoryId == product.categoryId,
                               orElse: () => Category(
                                   categoryId: '',
                                   category: '',
@@ -133,14 +135,51 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                     Positioned(
                       top: 8,
                       right: 8,
-                      child: CircleAvatar(
-                        radius: 15,
-                        backgroundColor: Colors.white.withOpacity(0.7),
-                        child: Icon(
-                          Icons.favorite_border,
-                          size: 16,
-                          color: Colors.black,
-                        ),
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          final favs = ref.watch(favoriteNotifierProvider);
+                          final currentUser =
+                              ref.watch(authUserNotifierProvider);
+                          final favoriteNotifier =
+                              ref.read(favoriteNotifierProvider.notifier);
+                          final isFavorite = favs
+                              .any((fav) => fav.productId == product.productId);
+
+                          return InkWell(
+                            onTap: () async {
+                              if (currentUser == null) return;
+
+                              if (isFavorite) {
+                                final toRemove = favs.firstWhere((fav) =>
+                                    fav.productId == product.productId);
+                                await favoriteNotifier.removeUserFavorite(
+                                    favorite: toRemove);
+                              } else {
+                                await favoriteNotifier.addUserFavorite(
+                                  favorite: Favorite(
+                                    favoriteId: '',
+                                    productId: product.productId,
+                                    userId: currentUser.id,
+                                  ),
+                                );
+                              }
+
+                              await favoriteNotifier.getUserFavorite(
+                                  user: currentUser);
+                            },
+                            child: CircleAvatar(
+                              radius: 15,
+                              backgroundColor: Colors.white.withOpacity(0.5),
+                              child: Icon(
+                                isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                size: 16,
+                                color: isFavorite ? Colors.red : Colors.black,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                     Positioned(
@@ -158,7 +197,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
 
                         // Optional: Adds a background to the text for better readability
                         child: Text(
-                          "\$${bestSellerProducts[index].price.toString()}",
+                          "\$${product.price.toString()}",
                           style: GoogleFonts.leagueSpartan(
                             color: Colors.white,
                             fontWeight: FontWeight.w400,
@@ -174,7 +213,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      bestSellerProducts[index].productName,
+                      product.productName,
                       textAlign: TextAlign.start,
                       style: GoogleFonts.leagueSpartan(
                         color: Color.fromARGB(255, 57, 23, 19),
@@ -210,7 +249,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                     Container(
                       width: 125,
                       child: Text(
-                        bestSellerProducts[index].description,
+                        product.description,
                         style: GoogleFonts.leagueSpartan(
                           color: Color.fromARGB(255, 57, 23, 19),
                           fontWeight: FontWeight.normal,

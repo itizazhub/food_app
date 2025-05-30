@@ -6,6 +6,7 @@ import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/best-sellers/presentation/screens/best_seller_screen.dart';
 import 'package:food_app/features/categories/presentation/screens/categories_screen.dart';
+import 'package:food_app/features/favorites/presentation/screens/favorite_screen.dart';
 import 'package:food_app/features/home/domain/entities/favorite.dart';
 import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/widgets/best_seller_list_view.dart';
@@ -107,8 +108,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                Text("recommended")), //RecommendationsScreen()
+            builder: (context) => CategoriesScreen(
+                categoryId: categoies[0].categoryId)), //RecommendationsScreen()
       );
     } else if (_currentIndex == 4) {
       Navigator.push(
@@ -118,8 +119,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     } else if (_currentIndex == 2) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => Text("favorites")), //FavoritesScreen()
+        MaterialPageRoute(builder: (context) => FavoriteScreen()), //
       );
     }
     // You can add additional navigation conditions for other indices if needed.

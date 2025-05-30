@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
+import 'package:food_app/features/home/domain/entities/favorite.dart';
 import 'package:food_app/features/home/domain/entities/product.dart';
+import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -25,7 +28,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     });
 
     if (_currentIndex == 0) {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
@@ -117,16 +120,53 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                         )
                       ],
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.all(24.0),
-                      child: CircleAvatar(
-                        radius: 10,
-                        backgroundColor: Color.fromARGB(180, 209, 91, 22),
-                        child: Icon(
-                          Icons.favorite_sharp,
-                          size: 12,
-                          color: Colors.white,
-                        ),
+                      child: Consumer(
+                        builder: (context, ref, _) {
+                          final favs = ref.watch(favoriteNotifierProvider);
+                          final currentUser =
+                              ref.watch(authUserNotifierProvider);
+                          final favoriteNotifier =
+                              ref.read(favoriteNotifierProvider.notifier);
+                          final isFavorite = favs.any((fav) =>
+                              fav.productId == widget.product.productId);
+
+                          return InkWell(
+                            onTap: () async {
+                              if (currentUser == null) return;
+
+                              if (isFavorite) {
+                                final toRemove = favs.firstWhere((fav) =>
+                                    fav.productId == widget.product.productId);
+                                await favoriteNotifier.removeUserFavorite(
+                                    favorite: toRemove);
+                              } else {
+                                await favoriteNotifier.addUserFavorite(
+                                  favorite: Favorite(
+                                    favoriteId: '',
+                                    productId: widget.product.productId,
+                                    userId: currentUser.id,
+                                  ),
+                                );
+                              }
+
+                              await favoriteNotifier.getUserFavorite(
+                                  user: currentUser);
+                            },
+                            child: CircleAvatar(
+                              radius: 15,
+                              backgroundColor: Colors.white.withOpacity(0.5),
+                              child: Icon(
+                                isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                size: 16,
+                                color: isFavorite ? Colors.red : Colors.black,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ],

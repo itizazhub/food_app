@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:food_app/features/best-sellers/presentation/widgets/best_seller_grid.dart';
-import 'package:food_app/features/home/domain/entities/product.dart';
-import 'package:food_app/features/home/presentation/providers/products_by_category_provider.dart';
-import 'package:food_app/features/home/presentation/widgets/recommended_grid.dart';
+import 'package:food_app/features/favorites/presentation/widgets/favorite_grid.dart';
+
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RecommendedScreen extends ConsumerStatefulWidget {
-  const RecommendedScreen({super.key});
+class FavoriteScreen extends ConsumerStatefulWidget {
+  const FavoriteScreen({super.key});
 
   @override
-  ConsumerState<RecommendedScreen> createState() => _RecommendedScreenState();
+  ConsumerState<FavoriteScreen> createState() => _FavoriteScreenState();
 }
 
-class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
-  int _currentIndex = 0;
+class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
+  int _currentIndex = 2;
 
   // Function to handle navigation
   void _onNavItemTapped(int index) {
@@ -73,7 +71,7 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
                     ),
                   ),
                   Text(
-                    "Recommended",
+                    "Favorites",
                     style: GoogleFonts.leagueSpartan(
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
@@ -106,7 +104,7 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
                 child: Column(
                   children: [
                     Text(
-                      "Discover our most popular dishes!",
+                      "Your favorite dishes!",
                       style: GoogleFonts.leagueSpartan(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
@@ -115,7 +113,7 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
                     ),
                     const SizedBox(height: 10),
                     // For example, you can add a list of products here
-                    RecommendedGrid(),
+                    FavoriteGrid(),
                   ],
                 ),
               ),

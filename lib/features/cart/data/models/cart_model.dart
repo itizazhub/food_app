@@ -53,7 +53,7 @@ class CartModel {
     };
   }
 
-  CartModel withCopy(
+  CartModel copyWith(
       {String? cartId,
       List<CartItemModel>? items,
       String? userId,

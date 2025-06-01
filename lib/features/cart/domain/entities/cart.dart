@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:food_app/features/cart/domain/entities/cart_item.dart';
 
 class Cart {
@@ -11,10 +9,10 @@ class Cart {
   String cartId;
   List<CartItem> items;
   String userId;
-  Double total;
+  double total;
 
-  Cart withCopy(
-      {String? cartId, List<CartItem>? items, String? userId, Double? total}) {
+  Cart copyWith(
+      {String? cartId, List<CartItem>? items, String? userId, double? total}) {
     return Cart(
         cartId: cartId ?? this.cartId,
         items: items ?? this.items,

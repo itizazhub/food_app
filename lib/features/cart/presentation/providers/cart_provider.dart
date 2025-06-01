@@ -78,4 +78,15 @@ class CartNotifier extends StateNotifier<Cart?> {
 
     state = state!.copyWith(items: updatedItems);
   }
+
+  void updateTotal() {
+    if (state == null) return;
+
+    final total = state!.items.fold<double>(
+      0.0,
+      (sum, item) => sum + (item.price * item.quantity),
+    );
+
+    state = state!.copyWith(total: total);
+  }
 }

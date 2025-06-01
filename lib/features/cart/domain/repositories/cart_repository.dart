@@ -1,10 +1,9 @@
+import 'package:dartz/dartz.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/cart/domain/entities/cart.dart';
+import 'package:food_app/features/core/error/failures.dart';
 
 abstract class CartRepository {
-  Future<void> createUserCart({required User user}) async {}
-  Future<void> getUserCart({required User user}) async {}
-
-  Future<void> resetUserCart({required Cart cart}) async {}
-  Future<void> saveUserCart({required Cart cart}) async {}
+  Future<Either<Failure, Cart>> getUserCart({required User user});
+  Future<Either<Failure, String>> updateUserCart({required Cart cart});
 }

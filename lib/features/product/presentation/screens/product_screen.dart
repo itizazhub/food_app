@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/cart/domain/entities/cart_item.dart';
+import 'package:food_app/features/cart/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/home/domain/entities/favorite.dart';
 import 'package:food_app/features/home/domain/entities/product.dart';
@@ -10,8 +12,8 @@ import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductScreen extends ConsumerStatefulWidget {
-  ProductScreen({super.key, required this.product});
-  Product product;
+  const ProductScreen({super.key, required this.product});
+  final Product product;
 
   @override
   ConsumerState<ProductScreen> createState() => _ProductScreenState();
@@ -19,8 +21,8 @@ class ProductScreen extends ConsumerStatefulWidget {
 
 class _ProductScreenState extends ConsumerState<ProductScreen> {
   int _currentIndex = 0;
-  int _quantity = 1;
   List<String> selectedToppings = [];
+  int _quantity = 1;
 
   void _onNavItemTapped(int index) {
     setState(() {
@@ -33,12 +35,11 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     }
-    // Handle other nav indices if needed
+    // Add handling for other nav indices if needed
   }
 
   Widget buildToppingOption(String label, double price) {
     final isSelected = selectedToppings.contains(label);
-
     return Row(
       children: [
         Text(
@@ -50,8 +51,10 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
           ),
         ),
         const Spacer(),
-        Text('\$${price.toStringAsFixed(2)}',
-            style: TextStyle(fontSize: 16, color: Colors.grey[700])),
+        Text(
+          '\$${price.toStringAsFixed(2)}',
+          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+        ),
         const SizedBox(width: 10),
         GestureDetector(
           onTap: () {
@@ -84,6 +87,19 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
   Widget build(BuildContext context) {
     const mainColor = Color.fromARGB(255, 233, 83, 34);
     const bgColor = Color.fromARGB(255, 248, 248, 248);
+
+    final cartItems = ref.watch(cartNotifierProvider)?.items ?? [];
+    final cartNotifier = ref.read(cartNotifierProvider.notifier);
+    final existingCartItem = cartItems
+        .where((item) => item.productId == widget.product.productId)
+        .firstOrNull;
+    int quantity = existingCartItem?.quantity ?? _quantity;
+
+    final favs = ref.watch(favoriteNotifierProvider);
+    final currentUser = ref.watch(authUserNotifierProvider);
+    final favoriteNotifier = ref.read(favoriteNotifierProvider.notifier);
+    final isFavorite =
+        favs.any((fav) => fav.productId == widget.product.productId);
 
     return Scaffold(
       body: SafeArea(
@@ -121,52 +137,40 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.all(24.0),
-                      child: Consumer(
-                        builder: (context, ref, _) {
-                          final favs = ref.watch(favoriteNotifierProvider);
-                          final currentUser =
-                              ref.watch(authUserNotifierProvider);
-                          final favoriteNotifier =
-                              ref.read(favoriteNotifierProvider.notifier);
-                          final isFavorite = favs.any((fav) =>
-                              fav.productId == widget.product.productId);
+                      padding: const EdgeInsets.all(24.0),
+                      child: InkWell(
+                        onTap: () async {
+                          if (currentUser == null) return;
 
-                          return InkWell(
-                            onTap: () async {
-                              if (currentUser == null) return;
-
-                              if (isFavorite) {
-                                final toRemove = favs.firstWhere((fav) =>
-                                    fav.productId == widget.product.productId);
-                                await favoriteNotifier.removeUserFavorite(
-                                    favorite: toRemove);
-                              } else {
-                                await favoriteNotifier.addUserFavorite(
-                                  favorite: Favorite(
-                                    favoriteId: '',
-                                    productId: widget.product.productId,
-                                    userId: currentUser.id,
-                                  ),
-                                );
-                              }
-
-                              await favoriteNotifier.getUserFavorite(
-                                  user: currentUser);
-                            },
-                            child: CircleAvatar(
-                              radius: 15,
-                              backgroundColor: Colors.white.withOpacity(0.5),
-                              child: Icon(
-                                isFavorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                size: 16,
-                                color: isFavorite ? Colors.red : Colors.black,
+                          if (isFavorite) {
+                            final toRemove = favs.firstWhere(
+                              (fav) =>
+                                  fav.productId == widget.product.productId,
+                            );
+                            await favoriteNotifier.removeUserFavorite(
+                                favorite: toRemove);
+                          } else {
+                            await favoriteNotifier.addUserFavorite(
+                              favorite: Favorite(
+                                favoriteId: '',
+                                productId: widget.product.productId,
+                                userId: currentUser.id,
                               ),
-                            ),
-                          );
+                            );
+                          }
+
+                          await favoriteNotifier.getUserFavorite(
+                              user: currentUser);
                         },
+                        child: CircleAvatar(
+                          radius: 15,
+                          backgroundColor: Colors.white.withOpacity(0.5),
+                          child: Icon(
+                            isFavorite ? Icons.favorite : Icons.favorite_border,
+                            size: 16,
+                            color: isFavorite ? Colors.red : Colors.black,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -207,7 +211,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                           Row(
                             children: [
                               Text(
-                                "\$${widget.product.price.toString()}",
+                                "\$${widget.product.price}",
                                 style: GoogleFonts.leagueSpartan(
                                   fontSize: 24,
                                   fontWeight: FontWeight.w500,
@@ -242,39 +246,38 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    if (_quantity > 0) _quantity--;
-                                  });
+                                  cartNotifier.decreaseItemQuantity(
+                                      widget.product.productId);
                                 },
                                 child: const CircleAvatar(
                                   radius: 10.5,
                                   backgroundColor:
-                                      const Color.fromARGB(180, 168, 121, 93),
-                                  child: const Icon(
-                                    Icons.remove,
-                                    size: 16,
-                                    color: Colors.white,
-                                  ),
+                                      Color.fromARGB(180, 168, 121, 93),
+                                  child: Icon(Icons.remove,
+                                      size: 16, color: Colors.white),
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              Text("$_quantity"),
+                              Text("$quantity"),
                               const SizedBox(width: 10),
                               GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    _quantity++;
-                                  });
+                                  cartNotifier.addItemToCart(
+                                    cartItem: CartItem(
+                                      productId: widget.product.productId,
+                                      quantity: quantity,
+                                      price: widget.product.price,
+                                      imageUrl: widget.product.imageUrl,
+                                    ),
+                                    maxQuantity: widget.product.stockQuantity,
+                                  );
                                 },
                                 child: const CircleAvatar(
                                   radius: 10.5,
                                   backgroundColor:
-                                      const Color.fromARGB(180, 209, 91, 22),
-                                  child: const Icon(
-                                    Icons.add,
-                                    size: 16,
-                                    color: Colors.white,
-                                  ),
+                                      Color.fromARGB(180, 209, 91, 22),
+                                  child: Icon(Icons.add,
+                                      size: 16, color: Colors.white),
                                 ),
                               ),
                             ],
@@ -313,12 +316,31 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                       const SizedBox(height: 8),
                       buildToppingOption("Cheese", 1.49),
                       const SizedBox(height: 20),
-                      const CustomFilledButton(
-                        text: "Add to Cart",
-                        height: 33,
-                        widht: 180,
-                        fontSize: 20,
-                        foregroundcolor: Colors.white,
+                      InkWell(
+                        child: const CustomFilledButton(
+                          text: "Add to Cart",
+                          height: 33,
+                          widht: 180,
+                          fontSize: 20,
+                          foregroundcolor: Colors.white,
+                        ),
+                        onTap: () {
+                          final isAlreadyInCart = cartItems.any(
+                            (item) =>
+                                item.productId == widget.product.productId,
+                          );
+                          if (!isAlreadyInCart) {
+                            cartNotifier.addItemToCart(
+                              cartItem: CartItem(
+                                productId: widget.product.productId,
+                                quantity: quantity,
+                                price: widget.product.price,
+                                imageUrl: widget.product.imageUrl,
+                              ),
+                              maxQuantity: widget.product.stockQuantity,
+                            );
+                          }
+                        },
                       ),
                     ],
                   ),
@@ -340,25 +362,25 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
           onTap: _onNavItemTapped,
-          items: [
+          items: const [
             BottomNavigationBarItem(
-              icon: SvgPicture.asset("bottom-navigation-icons/home.svg"),
+              icon: Icon(Icons.home), // Replace with actual asset if needed
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset("bottom-navigation-icons/categories.svg"),
+              icon: Icon(Icons.category),
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset("bottom-navigation-icons/favorites.svg"),
+              icon: Icon(Icons.favorite),
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset("bottom-navigation-icons/list.svg"),
+              icon: Icon(Icons.list),
               label: "",
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset("bottom-navigation-icons/help.svg"),
+              icon: Icon(Icons.help),
               label: "",
             ),
           ],

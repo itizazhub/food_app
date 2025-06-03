@@ -16,11 +16,15 @@ class CartModel {
       {required String key, required Map<String, dynamic> json}) {
     return CartModel(
       cartId: key,
-      items: (json['items'] as List)
-          .map((item) => CartItemModel.fromJson(item))
-          .toList(),
+      items: json['items'] != null
+          ? (json['items'] as List)
+              .map((item) => CartItemModel.fromJson(item))
+              .toList()
+          : [],
       userId: json["user_id"],
-      total: double.parse(json["total"]),
+      total: (json["total"] != null)
+          ? double.tryParse(json["total"].toString()) ?? 0.0
+          : 0.0,
     );
   }
 
@@ -46,8 +50,9 @@ class CartModel {
 
   Map<String, dynamic> toJson() {
     return {
-      "cart_id": cartId,
-      "items": items,
+      "items": items.map((cartItemModel) {
+        return cartItemModel.toJson();
+      }).toList(),
       "user_id": userId,
       "total": total
     };

@@ -13,7 +13,7 @@ class CartFirebasedatasource {
       "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app";
 
   Future<Either<Failure, CartModel>> getUserCart({required User user}) async {
-    final url = Uri.http(
+    final url = Uri.https(
       _baseUrl,
       "carts.json",
       {
@@ -24,14 +24,14 @@ class CartFirebasedatasource {
 
     try {
       final response = await http.get(url, headers: _headers);
-
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final result = jsonDecode(response.body) as Map<String, dynamic>?;
-
+        print(result);
         if (result != null && result.isNotEmpty) {
           final firstEntry = result.entries.first;
           return Right(
-              CartModel.fromJson(key: firstEntry.key, json: firstEntry.value));
+            CartModel.fromJson(key: firstEntry.key, json: firstEntry.value),
+          );
         }
 
         // No cart found → create a new one
@@ -41,14 +41,15 @@ class CartFirebasedatasource {
             SomeSpecificError("Failed to fetch cart: ${response.statusCode}"));
       }
     } catch (e) {
-      return Left(SomeSpecificError("Exception in getUserCart: $e"));
+      return Left(
+          SomeSpecificError("Exception in getUserCart: ${e.toString()}"));
     }
   }
 
   Future<Either<Failure, String>> updateCart({
     required Cart cart,
   }) async {
-    final url = Uri.http(_baseUrl, "carts/${cart.cartId}.json");
+    final url = Uri.https(_baseUrl, "carts/${cart.cartId}.json");
 
     try {
       final response = await http.patch(
@@ -80,7 +81,7 @@ class CartFirebasedatasource {
       total: 0.0,
     );
 
-    final url = Uri.http(_baseUrl, "carts.json");
+    final url = Uri.https(_baseUrl, "carts.json");
 
     try {
       final response = await http.post(
@@ -98,7 +99,8 @@ class CartFirebasedatasource {
             "Failed to create new cart: ${response.statusCode}"));
       }
     } catch (e) {
-      return Left(SomeSpecificError("Exception in createNewCart: $e"));
+      return Left(
+          SomeSpecificError("Exception in createNewCart: ${e.toString()}"));
     }
   }
 

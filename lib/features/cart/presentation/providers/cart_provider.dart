@@ -44,29 +44,45 @@ class CartNotifier extends StateNotifier<Cart?> {
 
   Future<void> getUserCart({required User user}) async {
     final result = await getUserCartUseCase(user: user);
-    result.fold(
-      (failure) => print('Get cart failed: $failure'),
-      (cart) => state = cart,
-    );
+    result.fold((failure) => print('Get cart failed: ${failure.message}'),
+        (cart) {
+      state = cart;
+      updateTotal();
+    });
   }
 
   Future<void> updateUserCart() async {
     if (state != null) {
       final result = await updateUserCartUseCase(cart: state!);
       result.fold(
-        (failure) => print('Update cart failed: $failure'),
-        (message) => print(message),
+        (failure) => print('Update cart failed: ${failure.message}'),
+        (message) {
+          print(message);
+          updateTotal();
+        },
       );
     }
   }
 
-  void addItemToCart({required CartItem cartItem}) {
+  void addItemToCart({
+    required CartItem cartItem,
+    required int maxQuantity,
+  }) {
     if (state == null) return;
 
-    final existingItems = List<CartItem>.from(state!.items);
-    existingItems.add(cartItem);
+    final existingItemIndex = state!.items.indexWhere(
+      (item) => item.productId == cartItem.productId,
+    );
 
-    state = state!.copyWith(items: existingItems);
+    if (existingItemIndex != -1) {
+      increaseItemQuantity(cartItem.productId, maxQuantity);
+    } else {
+      final updatedItems = [...state!.items, cartItem];
+      state = state!.copyWith(items: updatedItems);
+      updateTotal();
+    }
+
+    updateUserCart();
   }
 
   void removeItemFromCart({required CartItem cartItem}) {
@@ -77,6 +93,7 @@ class CartNotifier extends StateNotifier<Cart?> {
         .toList();
 
     state = state!.copyWith(items: updatedItems);
+    updateUserCart();
   }
 
   void updateTotal() {
@@ -88,5 +105,41 @@ class CartNotifier extends StateNotifier<Cart?> {
     );
 
     state = state!.copyWith(total: total);
+  }
+
+  void increaseItemQuantity(String productId, int maxQuantity) {
+    if (state == null) return;
+
+    final updatedItems = state!.items.map((item) {
+      if (item.productId == productId) {
+        final newQuantity = item.quantity + 1;
+        if (newQuantity <= maxQuantity) {
+          return item.copyWith(quantity: newQuantity);
+        }
+      }
+      return item;
+    }).toList();
+
+    state = state!.copyWith(items: updatedItems);
+    updateTotal();
+    updateUserCart();
+  }
+
+  void decreaseItemQuantity(String productId) {
+    if (state == null) return;
+
+    final updatedItems = state!.items.map((item) {
+      if (item.productId == productId) {
+        final newQuantity = item.quantity - 1;
+        if (newQuantity >= 1) {
+          return item.copyWith(quantity: newQuantity);
+        }
+      }
+      return item;
+    }).toList();
+
+    state = state!.copyWith(items: updatedItems);
+    updateTotal();
+    updateUserCart();
   }
 }

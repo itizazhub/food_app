@@ -5,9 +5,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/best-sellers/presentation/screens/best_seller_screen.dart';
+import 'package:food_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/cart/presentation/screens/cart_screen.dart';
 import 'package:food_app/features/categories/presentation/screens/categories_screen.dart';
 import 'package:food_app/features/favorites/presentation/screens/favorite_screen.dart';
-import 'package:food_app/features/home/domain/entities/favorite.dart';
 import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/widgets/best_seller_list_view.dart';
 import 'package:food_app/features/core/widgets/custom_input_text_field.dart';
@@ -47,6 +48,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final bests = await getBestSellers();
     final recommends = await getRecommendeds();
     final favs = await getFavorites();
+    User? user = ref.read(authUserNotifierProvider);
+    await ref.read(cartNotifierProvider.notifier).getUserCart(user: user!);
+    final cart = ref.read(cartNotifierProvider);
+    print(cart!.cartId);
+    print(cart!.items);
 
     setState(() {
       categoies = cats;
@@ -151,6 +157,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
+  void goToCartScreen() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CartScreen(),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,7 +191,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            CustomIcon(path: "cart-icons/cart.svg"),
+                            InkWell(
+                                onTap: goToCartScreen,
+                                child: CustomIcon(path: "cart-icons/cart.svg")),
                             const SizedBox(width: 8),
                             CustomIcon(
                                 path: "notification-icons/notification.svg"),

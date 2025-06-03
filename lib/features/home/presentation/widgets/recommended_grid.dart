@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/cart/domain/entities/cart_item.dart';
+import 'package:food_app/features/cart/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/home/domain/entities/category.dart';
 import 'package:food_app/features/home/domain/entities/favorite.dart';
@@ -247,15 +249,53 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                         maxLines: 2,
                       ),
                     ),
-                    const CircleAvatar(
-                      radius: 10,
-                      backgroundColor: Color.fromARGB(255, 233, 83, 34),
-                      foregroundColor: Color.fromARGB(255, 248, 248, 248),
-                      child: Icon(
-                        Icons.shopping_cart,
-                        size: 12,
-                      ),
-                    )
+                    Consumer(builder: (context, ref, child) {
+                      final cart = ref.watch(cartNotifierProvider);
+                      final cartNotifier =
+                          ref.read(cartNotifierProvider.notifier);
+
+                      final cartItems = cart?.items ?? [];
+                      final isAdded = cartItems.any((cartItem) {
+                        return cartItem.productId ==
+                            recommendedProducts[index].productId;
+                      });
+
+                      return InkWell(
+                        onTap: () async {
+                          if (!isAdded) {
+                            cartNotifier.addItemToCart(
+                                cartItem: CartItem(
+                                    productId:
+                                        recommendedProducts[index].productId,
+                                    quantity: 1,
+                                    price: recommendedProducts[index].price,
+                                    imageUrl:
+                                        recommendedProducts[index].imageUrl),
+                                maxQuantity:
+                                    recommendedProducts[index].stockQuantity);
+                          } else {
+                            cartNotifier.removeItemFromCart(
+                                cartItem: cartItems.firstWhere((cartItem) {
+                              return cartItem.productId ==
+                                  recommendedProducts[index].productId;
+                            }));
+                          }
+                        },
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundColor: isAdded
+                              ? Color.fromARGB(255, 226, 216, 216)
+                              : const Color.fromARGB(255, 214, 35, 35),
+                          foregroundColor: isAdded
+                              ? Color.fromARGB(255, 223, 43, 43)
+                              : Color.fromARGB(255, 248, 248, 248),
+                          child: const Icon(
+                            Icons.shopping_cart,
+                            size: 12,
+                          ),
+                        ),
+                      );
+                    }),
                   ],
                 )
               ],

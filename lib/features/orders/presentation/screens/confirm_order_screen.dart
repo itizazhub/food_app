@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:food_app/features/home/presentation/widgets/recommended_grid.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RecommendedScreen extends ConsumerStatefulWidget {
-  const RecommendedScreen({super.key});
+class ConfirmOrderScreen extends ConsumerStatefulWidget {
+  const ConfirmOrderScreen({super.key});
 
   @override
-  ConsumerState<RecommendedScreen> createState() => _RecommendedScreenState();
+  ConsumerState<ConfirmOrderScreen> createState() => _ConfirmOrderScreenState();
 }
 
-class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
+class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
   int _currentIndex = 0;
 
   // Function to handle navigation
@@ -70,7 +69,7 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
                     ),
                   ),
                   Text(
-                    "Recommended",
+                    "Confirm Order",
                     style: GoogleFonts.leagueSpartan(
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
@@ -110,9 +109,6 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
                         color: const Color.fromARGB(255, 233, 83, 34),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    // For example, you can add a list of products here
-                    RecommendedGrid(),
                   ],
                 ),
               ),

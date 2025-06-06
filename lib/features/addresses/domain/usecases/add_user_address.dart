@@ -7,6 +7,6 @@ class AddUserAddress {
   AddUserAddress({required this.addressRepository});
   AddressRepository addressRepository;
   Future<Either<Failure, Address>> call({required Address address}) {
-    return addressRepository.addUserAddresses(address: address);
+    return addressRepository.addUserAddress(address: address);
   }
 }

@@ -6,6 +6,7 @@ import 'package:food_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:food_app/features/cart/presentation/screens/cart_screen.dart';
 import 'package:food_app/features/core/screens/first_splash_screen.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
+import 'package:food_app/features/orders/presentation/screens/confirm_order_screen.dart';
 import 'package:food_app/features/product/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: FirstSplashScreen(),
+      home: ConfirmOrderScreen(), // FirstSplashScreen(),
       // CartScreen(), // ProductScreen(), // HomeScreen(),
     );
   }

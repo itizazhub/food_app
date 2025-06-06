@@ -7,6 +7,6 @@ class RemoveUserAddress {
   RemoveUserAddress({required this.addressRepository});
   AddressRepository addressRepository;
   Future<Either<Failure, String>> call({required Address address}) {
-    return addressRepository.removeUserAddresses(address: address);
+    return addressRepository.removeUserAddress(address: address);
   }
 }

@@ -26,7 +26,7 @@ class AddressRepositoryImpl implements AddressRepository {
   }
 
   @override
-  Future<Either<Failure, Address>> addUserAddresses(
+  Future<Either<Failure, Address>> addUserAddress(
       {required Address address}) async {
     try {
       final failureOrAddress =
@@ -42,7 +42,7 @@ class AddressRepositoryImpl implements AddressRepository {
   }
 
   @override
-  Future<Either<Failure, String>> removeUserAddresses(
+  Future<Either<Failure, String>> removeUserAddress(
       {required Address address}) async {
     try {
       final failureOrSucessMessage =

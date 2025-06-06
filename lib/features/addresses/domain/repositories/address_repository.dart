@@ -5,7 +5,6 @@ import 'package:food_app/features/core/error/failures.dart';
 
 abstract class AddressRepository {
   Future<Either<Failure, List<Address>>> getUserAddresses({required User user});
-  Future<Either<Failure, Address>> addUserAddresses({required Address address});
-  Future<Either<Failure, String>> removeUserAddresses(
-      {required Address address});
+  Future<Either<Failure, Address>> addUserAddress({required Address address});
+  Future<Either<Failure, String>> removeUserAddress({required Address address});
 }

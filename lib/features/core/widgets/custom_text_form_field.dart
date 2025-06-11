@@ -5,6 +5,7 @@ class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({
     super.key,
     this.width = 200,
+    this.height = 45,
     this.fontSize = 12,
     this.radius = 30,
     this.fontColor = const Color.fromARGB(255, 57, 23, 19),
@@ -18,6 +19,7 @@ class CustomTextFormField extends StatelessWidget {
   });
 
   final double width;
+  final double height;
   final double fontSize;
   final double radius;
   final Color background;
@@ -31,9 +33,9 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: width,
-      // height: height,
+      height: height,
       child: TextFormField(
         controller: controller,
         obscureText: obscure,

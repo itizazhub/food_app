@@ -21,7 +21,6 @@ class PaymentMethodScreen extends ConsumerStatefulWidget {
 class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   final _formKey = GlobalKey<FormState>();
   final _addressInput = TextEditingController();
-
   int _currentIndex = 0;
   String? selectedAddress;
 
@@ -33,14 +32,26 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
 
   void _onNavItemTapped(int index) {
     setState(() => _currentIndex = index);
-
     if (index == 0) {
       Navigator.push(context, MaterialPageRoute(builder: (_) => HomeScreen()));
     }
   }
 
-  Future<void> _showAddressDialog(List<Address> addresses) async {
+  Future<void> _showAddressDialog() async {
+    await ref.read(addressNotifierProvider.notifier).getUserAddresses(
+          user: User(
+            id: "-OPUxrBC0UHpf4kMnQMT",
+            username: "test",
+            email: "test@gmail.com",
+            password: "test123",
+            isAdmin: false,
+          ),
+        );
+
+    final addresses = ref.read(addressNotifierProvider);
     String? tempSelected = selectedAddress;
+
+    if (!mounted) return;
 
     await showDialog(
       context: context,
@@ -49,12 +60,13 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
           builder: (context, setDialogState) {
             return AlertDialog(
               title: const Text('Select Address'),
-              content: SingleChildScrollView(
-                child: Column(
-                  children: [
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (addresses != null && addresses.isNotEmpty)
                     SizedBox(
-                      height: 200,
-                      width: 400,
+                      height: 300,
+                      width: 300,
                       child: ListView.builder(
                         itemCount: addresses.length,
                         itemBuilder: (_, index) {
@@ -69,33 +81,40 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                           );
                         },
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    CustomFilledButton(
+                    )
+                  else
+                    const Center(child: Text("No address found")),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: 150,
+                    height: 35,
+                    child: CustomFilledButton(
                       text: "Add New Address",
                       widht: 150,
-                      height: 30,
+                      height: 35,
                       fontSize: 12,
                       callBack: () async {
-                        Navigator.pop(context);
-                        _showAddAddressDialog();
+                        Navigator.pop(context); // Close current dialog
+                        await _showAddAddressDialog(); // Open add address dialog
                       },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               actions: [
                 TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel')),
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
                 TextButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedAddress = tempSelected;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Confirm')),
+                  onPressed: () {
+                    setState(() {
+                      selectedAddress = tempSelected;
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Confirm'),
+                ),
               ],
             );
           },
@@ -107,7 +126,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   Future<void> _showAddAddressDialog() async {
     final addressNotifier = ref.read(addressNotifierProvider.notifier);
 
-    showDialog(
+    await showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('Enter New Address'),
@@ -118,6 +137,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             background: const Color.fromARGB(255, 243, 233, 181),
             radius: 12,
             width: double.infinity,
+            height: 45,
             fontSize: 20,
             validator: (value) => (value == null || value.trim().isEmpty)
                 ? 'Address cannot be empty'
@@ -126,20 +146,36 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
         ),
         actions: [
           CustomFilledButton(
+              text: "cancel",
+              widht: 80,
+              height: 25,
+              fontSize: 12,
+              callBack: () async {
+                _addressInput.clear();
+                if (mounted) {
+                  Navigator.pop(context); // Close add dialog
+                  await _showAddressDialog(); // Reopen address selector
+                }
+              }),
+          CustomFilledButton(
             text: "Add Address",
-            widht: 150,
-            height: 30,
+            widht: 120,
+            height: 25,
             fontSize: 12,
             callBack: () async {
               if (_formKey.currentState?.validate() ?? false) {
                 await addressNotifier.addUserAddress(
                   address: Address(
-                    addressId: "",
+                    addressId: "", // Generate unique ID in Firestore
                     userId: "-OPUxrBC0UHpf4kMnQMT",
                     address: _addressInput.text.trim(),
                   ),
                 );
-                if (mounted) Navigator.pop(context);
+                _addressInput.clear();
+                if (mounted) {
+                  Navigator.pop(context); // Close add dialog
+                  await _showAddressDialog(); // Reopen address selector
+                }
               }
             },
           ),
@@ -181,7 +217,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                         ),
                       ),
                       const Divider(),
-                      // TODO: Add ConfirmOrderListView or other summary widgets
+                      // Add order summary widgets here
                     ],
                   ),
                 ),
@@ -212,7 +248,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             style: GoogleFonts.leagueSpartan(
               fontSize: 28,
               fontWeight: FontWeight.w700,
-              color: const Color.fromARGB(255, 248, 248, 248),
+              color: Colors.white,
             ),
           ),
           const SizedBox(width: 50),
@@ -222,7 +258,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   }
 
   Widget _buildShippingAddressSection(
-      List<Address> addresses, addressNotifier) {
+      List<Address>? addresses, dynamic notifier) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -238,20 +274,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             ),
             const SizedBox(width: 5),
             InkWell(
-              onTap: () async {
-                await addressNotifier.getUserAddresses(
-                  user: User(
-                    id: "-OPUxrBC0UHpf4kMnQMT",
-                    username: "test",
-                    email: "test@gmailc.com",
-                    password: "test123",
-                    isAdmin: false,
-                  ),
-                );
-                if (addresses.isNotEmpty) {
-                  _showAddressDialog(addresses);
-                }
-              },
+              onTap: _showAddressDialog,
               child: const Icon(Icons.edit, size: 18),
             ),
           ],
@@ -260,8 +283,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
         Container(
           alignment: Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          height: 35,
-          width: double.infinity,
+          height: 40,
           decoration: BoxDecoration(
             color: const Color.fromARGB(255, 211, 182, 51),
             borderRadius: BorderRadius.circular(18),
@@ -302,7 +324,8 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
 
   BottomNavigationBarItem _navItem(String iconName) {
     return BottomNavigationBarItem(
-      icon: SvgPicture.asset("bottom-navigation-icons/$iconName.svg"),
+      icon:
+          SvgPicture.asset("bottom-navigation-icons/$iconName.svg", height: 24),
       label: '',
     );
   }

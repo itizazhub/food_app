@@ -67,7 +67,7 @@ class AddressNotifier extends StateNotifier<List<Address>> {
         debugPrint("Failed to get addresses: ${failure.message}");
       },
       (addresses) {
-        state = addresses;
+        state = [...addresses];
       },
     );
   }

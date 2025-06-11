@@ -18,7 +18,7 @@ class AddressModel {
     return AddressModel(
       addressId: key,
       userId: json["user_id"],
-      address: json["address"],
+      address: json["address_line"],
     );
   }
 
@@ -34,7 +34,7 @@ class AddressModel {
   Map<String, dynamic> toJson() {
     return {
       "user_id": userId,
-      "address": address,
+      "address_line": address,
     };
   }
 

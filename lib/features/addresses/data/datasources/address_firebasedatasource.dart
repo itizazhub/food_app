@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
@@ -18,17 +19,21 @@ class AddressFirebasedatasource {
           await http.get(url, headers: {"Content-Type": "application/json"});
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        print("Get users request status code ${response.statusCode}");
+        print("Get address request status code ${response.statusCode}");
 
         Map<String, dynamic> result = jsonDecode(response.body);
+        print(result);
 
-        List<AddressModel> allAddresses = result.entries.map((jsonUser) {
-          return AddressModel.fromJson(key: jsonUser.key, json: jsonUser.value);
+        List<AddressModel> allAddresses = result.entries.map((jsonUserAddress) {
+          return AddressModel.fromJson(
+              key: jsonUserAddress.key, json: jsonUserAddress.value);
         }).toList();
+        print("all addresses $allAddresses");
 
         List<AddressModel> userAddresses = allAddresses.where((address) {
           return address.userId == user.id;
         }).toList();
+        print("user Addresses $userAddresses");
 
         return Right(userAddresses);
       } else {

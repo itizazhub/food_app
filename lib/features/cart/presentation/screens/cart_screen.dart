@@ -5,6 +5,7 @@ import 'package:food_app/features/cart/presentation/providers/cart_provider.dart
 import 'package:food_app/features/cart/presentation/widgets/cart_list_view.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
+import 'package:food_app/features/orders/presentation/screens/confirm_order_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CartScreen extends ConsumerStatefulWidget {
@@ -41,8 +42,19 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     }
   }
 
+  Future<void> goToconfirmOrderScreen() async {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => ConfirmOrderScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final cart = ref.watch(cartNotifierProvider);
+
+    final cartItems = cart?.items ?? [];
+
     return Scaffold(
       // backgroundColor: Color.fromARGB(255, 245, 203, 88),
       resizeToAvoidBottomInset: true, // Ensure UI adjusts with keyboard
@@ -105,7 +117,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 child: Column(
                   children: [
                     Text(
-                      "You have 2 items in the cart",
+                      "You have ${cartItems.length} items in the cart",
                       style: GoogleFonts.leagueSpartan(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
@@ -115,40 +127,56 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     const SizedBox(height: 10),
                     // For example, you can add a list of products here
                     CartListView(),
-                    Row(
-                      children: [
-                        Text("Subtotal"),
-                        Spacer(),
-                        Text(
-                            "\$${ref.watch(cartNotifierProvider)!.total.toStringAsFixed(2)}")
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text("Tax and fees"),
-                        Spacer(),
-                        Text("\$5.00")
-                      ],
-                    ),
-                    Row(
-                      children: [Text("Delivery"), Spacer(), Text("\$3.00")],
-                    ),
-                    Divider(),
-                    Row(
-                      children: [
-                        Text("Total"),
-                        Spacer(),
-                        Text(
-                            "\$${(ref.watch(cartNotifierProvider)!.total + 8).toStringAsFixed(2)}")
-                      ],
-                    ),
-                    CustomFilledButton(
-                      text: "Checkout",
-                      height: 36,
-                      widht: 130,
-                      fontSize: 20,
-                      foregroundcolor: Colors.white,
-                    ),
+
+                    cartItems.length != 0
+                        ? Row(
+                            children: [
+                              Text("Subtotal"),
+                              Spacer(),
+                              Text(
+                                  "\$${ref.watch(cartNotifierProvider)!.total.toStringAsFixed(2)}")
+                            ],
+                          )
+                        : SizedBox.shrink(),
+                    cartItems.length != 0
+                        ? Row(
+                            children: [
+                              Text("Tax and fees"),
+                              Spacer(),
+                              Text("\$5.00")
+                            ],
+                          )
+                        : SizedBox.shrink(),
+                    cartItems.length != 0
+                        ? Row(
+                            children: [
+                              Text("Delivery"),
+                              Spacer(),
+                              Text("\$3.00")
+                            ],
+                          )
+                        : SizedBox.shrink(),
+                    cartItems.length != 0 ? Divider() : SizedBox.shrink(),
+                    cartItems.length != 0
+                        ? Row(
+                            children: [
+                              Text("Total"),
+                              Spacer(),
+                              Text(
+                                  "\$${(ref.watch(cartNotifierProvider)!.total + 8).toStringAsFixed(2)}")
+                            ],
+                          )
+                        : SizedBox.shrink(),
+                    cartItems.length != 0
+                        ? CustomFilledButton(
+                            text: "Checkout",
+                            height: 36,
+                            widht: 130,
+                            fontSize: 20,
+                            foregroundcolor: Colors.white,
+                            callBack: goToconfirmOrderScreen,
+                          )
+                        : SizedBox.shrink(),
                   ],
                 ),
               ),

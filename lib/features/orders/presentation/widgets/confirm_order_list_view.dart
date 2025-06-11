@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/core/date_functions/get_current_formatted_date.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:intl/intl.dart';
 
-class CartListView extends ConsumerStatefulWidget {
-  const CartListView({super.key});
+class ConfirmOrderListView extends ConsumerStatefulWidget {
+  const ConfirmOrderListView({super.key});
 
   @override
-  ConsumerState<CartListView> createState() => _CartListViewState();
+  ConsumerState<ConfirmOrderListView> createState() =>
+      _ConfirmOrderListViewState();
 }
 
-class _CartListViewState extends ConsumerState<CartListView> {
-  String getCurrentFormattedDate() {
-    final now = DateTime.now();
-    final formatter = DateFormat('dd/MM/yy');
-    return formatter.format(now);
-  }
-
+class _ConfirmOrderListViewState extends ConsumerState<ConfirmOrderListView> {
   @override
   Widget build(BuildContext context) {
     final cart = ref.watch(cartNotifierProvider);

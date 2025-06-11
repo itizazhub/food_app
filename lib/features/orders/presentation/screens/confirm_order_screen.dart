@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:food_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
+import 'package:food_app/features/orders/presentation/screens/payment_method_screen.dart';
+import 'package:food_app/features/orders/presentation/widgets/confirm_order_list_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ConfirmOrderScreen extends ConsumerStatefulWidget {
@@ -36,6 +40,13 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
     } else if (_currentIndex == 4) {
       // Handle fifth navigation, e.g., go to Help
     }
+  }
+
+  Future<void> goToPaymentMethodScreen() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PaymentMethodScreen()),
+    );
   }
 
   @override
@@ -100,13 +111,85 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: SingleChildScrollView(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Row(children: [
+                      Text(
+                        "Shipping Address",
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                          color: const Color.fromARGB(255, 233, 83, 34),
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Icon(Icons.edit, size: 18),
+                    ]),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      height: 35,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 211, 182, 51),
+                          borderRadius: BorderRadius.circular(18)),
+                      child: Padding(
+                          padding: const EdgeInsets.only(left: 12),
+                          child: Text(
+                            "778 Locust View Drive Oaklanda, CA",
+                            style: GoogleFonts.leagueSpartan(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: const Color.fromARGB(255, 15, 15, 14),
+                            ),
+                          )),
+                    ),
+                    SizedBox(height: 25),
                     Text(
-                      "Discover our most popular dishes!",
+                      "Order Summary",
                       style: GoogleFonts.leagueSpartan(
                         fontSize: 20,
                         fontWeight: FontWeight.w500,
-                        color: const Color.fromARGB(255, 233, 83, 34),
+                        color: const Color.fromARGB(255, 15, 15, 14),
+                      ),
+                    ),
+                    Divider(),
+                    ConfirmOrderListView(),
+                    Row(
+                      children: [
+                        Text("Subtotal"),
+                        Spacer(),
+                        Text(
+                            "\$${ref.watch(cartNotifierProvider)!.total.toStringAsFixed(2)}")
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text("Tax and fees"),
+                        Spacer(),
+                        Text("\$5.00")
+                      ],
+                    ),
+                    Row(
+                      children: [Text("Delivery"), Spacer(), Text("\$3.00")],
+                    ),
+                    Divider(),
+                    Row(
+                      children: [
+                        Text("Total"),
+                        Spacer(),
+                        Text(
+                            "\$${(ref.watch(cartNotifierProvider)!.total + 8).toStringAsFixed(2)}")
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: CustomFilledButton(
+                        text: "Place Order",
+                        height: 36,
+                        widht: 130,
+                        fontSize: 20,
+                        foregroundcolor: Colors.white,
+                        callBack: goToPaymentMethodScreen,
                       ),
                     ),
                   ],

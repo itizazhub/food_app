@@ -105,6 +105,7 @@ class AddressFirebasedatasource {
   Future<Either<Failure, AddressModel>> updateUserAddress({
     required Address address,
   }) async {
+    print("this is address id ${address.addressId}");
     final url = Uri.https(
       "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app",
       "addresses/${address.addressId}.json",

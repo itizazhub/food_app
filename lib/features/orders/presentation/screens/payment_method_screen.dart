@@ -197,8 +197,9 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                       )
                     : await addressNotifier.updateUserAddress(
                         address: Address(
-                          addressId: "", // Generate unique ID in Firestore
-                          userId: "-OPUxrBC0UHpf4kMnQMT",
+                          addressId: address
+                              .addressId, // Generate unique ID in Firestore
+                          userId: address.userId,
                           address: _addressInput.text.trim(),
                         ),
                       );

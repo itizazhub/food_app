@@ -6,6 +6,7 @@ import 'package:food_app/features/addresses/domain/entities/address.dart';
 import 'package:food_app/features/addresses/domain/usecases/add_user_address.dart';
 import 'package:food_app/features/addresses/domain/usecases/get_user_addresses.dart';
 import 'package:food_app/features/addresses/domain/usecases/remove_user_address.dart';
+import 'package:food_app/features/addresses/domain/usecases/update_user_address.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
 
 /// 🔌 Firebase Data Source Provider
@@ -40,6 +41,12 @@ final removeUserAddressProvider = Provider<RemoveUserAddress>((ref) {
   );
 });
 
+final updateUserAddressProvider = Provider<UpdateUserAddress>((ref) {
+  return UpdateUserAddress(
+    addressRepository: ref.watch(addressRepositoryProvider),
+  );
+});
+
 /// 🧠 Notifier Provider (State Management)
 final addressNotifierProvider =
     StateNotifierProvider<AddressNotifier, List<Address>>((ref) {
@@ -47,6 +54,7 @@ final addressNotifierProvider =
     getUserAddressesUseCase: ref.watch(getUserAddressesProvider),
     addUserAddressUseCase: ref.watch(addUserAddressProvider),
     removeUserAddressUseCase: ref.watch(removeUserAddressProvider),
+    updateUserAddressUseCase: ref.watch(updateUserAddressProvider),
   );
 });
 
@@ -55,11 +63,13 @@ class AddressNotifier extends StateNotifier<List<Address>> {
   final GetUserAddresses getUserAddressesUseCase;
   final AddUserAddress addUserAddressUseCase;
   final RemoveUserAddress removeUserAddressUseCase;
+  final UpdateUserAddress updateUserAddressUseCase;
 
   AddressNotifier({
     required this.getUserAddressesUseCase,
     required this.addUserAddressUseCase,
     required this.removeUserAddressUseCase,
+    required this.updateUserAddressUseCase,
   }) : super([]);
 
   /// 🔄 Fetch All Addresses for a User
@@ -105,6 +115,29 @@ class AddressNotifier extends StateNotifier<List<Address>> {
       (message) {
         debugPrint("✅ $message");
         state = state.where((a) => a.addressId != address.addressId).toList();
+      },
+    );
+  }
+
+  /// Update Address
+  Future<void> updateUserAddress({required Address address}) async {
+    final result = await updateUserAddressUseCase(address: address);
+
+    result.fold(
+      (failure) {
+        debugPrint("❌ Failed to update address: ${failure.message}");
+      },
+      (updatedAddress) {
+        final index =
+            state.indexWhere((a) => a.addressId == updatedAddress.addressId);
+        if (index != -1) {
+          final updatedList = [...state];
+          updatedList[index] = updatedAddress;
+          state = updatedList;
+          debugPrint("✅ Address updated successfully.");
+        } else {
+          debugPrint("⚠️ Address not found in current state.");
+        }
       },
     );
   }

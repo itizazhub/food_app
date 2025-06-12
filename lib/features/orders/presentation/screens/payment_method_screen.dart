@@ -38,17 +38,18 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   }
 
   Future<void> _showAddressDialog() async {
-    await ref.read(addressNotifierProvider.notifier).getUserAddresses(
-          user: User(
-            id: "-OPUxrBC0UHpf4kMnQMT",
-            username: "test",
-            email: "test@gmail.com",
-            password: "test123",
-            isAdmin: false,
-          ),
-        );
+    final addressNotifier = ref.read(addressNotifierProvider.notifier);
+    await addressNotifier.getUserAddresses(
+      user: User(
+        id: "-OPUxrBC0UHpf4kMnQMT",
+        username: "test",
+        email: "test@gmail.com",
+        password: "test123",
+        isAdmin: false,
+      ),
+    );
 
-    final addresses = ref.read(addressNotifierProvider);
+    final addresses = ref.watch(addressNotifierProvider);
     String? tempSelected = selectedAddress;
 
     if (!mounted) return;
@@ -71,12 +72,36 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                         itemCount: addresses.length,
                         itemBuilder: (_, index) {
                           final address = addresses[index];
-                          return RadioListTile<String>(
-                            value: address.address,
-                            groupValue: tempSelected,
+                          return ListTile(
                             title: Text(address.address),
-                            onChanged: (value) {
-                              setDialogState(() => tempSelected = value);
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                InkWell(
+                                    onTap: () async {
+                                      Navigator.pop(context);
+                                      await _showAddAddressDialog(
+                                          address: address);
+                                    },
+                                    child: Icon(Icons.edit)),
+                                InkWell(
+                                    onTap: () async {
+                                      await addressNotifier.removeUserAddress(
+                                          address: Address(
+                                              addressId: address.addressId,
+                                              userId: address.userId,
+                                              address: address.address));
+                                      Navigator.pop(context);
+                                      await _showAddressDialog();
+                                    },
+                                    child: Icon(Icons.delete)),
+                              ],
+                            ),
+                            onTap: () {
+                              setState(() {
+                                selectedAddress = address.address;
+                              });
+                              Navigator.pop(context);
                             },
                           );
                         },
@@ -102,19 +127,14 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                 ],
               ),
               actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedAddress = tempSelected;
-                    });
-                    Navigator.pop(context);
-                  },
-                  child: const Text('Confirm'),
-                ),
+                CustomFilledButton(
+                    text: "cancel",
+                    widht: 80,
+                    height: 25,
+                    fontSize: 12,
+                    callBack: () async {
+                      Navigator.pop(context); // Reopen address selector
+                    }),
               ],
             );
           },
@@ -123,13 +143,16 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
     );
   }
 
-  Future<void> _showAddAddressDialog() async {
+  Future<void> _showAddAddressDialog({Address? address}) async {
     final addressNotifier = ref.read(addressNotifierProvider.notifier);
+    if (address != null) {
+      _addressInput.text = address.address;
+    }
 
     await showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Enter New Address'),
+        title: Text(address == null ? 'Enter New Address' : 'Update Address'),
         content: Form(
           key: _formKey,
           child: CustomTextFormField(
@@ -158,19 +181,27 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                 }
               }),
           CustomFilledButton(
-            text: "Add Address",
-            widht: 120,
+            text: address == null ? "Add Address" : "Update Address",
+            widht: 130,
             height: 25,
             fontSize: 12,
             callBack: () async {
               if (_formKey.currentState?.validate() ?? false) {
-                await addressNotifier.addUserAddress(
-                  address: Address(
-                    addressId: "", // Generate unique ID in Firestore
-                    userId: "-OPUxrBC0UHpf4kMnQMT",
-                    address: _addressInput.text.trim(),
-                  ),
-                );
+                address == null
+                    ? await addressNotifier.addUserAddress(
+                        address: Address(
+                          addressId: "", // Generate unique ID in Firestore
+                          userId: "-OPUxrBC0UHpf4kMnQMT",
+                          address: _addressInput.text.trim(),
+                        ),
+                      )
+                    : await addressNotifier.updateUserAddress(
+                        address: Address(
+                          addressId: "", // Generate unique ID in Firestore
+                          userId: "-OPUxrBC0UHpf4kMnQMT",
+                          address: _addressInput.text.trim(),
+                        ),
+                      );
                 _addressInput.clear();
                 if (mounted) {
                   Navigator.pop(context); // Close add dialog
@@ -186,28 +217,30 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userAddresses = ref.watch(addressNotifierProvider);
-    final addressNotifier = ref.read(addressNotifierProvider.notifier);
-
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      // resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            _buildTopHeader(),
-            Expanded(
+            Positioned(top: 0, child: _buildTopHeader()),
+            Positioned(
+              top: 100,
+              bottom: 0,
+              left: 0,
+              right: 0,
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: const BoxDecoration(
                   color: Color.fromARGB(255, 248, 248, 248),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20)),
                 ),
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildShippingAddressSection(
-                          userAddresses, addressNotifier),
+                      _buildShippingAddressSection(),
                       const SizedBox(height: 25),
                       Text(
                         "Order Summary",
@@ -233,6 +266,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   Widget _buildTopHeader() {
     return Container(
       height: 110,
+      width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: const BoxDecoration(color: Color.fromARGB(255, 245, 203, 88)),
       child: Row(
@@ -257,8 +291,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
     );
   }
 
-  Widget _buildShippingAddressSection(
-      List<Address>? addresses, dynamic notifier) {
+  Widget _buildShippingAddressSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

@@ -101,4 +101,33 @@ class AddressFirebasedatasource {
       return Left((SomeSpecificError("Can not add user address $e")));
     }
   }
+
+  Future<Either<Failure, AddressModel>> updateUserAddress({
+    required Address address,
+  }) async {
+    final url = Uri.https(
+      "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app",
+      "addresses/${address.addressId}.json",
+    );
+
+    try {
+      final response = await http.put(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(AddressModel.fromEntity(address: address).toJson()),
+      );
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        print("User address updated successfully ${response.statusCode}");
+
+        return Right(AddressModel.fromEntity(address: address));
+      } else {
+        return Left(SomeSpecificError(
+          "Cannot update user address: ${response.statusCode}",
+        ));
+      }
+    } catch (e) {
+      return Left(SomeSpecificError("Cannot update user address: $e"));
+    }
+  }
 }

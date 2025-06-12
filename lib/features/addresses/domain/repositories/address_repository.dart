@@ -7,4 +7,6 @@ abstract class AddressRepository {
   Future<Either<Failure, List<Address>>> getUserAddresses({required User user});
   Future<Either<Failure, Address>> addUserAddress({required Address address});
   Future<Either<Failure, String>> removeUserAddress({required Address address});
+  Future<Either<Failure, Address>> updateUserAddress(
+      {required Address address});
 }

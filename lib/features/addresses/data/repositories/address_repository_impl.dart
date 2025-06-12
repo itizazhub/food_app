@@ -56,4 +56,20 @@ class AddressRepositoryImpl implements AddressRepository {
       return Left(SomeSpecificError(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, Address>> updateUserAddress(
+      {required Address address}) async {
+    try {
+      final failureOrAddress =
+          await addressFirebasedatasource.updateUserAddress(address: address);
+      return failureOrAddress.fold((failure) {
+        return Left(failure);
+      }, (address) {
+        return Right(address.toEntity());
+      });
+    } catch (e) {
+      return Left(SomeSpecificError(e.toString()));
+    }
+  }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/orders/presentation/screens/order_confirmed_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:food_app/features/addresses/domain/entities/address.dart';
@@ -23,6 +25,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   final _addressInput = TextEditingController();
   int _currentIndex = 0;
   String? selectedAddress;
+  String? paymentMethod = "";
 
   @override
   void dispose() {
@@ -119,8 +122,8 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                       height: 35,
                       fontSize: 12,
                       callBack: () async {
-                        Navigator.pop(context); // Close current dialog
-                        await _showAddAddressDialog(); // Open add address dialog
+                        Navigator.pop(context);
+                        await _showAddAddressDialog();
                       },
                     ),
                   ),
@@ -133,7 +136,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                     height: 25,
                     fontSize: 12,
                     callBack: () async {
-                      Navigator.pop(context); // Reopen address selector
+                      Navigator.pop(context);
                     }),
               ],
             );
@@ -176,8 +179,8 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
               callBack: () async {
                 _addressInput.clear();
                 if (mounted) {
-                  Navigator.pop(context); // Close add dialog
-                  await _showAddressDialog(); // Reopen address selector
+                  Navigator.pop(context);
+                  await _showAddressDialog();
                 }
               }),
           CustomFilledButton(
@@ -190,23 +193,22 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                 address == null
                     ? await addressNotifier.addUserAddress(
                         address: Address(
-                          addressId: "", // Generate unique ID in Firestore
+                          addressId: "",
                           userId: "-OPUxrBC0UHpf4kMnQMT",
                           address: _addressInput.text.trim(),
                         ),
                       )
                     : await addressNotifier.updateUserAddress(
                         address: Address(
-                          addressId: address
-                              .addressId, // Generate unique ID in Firestore
+                          addressId: address.addressId,
                           userId: address.userId,
                           address: _addressInput.text.trim(),
                         ),
                       );
                 _addressInput.clear();
                 if (mounted) {
-                  Navigator.pop(context); // Close add dialog
-                  await _showAddressDialog(); // Reopen address selector
+                  Navigator.pop(context);
+                  await _showAddressDialog();
                 }
               }
             },
@@ -216,10 +218,26 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
     );
   }
 
+  Future<void> goToOrderConfirmedScreen() async {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OrderConfirmedScreen()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final cart = ref.watch(cartNotifierProvider);
+    ref.watch(cartNotifierProvider.notifier).getUserCart(
+            user: User(
+          id: "-OPUxrBC0UHpf4kMnQMT",
+          username: "test",
+          email: "test@gmail.com",
+          password: "test123",
+          isAdmin: false,
+        ));
+    final cartItems = cart!.items ?? [];
     return Scaffold(
-      // resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(
           children: [
@@ -239,21 +257,93 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                 ),
                 child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildShippingAddressSection(),
-                      const SizedBox(height: 25),
-                      Text(
-                        "Order Summary",
-                        style: GoogleFonts.leagueSpartan(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildShippingAddressSection(),
+                        const SizedBox(height: 25),
+                        Text(
+                          "Order Summary",
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      const Divider(),
-                      // Add order summary widgets here
-                    ],
-                  ),
+                        const Divider(),
+                        SingleChildScrollView(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: cartItems.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                  title: Text("${cartItems[index].productId}"),
+                                  trailing: Text(
+                                      "${cartItems[index].quantity} items"),
+                                );
+                              }),
+                        ),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Total",
+                                style: GoogleFonts.leagueSpartan(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text("\$${(cart.total + 8).toString()}"),
+                            ]),
+                        Divider(),
+                        Text(
+                          "Payment Method",
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        RadioListTile(
+                            title: Text("Cash on Delivery"),
+                            value: "Cash",
+                            groupValue: paymentMethod,
+                            onChanged: (value) {
+                              setState(() {
+                                paymentMethod = "Cash";
+                              });
+                            }),
+                        RadioListTile(
+                            title: Text("Card at Door Step"),
+                            value: "Card",
+                            groupValue: paymentMethod,
+                            onChanged: (value) {
+                              setState(() {
+                                paymentMethod = "Card";
+                              });
+                            }),
+                        Divider(),
+                        Text(
+                          "Delivery Time",
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Estimated Delivery"),
+                            Text("25 mins")
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        Align(
+                          alignment: Alignment.center,
+                          child: CustomFilledButton(
+                            text: "Order Now",
+                            callBack: goToOrderConfirmedScreen,
+                          ),
+                        ),
+                      ]),
                 ),
               ),
             ),

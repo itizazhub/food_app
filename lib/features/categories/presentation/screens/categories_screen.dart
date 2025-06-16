@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_app/features/best-sellers/presentation/widgets/best_seller_grid.dart';
+import 'package:food_app/features/best_sellers/presentation/widgets/best_seller_grid.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/home/domain/entities/category.dart';
 import 'package:food_app/features/home/domain/entities/product.dart';
@@ -9,7 +9,7 @@ import 'package:food_app/features/home/presentation/providers/categories_provide
 import 'package:food_app/features/home/presentation/providers/products_by_category_provider.dart';
 import 'package:food_app/features/home/presentation/widgets/recommended_grid.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
-import 'package:food_app/features/product/presentation/screens/product_screen.dart';
+import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CategoriesScreen extends ConsumerStatefulWidget {

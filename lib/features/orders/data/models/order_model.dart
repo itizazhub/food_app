@@ -1,4 +1,4 @@
-import 'package:food_app/features/cart/data/models/cart_item_model.dart';
+import 'package:food_app/features/carts/data/models/cart_item_model.dart';
 import 'package:food_app/features/core/date_functions/parse_formatted_date.dart';
 import 'package:food_app/features/orders/domain/entities/order.dart';
 

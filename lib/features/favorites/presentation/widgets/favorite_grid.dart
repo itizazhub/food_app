@@ -11,7 +11,7 @@ import 'package:food_app/features/home/domain/entities/product.dart';
 import 'package:food_app/features/home/presentation/providers/categories_provider.dart';
 import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/providers/products_provider.dart';
-import 'package:food_app/features/product/presentation/screens/product_screen.dart';
+import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 
 class FavoriteGrid extends ConsumerStatefulWidget {
   const FavoriteGrid({super.key});

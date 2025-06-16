@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
-import 'package:food_app/features/cart/domain/entities/cart.dart';
-import 'package:food_app/features/cart/domain/repositories/cart_repository.dart';
+import 'package:food_app/features/carts/domain/entities/cart.dart';
+import 'package:food_app/features/carts/domain/repositories/cart_repository.dart';
 import 'package:food_app/features/core/error/failures.dart';
 
 class GetUserCart {

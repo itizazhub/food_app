@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/home/domain/entities/product.dart';
 import 'package:food_app/features/home/presentation/providers/best_sellers_provider.dart';
 import 'package:food_app/features/home/presentation/providers/products_provider.dart';
-import 'package:food_app/features/product/presentation/screens/product_screen.dart';
+import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BestSellerListView extends ConsumerStatefulWidget {

@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:dartz/dartz.dart';
-import 'package:food_app/features/cart/data/models/cart_item_model.dart';
-import 'package:food_app/features/cart/domain/entities/cart.dart';
+import 'package:food_app/features/carts/data/models/cart_item_model.dart';
+import 'package:food_app/features/carts/domain/entities/cart.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:food_app/features/auth/domain/entities/user.dart';
-import 'package:food_app/features/cart/data/models/cart_model.dart';
+import 'package:food_app/features/carts/data/models/cart_model.dart';
 import 'package:food_app/features/core/error/failures.dart';
 
 class CartFirebasedatasource {

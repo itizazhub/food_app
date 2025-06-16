@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:food_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/core/date_functions/get_current_formatted_date.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:intl/intl.dart';

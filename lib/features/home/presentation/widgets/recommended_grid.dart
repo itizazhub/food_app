@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
-import 'package:food_app/features/cart/domain/entities/cart_item.dart';
-import 'package:food_app/features/cart/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/carts/domain/entities/cart_item.dart';
+import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/home/domain/entities/category.dart';
 import 'package:food_app/features/home/domain/entities/favorite.dart';
@@ -13,7 +13,7 @@ import 'package:food_app/features/home/presentation/providers/categories_provide
 import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/providers/products_provider.dart';
 import 'package:food_app/features/home/presentation/providers/recommendeds_provider.dart';
-import 'package:food_app/features/product/presentation/screens/product_screen.dart';
+import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RecommendedGrid extends ConsumerStatefulWidget {

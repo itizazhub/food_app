@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:food_app/features/core/error/failures.dart';
-import 'package:food_app/features/status/data/models/status_model.dart';
+import 'package:food_app/features/statuses/data/models/status_model.dart';
 
 import 'package:http/http.dart' as http;
 

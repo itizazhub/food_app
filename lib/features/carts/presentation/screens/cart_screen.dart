@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:food_app/features/cart/presentation/providers/cart_provider.dart';
-import 'package:food_app/features/cart/presentation/widgets/cart_list_view.dart';
+import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/carts/presentation/widgets/cart_list_view.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:food_app/features/orders/presentation/screens/confirm_order_screen.dart';

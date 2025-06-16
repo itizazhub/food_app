@@ -1,4 +1,4 @@
-import 'package:food_app/features/status/domain/entities/status.dart';
+import 'package:food_app/features/statuses/domain/entities/status.dart';
 
 class StatusModel {
   StatusModel({

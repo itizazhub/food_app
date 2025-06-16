@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
-import 'package:food_app/features/cart/data/datasources/cart_firebasedatasource.dart';
-import 'package:food_app/features/cart/data/repositories/cart_repository_impl.dart';
-import 'package:food_app/features/cart/domain/entities/cart.dart';
-import 'package:food_app/features/cart/domain/entities/cart_item.dart';
-import 'package:food_app/features/cart/domain/usecases/get_user_cart.dart';
-import 'package:food_app/features/cart/domain/usecases/update_user_cart.dart';
+import 'package:food_app/features/carts/data/datasources/cart_firebasedatasource.dart';
+import 'package:food_app/features/carts/data/repositories/cart_repository_impl.dart';
+import 'package:food_app/features/carts/domain/entities/cart.dart';
+import 'package:food_app/features/carts/domain/entities/cart_item.dart';
+import 'package:food_app/features/carts/domain/usecases/get_user_cart.dart';
+import 'package:food_app/features/carts/domain/usecases/update_user_cart.dart';
 import 'package:food_app/features/home/presentation/providers/categories_provider.dart';
 
 final cartFirebasedatasource = Provider<CartFirebasedatasource>((ref) {

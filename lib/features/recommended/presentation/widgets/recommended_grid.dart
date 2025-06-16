@@ -10,7 +10,7 @@ import 'package:food_app/features/home/presentation/providers/categories_provide
 import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/providers/products_provider.dart';
 import 'package:food_app/features/home/presentation/providers/recommendeds_provider.dart';
-import 'package:food_app/features/product/presentation/screens/product_screen.dart';
+import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RecommendedGrid extends ConsumerStatefulWidget {

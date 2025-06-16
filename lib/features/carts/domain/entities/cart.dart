@@ -1,4 +1,4 @@
-import 'package:food_app/features/cart/domain/entities/cart_item.dart';
+import 'package:food_app/features/carts/domain/entities/cart_item.dart';
 
 class Cart {
   Cart(

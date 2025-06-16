@@ -9,8 +9,16 @@ class StatusRepositoryImpl implements StatusRepository {
   StatusFirebasedatasource statusFirebasedatasource;
 
   @override
-  Future<Either<Failure, List<Status>>> getStatuses() {
-    // TODO: implement getStatuses
-    throw UnimplementedError();
+  Future<Either<Failure, List<Status>>> getStatuses() async {
+    try {
+      final failureOrStatuses = await statusFirebasedatasource.getStatuses();
+      return failureOrStatuses.fold((failure) {
+        return Left(failure);
+      }, (statuses) {
+        return Right(statuses.map((status) => status.toEntity()).toList());
+      });
+    } catch (e) {
+      return Left(SomeSpecificError(e.toString()));
+    }
   }
 }

@@ -221,7 +221,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   Future<void> goToOrderConfirmedScreen() async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => OrderConfirmedScreen()),
+      MaterialPageRoute(builder: (context) => const OrderConfirmedScreen()),
     );
   }
 
@@ -272,11 +272,11 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                         SingleChildScrollView(
                           child: ListView.builder(
                               shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               itemCount: cartItems.length,
                               itemBuilder: (context, index) {
                                 return ListTile(
-                                  title: Text("${cartItems[index].productId}"),
+                                  title: Text("${cartItems[index].productId} "),
                                   trailing: Text(
                                       "${cartItems[index].quantity} items"),
                                 );
@@ -294,7 +294,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                               ),
                               Text("\$${(cart.total + 8).toString()}"),
                             ]),
-                        Divider(),
+                        const Divider(),
                         Text(
                           "Payment Method",
                           style: GoogleFonts.leagueSpartan(
@@ -303,7 +303,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                           ),
                         ),
                         RadioListTile(
-                            title: Text("Cash on Delivery"),
+                            title: const Text("Cash on Delivery"),
                             value: "Cash",
                             groupValue: paymentMethod,
                             onChanged: (value) {
@@ -312,7 +312,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                               });
                             }),
                         RadioListTile(
-                            title: Text("Card at Door Step"),
+                            title: const Text("Card at Door Step"),
                             value: "Card",
                             groupValue: paymentMethod,
                             onChanged: (value) {
@@ -320,7 +320,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                                 paymentMethod = "Card";
                               });
                             }),
-                        Divider(),
+                        const Divider(),
                         Text(
                           "Delivery Time",
                           style: GoogleFonts.leagueSpartan(
@@ -328,14 +328,14 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Estimated Delivery"),
                             Text("25 mins")
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Align(
                           alignment: Alignment.center,
                           child: CustomFilledButton(

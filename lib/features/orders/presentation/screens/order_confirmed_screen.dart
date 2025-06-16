@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +14,15 @@ class OrderConfirmedScreen extends ConsumerStatefulWidget {
 }
 
 class _OrderConfirmedScreenState extends ConsumerState<OrderConfirmedScreen> {
+  int _currentIndex = 0;
+
+  void _onNavItemTapped(int index) {
+    setState(() => _currentIndex = index);
+    if (index == 0) {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => HomeScreen()));
+    }
+  }
+
   Future<void> goToHomeScreen() async {
     Navigator.push(
       context,
@@ -82,6 +92,8 @@ class _OrderConfirmedScreenState extends ConsumerState<OrderConfirmedScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Text("Order Successfully Placed!"),
+                  SizedBox(height: 10),
                   Text("Thank you for placing your order"),
                   SizedBox(height: 20),
                   CustomFilledButton(
@@ -92,12 +104,51 @@ class _OrderConfirmedScreenState extends ConsumerState<OrderConfirmedScreen> {
                     foregroundcolor: Colors.white,
                     callBack: goToHomeScreen,
                   ),
+                  SizedBox(height: 20),
+                  CustomFilledButton(
+                    text: "Go to My Orders",
+                    height: 36,
+                    widht: 200,
+                    fontSize: 20,
+                    foregroundcolor: Colors.white,
+                    // callBack: goToHomeScreen,
+                  ),
                 ],
               ),
             ),
           ),
         ]),
       ),
+      bottomNavigationBar: _buildBottomNavBar(),
+    );
+  }
+
+  Widget _buildBottomNavBar() {
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+      child: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: _onNavItemTapped,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: const Color.fromARGB(255, 233, 83, 34),
+        items: [
+          _navItem("home"),
+          _navItem("categories"),
+          _navItem("favorites"),
+          _navItem("list"),
+          _navItem("help"),
+        ],
+      ),
+    );
+  }
+
+  BottomNavigationBarItem _navItem(String iconName) {
+    return BottomNavigationBarItem(
+      icon:
+          SvgPicture.asset("bottom-navigation-icons/$iconName.svg", height: 24),
+      label: '',
     );
   }
 }

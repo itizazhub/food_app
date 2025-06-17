@@ -55,7 +55,7 @@ class RatingFirebasedatabase {
         final Map<String, dynamic> result = jsonDecode(response.body);
         print(result);
         if (result.isEmpty) {
-          return Right(0.0); // No ratings yet
+          return Right(0.0);
         }
         final ratings = result.entries
             .map((ratingJson) => RatingModel.fromJson(

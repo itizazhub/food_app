@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/core/date_functions/get_current_formatted_date.dart';
+import 'package:food_app/features/orders/domain/entities/order.dart';
+import 'package:food_app/features/orders/presentation/providers/order_provider.dart';
 import 'package:food_app/features/orders/presentation/screens/order_confirmed_screen.dart';
+import 'package:food_app/features/payment_methods/presentation/providers/payment_methods_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:food_app/features/addresses/domain/entities/address.dart';
@@ -24,7 +28,11 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   final _formKey = GlobalKey<FormState>();
   final _addressInput = TextEditingController();
   int _currentIndex = 0;
-  String? selectedAddress;
+  Address selectedAddress = Address(addressId: "", userId: "", address: "");
+  var cartItems = null;
+  var cart = null;
+
+  // String? selectedAddress;
   String? paymentMethod = "";
 
   @override
@@ -53,7 +61,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
     );
 
     final addresses = ref.watch(addressNotifierProvider);
-    String? tempSelected = selectedAddress;
+    // String? tempSelected = selectedAddress;
 
     if (!mounted) return;
 
@@ -102,7 +110,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                             ),
                             onTap: () {
                               setState(() {
-                                selectedAddress = address.address;
+                                selectedAddress = address;
                               });
                               Navigator.pop(context);
                             },
@@ -227,7 +235,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cart = ref.watch(cartNotifierProvider);
+    cart = ref.watch(cartNotifierProvider);
     ref.watch(cartNotifierProvider.notifier).getUserCart(
             user: User(
           id: "-OPUxrBC0UHpf4kMnQMT",
@@ -236,7 +244,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
           password: "test123",
           isAdmin: false,
         ));
-    final cartItems = cart!.items ?? [];
+    cartItems = cart!.items ?? [];
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -340,7 +348,40 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                           alignment: Alignment.center,
                           child: CustomFilledButton(
                             text: "Order Now",
-                            callBack: goToOrderConfirmedScreen,
+                            callBack: () async {
+                              await ref
+                                  .watch(
+                                      paymentMethodsNotifierProvider.notifier)
+                                  .getPaymentMethods();
+                              final paymentMethods = await ref
+                                  .watch(paymentMethodsNotifierProvider);
+                              final _paymentMethod =
+                                  paymentMethods.firstWhere((element) {
+                                return element.payment == paymentMethod;
+                              });
+
+                              await ref
+                                  .watch(orderNotifierProvider.notifier)
+                                  .addOrder(
+                                      order: Order(
+                                    addressId: selectedAddress.address,
+                                    items: cartItems,
+                                    orderDate: DateTime.now(),
+                                    orderId: "",
+                                    orderStatus:
+                                        "-OPVnopZWgoqB8b3oK8I", // statusId
+                                    orderType: "delivery",
+                                    paymentMethodId: _paymentMethod.paymentId,
+                                    total: cart.total,
+                                    userId: "OPUxrBC0UHpf4kMnQMT",
+                                  ));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const OrderConfirmedScreen()),
+                              );
+                            },
                           ),
                         ),
                       ]),
@@ -413,7 +454,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             borderRadius: BorderRadius.circular(18),
           ),
           child: Text(
-            selectedAddress ?? "Tap on edit icon",
+            selectedAddress.address ?? "Tap on edit icon",
             style: GoogleFonts.leagueSpartan(
               fontSize: 16,
               fontWeight: FontWeight.w500,

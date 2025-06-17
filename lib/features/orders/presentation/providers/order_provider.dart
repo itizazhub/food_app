@@ -59,7 +59,7 @@ class OrderNotifier extends StateNotifier<List<Order>> {
         debugPrint("Failed to get addresses: ${failure.message}");
       },
       (success) {
-        debugPrint("Failed to get addresses: $success");
+        debugPrint("Successfully order added: $success");
       },
     );
   }

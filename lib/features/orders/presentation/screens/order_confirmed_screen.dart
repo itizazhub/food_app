@@ -41,7 +41,7 @@ class _OrderConfirmedScreenState extends ConsumerState<OrderConfirmedScreen> {
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: 110,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 245, 203, 88),
               ),
               child: Row(
@@ -52,7 +52,7 @@ class _OrderConfirmedScreenState extends ConsumerState<OrderConfirmedScreen> {
                       // Go back to the previous screen
                       Navigator.pop(context);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       size: 18,
                       Icons.arrow_back_ios,
                       color: Color.fromARGB(255, 233, 83, 34),
@@ -63,10 +63,11 @@ class _OrderConfirmedScreenState extends ConsumerState<OrderConfirmedScreen> {
                     style: GoogleFonts.leagueSpartan(
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(255, 248, 248, 248),
+                      color: const Color.fromARGB(255, 248, 248, 248),
                     ),
                   ),
-                  SizedBox(width: 50), // You can remove this if not needed
+                  const SizedBox(
+                      width: 50), // You can remove this if not needed
                 ],
               ),
             ),
@@ -92,10 +93,10 @@ class _OrderConfirmedScreenState extends ConsumerState<OrderConfirmedScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Order Successfully Placed!"),
-                  SizedBox(height: 10),
-                  Text("Thank you for placing your order"),
-                  SizedBox(height: 20),
+                  const Text("Order Successfully Placed!"),
+                  const SizedBox(height: 10),
+                  const Text("Thank you for placing your order"),
+                  const SizedBox(height: 20),
                   CustomFilledButton(
                     text: "Go to Home",
                     height: 36,
@@ -104,14 +105,14 @@ class _OrderConfirmedScreenState extends ConsumerState<OrderConfirmedScreen> {
                     foregroundcolor: Colors.white,
                     callBack: goToHomeScreen,
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   CustomFilledButton(
                     text: "Go to My Orders",
                     height: 36,
                     widht: 200,
                     fontSize: 20,
                     foregroundcolor: Colors.white,
-                    // callBack: goToHomeScreen,
+                    callBack: goToHomeScreen,
                   ),
                 ],
               ),

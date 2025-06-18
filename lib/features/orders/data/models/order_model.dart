@@ -80,7 +80,6 @@ class OrderModel {
         return cartItemModel.toJson();
       }).toList(),
       "order_date": orderDate.toString(),
-      "order_id": orderId,
       "order_status": orderStatus,
       "order_type": orderType,
       "payment_method_id": paymentMethodId,

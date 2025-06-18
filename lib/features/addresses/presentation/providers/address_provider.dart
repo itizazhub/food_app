@@ -142,3 +142,20 @@ class AddressNotifier extends StateNotifier<List<Address>> {
     );
   }
 }
+
+final selectedAddressNotifierProvider =
+    StateNotifierProvider<SelectedAddressNotifier, Address?>((ref) {
+  return SelectedAddressNotifier();
+});
+
+class SelectedAddressNotifier extends StateNotifier<Address?> {
+  SelectedAddressNotifier() : super(null);
+
+  void selectAddress(Address address) {
+    state = address;
+  }
+
+  void clear() {
+    state = null;
+  }
+}

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
-import 'package:food_app/features/core/date_functions/get_current_formatted_date.dart';
+
 import 'package:food_app/features/orders/domain/entities/order.dart';
 import 'package:food_app/features/orders/presentation/providers/order_provider.dart';
 import 'package:food_app/features/orders/presentation/screens/order_confirmed_screen.dart';
@@ -28,9 +28,8 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   final _formKey = GlobalKey<FormState>();
   final _addressInput = TextEditingController();
   int _currentIndex = 0;
-  Address selectedAddress = Address(addressId: "", userId: "", address: "");
-  var cartItems = null;
-  var cart = null;
+  var cartItems;
+  var cart;
 
   // String? selectedAddress;
   String? paymentMethod = "";
@@ -50,6 +49,8 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
 
   Future<void> _showAddressDialog() async {
     final addressNotifier = ref.read(addressNotifierProvider.notifier);
+    final selectedAddressNotifier =
+        ref.watch(selectedAddressNotifierProvider.notifier);
     await addressNotifier.getUserAddresses(
       user: User(
         id: "-OPUxrBC0UHpf4kMnQMT",
@@ -110,7 +111,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                             ),
                             onTap: () {
                               setState(() {
-                                selectedAddress = address;
+                                selectedAddressNotifier.selectAddress(address);
                               });
                               Navigator.pop(context);
                             },
@@ -364,7 +365,9 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                                   .watch(orderNotifierProvider.notifier)
                                   .addOrder(
                                       order: Order(
-                                    addressId: selectedAddress.address,
+                                    addressId: ref
+                                        .watch(selectedAddressNotifierProvider)!
+                                        .addressId,
                                     items: cartItems,
                                     orderDate: DateTime.now(),
                                     orderId: "",
@@ -454,7 +457,9 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             borderRadius: BorderRadius.circular(18),
           ),
           child: Text(
-            selectedAddress.address ?? "Tap on edit icon",
+            ref.watch(selectedAddressNotifierProvider) == null
+                ? "Tap on edit icon"
+                : ref.watch(selectedAddressNotifierProvider)!.address,
             style: GoogleFonts.leagueSpartan(
               fontSize: 16,
               fontWeight: FontWeight.w500,

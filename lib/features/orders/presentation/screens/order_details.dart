@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
+
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:food_app/features/orders/presentation/providers/order_provider.dart';
-import 'package:food_app/features/orders/presentation/widgets/active_page.dart';
-import 'package:food_app/features/orders/presentation/widgets/cancelled_page.dart';
-import 'package:food_app/features/orders/presentation/widgets/completed_page.dart';
+import 'package:food_app/features/orders/presentation/widgets/my_order_list_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class MyOrdersScreen extends ConsumerStatefulWidget {
-  const MyOrdersScreen({super.key});
+class OrderDetails extends ConsumerStatefulWidget {
+  OrderDetails({super.key, required this.orderId});
+  String orderId;
 
   @override
-  ConsumerState<MyOrdersScreen> createState() => _MyOrdersScreenState();
+  ConsumerState<OrderDetails> createState() => _OrderDetailsState();
 }
 
-class _MyOrdersScreenState extends ConsumerState<MyOrdersScreen> {
-  int _currentIndex = 0;
+class _OrderDetailsState extends ConsumerState<OrderDetails> {
+  int _currentIndex = 3;
+
+  // Function to handle navigation
   void _onNavItemTapped(int index) {
     setState(() {
       _currentIndex = index;
@@ -42,38 +43,14 @@ class _MyOrdersScreenState extends ConsumerState<MyOrdersScreen> {
     }
   }
 
-  final PageController _pageController = PageController();
-  int _currentPage = 0;
-  final List<Widget> _pages = [ActivePage(), CompletedPage(), CancelledPage()];
-
-  Future<void> _goToPage(int index) async {
-    setState(() {
-      _currentPage = index;
-    });
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
-  }
-
-  @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
-    ref.watch(orderNotifierProvider.notifier).getUserOrders(
-            user: User(
-          id: "-OPUxrBC0UHpf4kMnQMT",
-          username: "test",
-          email: "test@gmail.com",
-          password: "test123",
-          isAdmin: false,
-        ));
+    final order = ref
+        .watch(orderNotifierProvider.notifier)
+        .getOrderById(orderId: widget.orderId);
     return Scaffold(
+      // backgroundColor: Color.fromARGB(255, 245, 203, 88),
+      resizeToAvoidBottomInset: true, // Ensure UI adjusts with keyboard
       body: SafeArea(
         child: Stack(children: [
           // Top section (title, back button)
@@ -100,7 +77,7 @@ class _MyOrdersScreenState extends ConsumerState<MyOrdersScreen> {
                     ),
                   ),
                   Text(
-                    "My Orders",
+                    "Order Details",
                     style: GoogleFonts.leagueSpartan(
                       fontSize: 28,
                       fontWeight: FontWeight.w700,
@@ -133,48 +110,62 @@ class _MyOrdersScreenState extends ConsumerState<MyOrdersScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      "${order.orderId}",
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                        color: const Color.fromARGB(255, 233, 83, 34),
+                      ),
+                    ),
+                    // const SizedBox(height: 10),
+                    Text(
+                      "${order.orderDate}",
+                      style: GoogleFonts.leagueSpartan(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: const Color.fromARGB(255, 233, 83, 34),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Divider(color: const Color.fromARGB(255, 233, 83, 34)),
+
+                    MyOrderListView(),
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomFilledButton(
-                          text: "Active",
-                          fontSize: 18,
-                          widht: 140,
-                          height: 40,
-                          backgroundColor:
-                              _currentPage == 0 ? Colors.orange : Colors.grey,
-                          callBack: () => _goToPage(0),
-                        ),
-                        CustomFilledButton(
-                          text: "Completed",
-                          fontSize: 18,
-                          widht: 140,
-                          height: 40,
-                          backgroundColor:
-                              _currentPage == 1 ? Colors.orange : Colors.grey,
-                          callBack: () => _goToPage(1),
-                        ),
-                        CustomFilledButton(
-                          text: "Cancelled",
-                          fontSize: 18,
-                          widht: 140,
-                          height: 40,
-                          backgroundColor:
-                              _currentPage == 2 ? Colors.orange : Colors.grey,
-                          callBack: () => _goToPage(2),
-                        ),
+                        Text("Subtotal"),
+                        Spacer(),
+                        Text("\$${order.total.toStringAsFixed(2)}")
                       ],
                     ),
-                    const SizedBox(height: 30),
-                    SizedBox(
-                      height: 300,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: _pages.length,
-                        onPageChanged: (index) => setState(() {
-                          _currentPage = index;
-                        }),
-                        itemBuilder: (context, index) => _pages[index],
+                    Row(
+                      children: [
+                        Text("Tax and fees"),
+                        Spacer(),
+                        Text("\$5.00")
+                      ],
+                    ),
+                    Row(
+                      children: [Text("Delivery"), Spacer(), Text("\$3.00")],
+                    ),
+                    Divider(),
+                    Row(
+                      children: [
+                        Text("Total"),
+                        Spacer(),
+                        Text("\$${(order.total + 8).toStringAsFixed(2)}")
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: CustomFilledButton(
+                        text: "Order Again",
+                        height: 36,
+                        widht: 160,
+                        fontSize: 20,
+                        foregroundcolor: Colors.white,
+                        // callBack: goToPaymentMethodScreen,
                       ),
                     ),
                   ],

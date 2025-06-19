@@ -63,4 +63,32 @@ class OrderNotifier extends StateNotifier<List<Order>> {
       },
     );
   }
+
+  Order getOrderById({required String orderId}) {
+    final matchedOrder = state.firstWhere((order) {
+      return order.orderId == orderId;
+    });
+    return matchedOrder;
+  }
+
+  List<Order> activeOrders() {
+    final activeOrdersList = state.where((order) {
+      return order.orderStatus == "-OPVnopZWgoqB8b3oK8I";
+    }).toList();
+    return activeOrdersList;
+  }
+
+  List<Order> completedOrders() {
+    final completedOrdersList = state.where((order) {
+      return order.orderStatus == "-OPVnqE0OKq74KEpQkwj";
+    }).toList();
+    return completedOrdersList;
+  }
+
+  List<Order> cancelledOrders() {
+    final cancelledOrdersList = state.where((order) {
+      return order.orderStatus == "-OPVnwE0OLQ75KEpQHwl";
+    }).toList();
+    return cancelledOrdersList;
+  }
 }

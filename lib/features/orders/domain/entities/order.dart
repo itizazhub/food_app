@@ -12,7 +12,7 @@ class Order {
       required this.total,
       required this.userId});
   String orderId;
-  DateTime orderDate;
+  String orderDate;
   String userId;
   List<CartItem> items;
   double total;
@@ -23,7 +23,7 @@ class Order {
 
   Order copyWith({
     String? orderId,
-    DateTime? orderDate,
+    String? orderDate,
     String? userId,
     List<CartItem>? items,
     double? total,

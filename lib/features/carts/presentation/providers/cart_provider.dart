@@ -142,4 +142,10 @@ class CartNotifier extends StateNotifier<Cart?> {
     updateTotal();
     updateUserCart();
   }
+
+  void clearCart() {
+    state!.items = [];
+    updateTotal();
+    updateUserCart();
+  }
 }

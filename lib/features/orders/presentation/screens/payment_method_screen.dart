@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/core/date_functions/get_current_formatted_date.dart';
 
 import 'package:food_app/features/orders/domain/entities/order.dart';
 import 'package:food_app/features/orders/presentation/providers/order_provider.dart';
@@ -11,7 +13,6 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:food_app/features/addresses/domain/entities/address.dart';
 import 'package:food_app/features/addresses/presentation/providers/address_provider.dart';
-import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/core/widgets/custom_text_form_field.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
@@ -28,6 +29,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   final _formKey = GlobalKey<FormState>();
   final _addressInput = TextEditingController();
   int _currentIndex = 0;
+
   var cartItems;
   var cart;
 
@@ -51,14 +53,9 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
     final addressNotifier = ref.read(addressNotifierProvider.notifier);
     final selectedAddressNotifier =
         ref.watch(selectedAddressNotifierProvider.notifier);
+
     await addressNotifier.getUserAddresses(
-      user: User(
-        id: "-OPUxrBC0UHpf4kMnQMT",
-        username: "test",
-        email: "test@gmail.com",
-        password: "test123",
-        isAdmin: false,
-      ),
+      user: ref.watch(authUserNotifierProvider)!,
     );
 
     final addresses = ref.watch(addressNotifierProvider);
@@ -203,7 +200,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                     ? await addressNotifier.addUserAddress(
                         address: Address(
                           addressId: "",
-                          userId: "-OPUxrBC0UHpf4kMnQMT",
+                          userId: ref.watch(authUserNotifierProvider)!.id,
                           address: _addressInput.text.trim(),
                         ),
                       )
@@ -237,14 +234,9 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
   @override
   Widget build(BuildContext context) {
     cart = ref.watch(cartNotifierProvider);
-    ref.watch(cartNotifierProvider.notifier).getUserCart(
-            user: User(
-          id: "-OPUxrBC0UHpf4kMnQMT",
-          username: "test",
-          email: "test@gmail.com",
-          password: "test123",
-          isAdmin: false,
-        ));
+    ref
+        .watch(cartNotifierProvider.notifier)
+        .getUserCart(user: ref.watch(authUserNotifierProvider)!);
     cartItems = cart!.items ?? [];
     return Scaffold(
       body: SafeArea(
@@ -369,15 +361,19 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                                         .watch(selectedAddressNotifierProvider)!
                                         .addressId,
                                     items: cartItems,
-                                    orderDate: DateTime.now(),
+                                    orderDate: getCurrentFormattedDate(),
                                     orderId: "",
                                     orderStatus:
                                         "-OPVnopZWgoqB8b3oK8I", // statusId
                                     orderType: "delivery",
                                     paymentMethodId: _paymentMethod.paymentId,
                                     total: cart.total,
-                                    userId: "OPUxrBC0UHpf4kMnQMT",
+                                    userId:
+                                        ref.watch(authUserNotifierProvider)!.id,
                                   ));
+                              ref
+                                  .watch(cartNotifierProvider.notifier)
+                                  .clearCart();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

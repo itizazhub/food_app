@@ -7,7 +7,9 @@ import 'package:food_app/features/auth/presentation/providers/auth_provider.dart
 import 'package:food_app/features/best_sellers/presentation/screens/best_seller_screen.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/carts/presentation/screens/cart_screen.dart';
+import 'package:food_app/features/carts/presentation/widgets/cart_list_view.dart';
 import 'package:food_app/features/categories/presentation/screens/categories_screen.dart';
+import 'package:food_app/features/core/widgets/show_right_drawer.dart';
 import 'package:food_app/features/favorites/presentation/screens/favorite_screen.dart';
 import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/widgets/best_seller_list_view.dart';
@@ -192,7 +194,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             InkWell(
-                                onTap: goToCartScreen,
+                                onTap: () {
+                                  showRightDrawer(
+                                      child: const CartListView(),
+                                      context: context);
+                                },
                                 child: CustomIcon(path: "cart-icons/cart.svg")),
                             const SizedBox(width: 8),
                             CustomIcon(

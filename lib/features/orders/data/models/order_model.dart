@@ -14,7 +14,7 @@ class OrderModel {
       required this.total,
       required this.userId});
   String orderId;
-  DateTime orderDate;
+  String orderDate;
   String userId;
   List<CartItemModel> items;
   double total;
@@ -32,7 +32,7 @@ class OrderModel {
                 .map((item) => CartItemModel.fromJson(item))
                 .toList()
             : [],
-        orderDate: parseFormattedDate(json["order_date"]),
+        orderDate: json["order_date"],
         orderId: key,
         orderStatus: json["order_status"] ?? "nill",
         orderType: json["order_type"] ?? "nill",
@@ -90,7 +90,7 @@ class OrderModel {
 
   OrderModel copyWith({
     String? orderId,
-    DateTime? orderDate,
+    String? orderDate,
     String? userId,
     List<CartItemModel>? items,
     double? total,

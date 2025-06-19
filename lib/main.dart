@@ -7,8 +7,10 @@ import 'package:food_app/features/carts/presentation/screens/cart_screen.dart';
 import 'package:food_app/features/core/screens/first_splash_screen.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:food_app/features/orders/presentation/screens/confirm_order_screen.dart';
+import 'package:food_app/features/orders/presentation/screens/my_orders_screen.dart';
 import 'package:food_app/features/orders/presentation/screens/payment_method_screen.dart';
 import 'package:food_app/features/products/presentation/screens/product_screen.dart';
+import 'package:food_app/right_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -22,18 +24,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:
-          PaymentMethodScreen(), //FirstSplashScreen(), // ConfirmOrderScreen(),
+      home: MyOrdersScreen(),
+      //FirstSplashScreen(), //FirstSplashScreen(), // ConfirmOrderScreen(), PaymentMethodScreen(), RightDrawer()
       // CartScreen(), // ProductScreen(), // HomeScreen(),
     );
   }
 }
 
-
-
-// things to do // 
+// things to do //
 // handle get request for one or more elements
-
 
 // use go router for navigation
 // equatable for object comparision

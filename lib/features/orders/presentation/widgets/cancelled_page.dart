@@ -38,7 +38,7 @@ class _CancelledPageState extends ConsumerState<CancelledPage> {
                     CustomFilledButton(
                       text: "Order Again",
                       height: 30,
-                      widht: 100,
+                      widht: 130,
                       fontSize: 14,
                     ),
                   ],

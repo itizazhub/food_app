@@ -38,7 +38,7 @@ class _CompletedPageState extends ConsumerState<CompletedPage> {
                     CustomFilledButton(
                       text: "Order Again",
                       height: 30,
-                      widht: 100,
+                      widht: 130,
                       fontSize: 14,
                     ),
                   ],

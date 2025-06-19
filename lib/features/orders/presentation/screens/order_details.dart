@@ -130,7 +130,7 @@ class _OrderDetailsState extends ConsumerState<OrderDetails> {
                     const SizedBox(height: 10),
                     Divider(color: const Color.fromARGB(255, 233, 83, 34)),
 
-                    MyOrderListView(),
+                    MyOrderListView(order: order),
 
                     Row(
                       children: [

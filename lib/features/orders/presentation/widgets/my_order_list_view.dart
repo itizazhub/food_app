@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
+
 import 'package:food_app/features/core/date_functions/get_current_formatted_date.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
-import 'package:intl/intl.dart';
+import 'package:food_app/features/orders/domain/entities/order.dart';
 
 class MyOrderListView extends ConsumerStatefulWidget {
-  const MyOrderListView({super.key});
+  MyOrderListView({super.key, required this.order});
+  Order order;
 
   @override
   ConsumerState<MyOrderListView> createState() => _MyOrderListViewState();
@@ -27,8 +28,9 @@ class _MyOrderListViewState extends ConsumerState<MyOrderListView> {
     return SizedBox(
       height: 300,
       child: ListView.builder(
-        itemCount: 3,
+        itemCount: widget.order.items.length,
         itemBuilder: (context, index) {
+          final item = widget.order.items[index];
           return Column(
             children: [
               Card(
@@ -39,7 +41,7 @@ class _MyOrderListViewState extends ConsumerState<MyOrderListView> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(18),
                       child: Image.asset(
-                        "drinks-images/1.jpg",
+                        item.imageUrl,
                         fit: BoxFit.cover,
                         height: 80,
                         width: 80,
@@ -51,8 +53,9 @@ class _MyOrderListViewState extends ConsumerState<MyOrderListView> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("product name"), // Ideally replace with item.name
-                        Text("\$${4.toStringAsFixed(2)}"),
+                        Text(
+                            "${item.productId}"), // Ideally replace with item.name
+                        Text("\$${item.price.toStringAsFixed(2)}"),
                         CustomFilledButton(
                           text: "Leave a review",
                           widht: 150,
@@ -67,7 +70,7 @@ class _MyOrderListViewState extends ConsumerState<MyOrderListView> {
                       children: [
                         Text(getCurrentFormattedDate()),
                         const SizedBox(height: 4),
-                        Text("${2} items"),
+                        Text("${widget.order.items.length.toString()} items"),
                       ],
                     ),
                   ],

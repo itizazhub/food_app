@@ -157,17 +157,19 @@ class _OrderDetailsState extends ConsumerState<OrderDetails> {
                         Text("\$${(order.total + 8).toStringAsFixed(2)}")
                       ],
                     ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: CustomFilledButton(
-                        text: "Order Again",
-                        height: 36,
-                        widht: 160,
-                        fontSize: 20,
-                        foregroundcolor: Colors.white,
-                        // callBack: goToPaymentMethodScreen,
-                      ),
-                    ),
+                    order.orderStatus != "-OPVnopZWgoqB8b3oK8I"
+                        ? Align(
+                            alignment: Alignment.center,
+                            child: CustomFilledButton(
+                              text: "Order Again",
+                              height: 36,
+                              widht: 160,
+                              fontSize: 20,
+                              foregroundcolor: Colors.white,
+                              // callBack: goToPaymentMethodScreen,
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ),

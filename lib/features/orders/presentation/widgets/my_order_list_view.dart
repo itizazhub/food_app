@@ -56,13 +56,16 @@ class _MyOrderListViewState extends ConsumerState<MyOrderListView> {
                         Text(
                             "${item.productId}"), // Ideally replace with item.name
                         Text("\$${item.price.toStringAsFixed(2)}"),
-                        CustomFilledButton(
-                          text: "Leave a review",
-                          widht: 150,
-                          height: 26,
-                          fontSize: 15,
-                          callBack: () async {},
-                        ),
+                        widget.order.orderStatus != "-OPVnopZWgoqB8b3oK8I"
+                            ? CustomFilledButton(
+                                text: "Leave a review",
+                                widht: 145,
+                                height: 26,
+                                horizental: 0.0,
+                                fontSize: 15,
+                                callBack: () async {},
+                              )
+                            : const SizedBox.shrink(),
                       ],
                     ),
                     const Spacer(),

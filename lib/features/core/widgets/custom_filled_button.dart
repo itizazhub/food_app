@@ -40,7 +40,7 @@ class CustomFilledButton extends StatelessWidget {
         onPressed: callBack == null
             ? null
             : () async {
-                await callBack!(); // safe to call now
+                await callBack!();
               },
         style: ButtonStyle(
           backgroundColor: WidgetStateProperty.all<Color>(backgroundColor),

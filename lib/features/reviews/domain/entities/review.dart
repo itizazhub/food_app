@@ -7,11 +7,11 @@ class Review {
   });
   String reviewId;
   String productId;
-  double review;
+  String review;
   String userId;
 
   Review copyWith(
-      {String? reviewId, String? productId, double? review, String? userId}) {
+      {String? reviewId, String? productId, String? review, String? userId}) {
     return Review(
       reviewId: reviewId ?? this.reviewId,
       productId: productId ?? this.productId,

@@ -20,7 +20,7 @@ class RatingModel {
       ratingId: key,
       productId: json["product_id"],
       userId: json["user_id"],
-      rating: json["rating"],
+      rating: json["rating"] == null ? 0.0 : double.parse(json["rating"]),
     );
   }
 
@@ -36,7 +36,7 @@ class RatingModel {
     return {
       "product_id": productId,
       "user_id": userId,
-      "rating": rating,
+      "rating": rating.toString(),
     };
   }
 

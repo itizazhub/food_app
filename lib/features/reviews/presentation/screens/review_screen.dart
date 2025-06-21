@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/carts/domain/entities/cart_item.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
+import 'package:food_app/features/orders/presentation/screens/my_orders_screen.dart';
+import 'package:food_app/features/ratings/domain/entities/rating.dart';
+import 'package:food_app/features/ratings/presentation/providers/rating_provider.dart';
+import 'package:food_app/features/reviews/domain/entities/review.dart';
+import 'package:food_app/features/reviews/presentation/providers/review_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ReviewScreen extends ConsumerStatefulWidget {
-  const ReviewScreen({super.key});
+  ReviewScreen({super.key, required this.item});
+  CartItem item;
 
   @override
   ConsumerState<ReviewScreen> createState() => _ReviewScreenState();
@@ -14,6 +22,10 @@ class ReviewScreen extends ConsumerStatefulWidget {
 
 class _ReviewScreenState extends ConsumerState<ReviewScreen> {
   int _currentIndex = 3;
+
+  String _reviewInput = '';
+  int _rating = 0;
+  final _formKey = GlobalKey<FormState>();
 
   void _onNavItemTapped(int index) {
     setState(() {
@@ -123,15 +135,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Text(
-                        "Leave us your comment!",
-                        style: GoogleFonts.leagueSpartan(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                          color: const Color.fromARGB(255, 20, 19, 19),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
+
                       // ⭐ Stars
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -145,6 +149,7 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                                   : Colors.grey,
                             ),
                             onPressed: () {
+                              _rating = index;
                               setState(() {
                                 for (int i = 0; i < starStates.length; i++) {
                                   starStates[i] = i <= index;
@@ -155,13 +160,33 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                         ),
                       ),
                       const SizedBox(height: 10),
+                      Text(
+                        "Leave us your comment!",
+                        style: GoogleFonts.leagueSpartan(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w500,
+                          color: const Color.fromARGB(255, 20, 19, 19),
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
 
                       // ✍️ Text Field
                       Form(
+                        key: _formKey,
                         child: TextFormField(
                           minLines: 6,
                           maxLines: null,
                           keyboardType: TextInputType.multiline,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter some text';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            _reviewInput = value!;
+                          },
                           decoration: InputDecoration(
                             alignLabelWithHint: true,
                             hintText: "Write review...",
@@ -209,6 +234,30 @@ class _ReviewScreenState extends ConsumerState<ReviewScreen> {
                             text: "Submit",
                             callBack: () async {
                               // Add review submission logic here
+                              if (_formKey.currentState!.validate() &&
+                                  _rating > 0) {
+                                _formKey.currentState!.save();
+                                // final currentUser =
+                                //     ref.watch(authUserNotifierProvider);
+                                await ref
+                                    .watch(reviewNotifierProvider.notifier)
+                                    .addReview(
+                                        review: Review(
+                                            reviewId: "",
+                                            productId: widget.item.productId,
+                                            userId: "", // currentUser!.id,
+                                            review: _reviewInput));
+                                await ref
+                                    .watch(ratingNotifierProvider.notifier)
+                                    .addRating(
+                                        rating: Rating(
+                                            ratingId: "",
+                                            productId: widget.item.productId,
+                                            userId: "",
+                                            rating: _rating.toDouble()));
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => MyOrdersScreen()));
+                              }
                             },
                           ),
                         ],

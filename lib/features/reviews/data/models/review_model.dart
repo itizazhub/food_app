@@ -9,7 +9,7 @@ class ReviewModel {
   });
   String reviewId;
   String productId;
-  double review;
+  String review;
   String userId;
 
   factory ReviewModel.fromJson({
@@ -51,7 +51,7 @@ class ReviewModel {
   ReviewModel copyWith({
     String? reviewId,
     String? productId,
-    double? review,
+    String? review,
     String? userId,
   }) {
     return ReviewModel(

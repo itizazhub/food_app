@@ -66,7 +66,8 @@ class _MyOrderListViewState extends ConsumerState<MyOrderListView> {
                                 fontSize: 15,
                                 callBack: () async {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => ReviewScreen()));
+                                      builder: (context) =>
+                                          ReviewScreen(item: item)));
                                 },
                               )
                             : const SizedBox.shrink(),

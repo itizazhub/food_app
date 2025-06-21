@@ -61,12 +61,34 @@ class OrderFirebasedatasource {
                 OrderModel.fromJson(key: orderJson.key, json: orderJson.value))
             .toList());
       } else {
-        return Left(
-            SomeSpecificError("Failed to fetch cart: ${response.statusCode}"));
+        return Left(SomeSpecificError(
+            "Failed to get user Orders: ${response.statusCode}"));
       }
     } catch (e) {
       return Left(
-          SomeSpecificError("Exception in getUserCart: ${e.toString()}"));
+          SomeSpecificError("Exception in getUserOrders: ${e.toString()}"));
+    }
+  }
+
+  Future<Either<Failure, String>> removeOrder(
+      {required food_app.Order order}) async {
+    final url = Uri.https(
+      _baseUrl,
+      "orders/${order.orderId}.json",
+    );
+    print("order is ${order.orderId}");
+
+    try {
+      final response = await http.delete(url, headers: _headers);
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return Right("order is deleted sucessfully");
+      } else {
+        return Left(SomeSpecificError(
+            "Failed to delete order: ${response.statusCode}"));
+      }
+    } catch (e) {
+      return Left(
+          SomeSpecificError("Exception in deleteUserOrder: ${e.toString()}"));
     }
   }
 }

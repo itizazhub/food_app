@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/core/date_functions/get_current_formatted_date.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/orders/domain/entities/order.dart';
+import 'package:food_app/features/reviews/presentation/screens/review_screen.dart';
 
 class MyOrderListView extends ConsumerStatefulWidget {
   MyOrderListView({super.key, required this.order});
@@ -63,7 +64,10 @@ class _MyOrderListViewState extends ConsumerState<MyOrderListView> {
                                 height: 26,
                                 horizental: 0.0,
                                 fontSize: 15,
-                                callBack: () async {},
+                                callBack: () async {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => ReviewScreen()));
+                                },
                               )
                             : const SizedBox.shrink(),
                       ],

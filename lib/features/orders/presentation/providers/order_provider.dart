@@ -6,6 +6,7 @@ import 'package:food_app/features/orders/data/repositories/order_repository_impl
 import 'package:food_app/features/orders/domain/entities/order.dart';
 import 'package:food_app/features/orders/domain/usecases/add_order.dart';
 import 'package:food_app/features/orders/domain/usecases/get_user_orders.dart';
+import 'package:food_app/features/orders/domain/usecases/remove_order.dart';
 
 final orderFirebasedatasourceProvider =
     Provider<OrderFirebasedatasource>((ref) {
@@ -25,20 +26,31 @@ final addOrderProvider = Provider<AddOrder>((ref) {
   return AddOrder(orderRepository: ref.watch(orderRepositoryImplProvider));
 });
 
+final removeOrderProvider = Provider<RemoveOrder>((ref) {
+  return RemoveOrder(orderRepository: ref.watch(orderRepositoryImplProvider));
+});
+
 final orderNotifierProvider =
     StateNotifierProvider<OrderNotifier, List<Order>>((ref) {
   final getUserOrders = ref.watch(getUserOrdersProvider);
   final addOrder = ref.watch(addOrderProvider);
+  final removeOrder = ref.watch(removeOrderProvider);
   return OrderNotifier(
-      addOrderUseCase: addOrder, getUserOrdersUseCase: getUserOrders);
+    addOrderUseCase: addOrder,
+    getUserOrdersUseCase: getUserOrders,
+    removeOrderUseCase: removeOrder,
+  );
 });
 
 class OrderNotifier extends StateNotifier<List<Order>> {
-  OrderNotifier(
-      {required this.addOrderUseCase, required this.getUserOrdersUseCase})
-      : super([]);
+  OrderNotifier({
+    required this.addOrderUseCase,
+    required this.getUserOrdersUseCase,
+    required this.removeOrderUseCase,
+  }) : super([]);
   final GetUserOrders getUserOrdersUseCase;
   final AddOrder addOrderUseCase;
+  final RemoveOrder removeOrderUseCase;
 
   Future<void> getUserOrders({required User user}) async {
     final result = await getUserOrdersUseCase(user: user);
@@ -56,10 +68,25 @@ class OrderNotifier extends StateNotifier<List<Order>> {
     final result = await addOrderUseCase(order: order);
     result.fold(
       (failure) {
-        debugPrint("Failed to get addresses: ${failure.message}");
+        debugPrint("Failed to add order: ${failure.message}");
       },
       (success) {
         debugPrint("Successfully order added: $success");
+      },
+    );
+  }
+
+  Future<void> removeOrder({required Order order}) async {
+    final result = await removeOrderUseCase(order: order);
+    result.fold(
+      (failure) {
+        debugPrint("Failed to delete order: ${failure.message}");
+      },
+      (success) {
+        final newList = state.toList(); // ✅ copy the list safely
+        newList.removeWhere((item) => item.orderId == order.orderId);
+        state = newList; // ✅ or: state = [...newList];
+        debugPrint("✅ Successfully deleted order: $success");
       },
     );
   }

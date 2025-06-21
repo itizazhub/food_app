@@ -60,3 +60,31 @@ class CustomFilledButton extends StatelessWidget {
     );
   }
 }
+
+
+
+
+//  SizedBox(
+//                       width: 20,
+//                       height: 20,
+//                       child: TextButton(
+//                         onPressed: () {
+//                           // your logic
+//                         },
+//                         style: TextButton.styleFrom(
+//                           padding: EdgeInsets.zero, // no internal padding
+//                           backgroundColor: Colors.orange, // filled background
+//                           minimumSize: Size.zero, // prevent default min size
+//                           tapTargetSize: MaterialTapTargetSize
+//                               .shrinkWrap, // compact touch area
+//                           shape: RoundedRectangleBorder(
+//                             borderRadius:
+//                                 BorderRadius.circular(4), // optional rounding
+//                           ),
+//                         ),
+//                         child: Text(
+//                           'Go',
+//                           style: TextStyle(color: Colors.white),
+//                         ),
+//                       ),
+//                     ),

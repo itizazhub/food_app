@@ -13,9 +13,11 @@ class ActivePage extends ConsumerStatefulWidget {
 }
 
 class _ActivePageState extends ConsumerState<ActivePage> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
+      ref.watch(orderNotifierProvider);
       final orders = ref.watch(orderNotifierProvider.notifier).activeOrders();
 
       return ListView.separated(
@@ -43,6 +45,18 @@ class _ActivePageState extends ConsumerState<ActivePage> {
                         height: 30,
                         widht: 100,
                         fontSize: 14,
+                        isLoading: isLoading,
+                        callBack: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          await ref
+                              .watch(orderNotifierProvider.notifier)
+                              .removeOrder(order: order);
+                          setState(() {
+                            isLoading = false;
+                          });
+                        },
                       ),
                     ],
                   ),

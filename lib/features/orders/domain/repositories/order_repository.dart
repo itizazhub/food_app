@@ -9,4 +9,6 @@ abstract class OrderRepository {
       {required User user});
   Future<Either<Failure, food_app.Order>> addOrder(
       {required food_app.Order order});
+
+  Future<Either<Failure, String>> removeOrder({required food_app.Order order});
 }

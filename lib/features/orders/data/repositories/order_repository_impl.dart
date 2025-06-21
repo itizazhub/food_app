@@ -40,4 +40,20 @@ class OrderRepositoryImpl implements OrderRepository {
       return Left(SomeSpecificError(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> removeOrder(
+      {required food_app.Order order}) async {
+    try {
+      final failureOrSuccess =
+          await orderFirebasedatasource.removeOrder(order: order);
+      return failureOrSuccess.fold((failure) {
+        return Left(failure);
+      }, (success) {
+        return Right(success);
+      });
+    } catch (e) {
+      return Left(SomeSpecificError(e.toString()));
+    }
+  }
 }

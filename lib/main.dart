@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MyOrdersScreen(),
-      //FirstSplashScreen(), //FirstSplashScreen(), // ConfirmOrderScreen(), PaymentMethodScreen(), RightDrawer()
+      home: RightDrawer(), // MyOrdersScreen(),
+      //FirstSplashScreen(), //FirstSplashScreen(), // ConfirmOrderScreen(), PaymentMethodScreen(),
       // CartScreen(), // ProductScreen(), // HomeScreen(),
     );
   }

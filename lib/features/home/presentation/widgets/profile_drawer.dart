@@ -1,69 +1,18 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:food_app/features/addresses/presentation/screens/delivery_address.dart';
 import 'package:food_app/features/orders/presentation/screens/my_orders_screen.dart';
 import 'package:food_app/features/profile/presentation/screens/my_profile_screen.dart';
 
-class RightDrawer extends StatefulWidget {
-  const RightDrawer({super.key});
+class ProfileDrawer extends StatefulWidget {
+  const ProfileDrawer({super.key});
 
   @override
-  State<RightDrawer> createState() => _RightDrawerState();
+  State<ProfileDrawer> createState() => _ProfileDrawerState();
 }
 
-class _RightDrawerState extends State<RightDrawer> {
+class _ProfileDrawerState extends State<ProfileDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: TextButton(
-          onPressed: () {
-            showRightDrawer(context: context, child: cartDrawer());
-          },
-          child: Text("click me")),
-    );
-  }
-
-  void showRightDrawer({
-    required BuildContext context,
-    required Widget child,
-  }) {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: 'RightDrawer',
-      barrierColor: Colors.black54,
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (_, __, ___) => Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          decoration: const BoxDecoration(
-              color: Colors.amber,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(50),
-                  bottomLeft: Radius.circular(50))),
-          width: MediaQuery.of(context).size.width * 0.75,
-          height: double.infinity,
-          padding: const EdgeInsets.all(16),
-          child: Material(
-            color: Colors.amber,
-            child: child,
-          ),
-        ),
-      ),
-      transitionBuilder: (_, anim, __, child) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(1, 0),
-            end: Offset.zero,
-          ).animate(anim),
-          child: child,
-        );
-      },
-    );
-  }
-
-  Widget cartDrawer() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -188,29 +137,3 @@ class _RightDrawerState extends State<RightDrawer> {
     );
   }
 }
-
-
-// SizedBox(
-//                       width: 20,
-//                       height: 20,
-//                       child: TextButton(
-//                         onPressed: () {
-//                           // your logic
-//                         },
-//                         style: TextButton.styleFrom(
-//                           padding: EdgeInsets.zero, // no internal padding
-//                           backgroundColor: Colors.orange, // filled background
-//                           minimumSize: Size.zero, // prevent default min size
-//                           tapTargetSize: MaterialTapTargetSize
-//                               .shrinkWrap, // compact touch area
-//                           shape: RoundedRectangleBorder(
-//                             borderRadius:
-//                                 BorderRadius.circular(4), // optional rounding
-//                           ),
-//                         ),
-//                         child: Text(
-//                           'Go',
-//                           style: TextStyle(color: Colors.white),
-//                         ),
-//                       ),
-//                     ),

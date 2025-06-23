@@ -15,6 +15,7 @@ import 'package:food_app/features/home/presentation/providers/favorite_provider.
 import 'package:food_app/features/home/presentation/widgets/best_seller_list_view.dart';
 import 'package:food_app/features/core/widgets/custom_input_text_field.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
+import 'package:food_app/features/home/presentation/widgets/profile_drawer.dart';
 import 'package:food_app/features/home/presentation/widgets/recommended_grid.dart';
 import 'package:food_app/features/home/domain/entities/category.dart';
 import 'package:food_app/features/home/domain/entities/product.dart';
@@ -204,7 +205,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             CustomIcon(
                                 path: "notification-icons/notification.svg"),
                             const SizedBox(width: 8),
-                            CustomIcon(path: "profile-icons/profile.svg"),
+                            InkWell(
+                                onTap: () {
+                                  showRightDrawer(
+                                      child: const ProfileDrawer(),
+                                      context: context);
+                                },
+                                child: CustomIcon(
+                                    path: "profile-icons/profile.svg")),
                           ],
                         ),
                       ],

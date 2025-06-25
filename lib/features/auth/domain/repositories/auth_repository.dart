@@ -7,4 +7,6 @@ abstract class AuthRepository {
   Future<Either<Failure, User>> login(
       {required String username, required String password});
   Future<Either<Failure, User>> signup({required User user});
+  Future<Either<Failure, String>> updateUserProfile({required User user});
+  Future<Either<Failure, String>> updateUserPassword({required User user});
 }

@@ -49,4 +49,16 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(SomeSpecificError(error.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, String>> updateUserPassword(
+      {required User user}) async {
+    return await userFirebaseDatasource.updateUserPassword(user: user);
+  }
+
+  @override
+  Future<Either<Failure, String>> updateUserProfile(
+      {required User user}) async {
+    return await userFirebaseDatasource.updateUserProfile(user: user);
+  }
 }

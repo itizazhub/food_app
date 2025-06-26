@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/addresses/presentation/screens/delivery_address.dart';
+import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/core/screens/second_splash_screen.dart';
 import 'package:food_app/features/orders/presentation/screens/my_orders_screen.dart';
 import 'package:food_app/features/profile/presentation/screens/my_profile_screen.dart';
 
-class ProfileDrawer extends StatefulWidget {
+class ProfileDrawer extends ConsumerStatefulWidget {
   const ProfileDrawer({super.key});
 
   @override
-  State<ProfileDrawer> createState() => _ProfileDrawerState();
+  ConsumerState<ProfileDrawer> createState() => _ProfileDrawerState();
 }
 
-class _ProfileDrawerState extends State<ProfileDrawer> {
+class _ProfileDrawerState extends ConsumerState<ProfileDrawer> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -91,7 +94,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         4), // optional rounding
                                   ),
                                 ),
-                                child: Text(
+                                child: const Text(
                                   'Cancel',
                                   style: TextStyle(color: Colors.white),
                                 ),
@@ -102,8 +105,13 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                               width: 100,
                               height: 30,
                               child: TextButton(
-                                onPressed: () {
-                                  // your logic
+                                onPressed: () async {
+                                  await ref
+                                      .watch(cartNotifierProvider.notifier)
+                                      .updateUserCart();
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          SecondSplashScreen()));
                                 },
                                 style: TextButton.styleFrom(
                                   padding:
@@ -119,7 +127,7 @@ class _ProfileDrawerState extends State<ProfileDrawer> {
                                         4), // optional rounding
                                   ),
                                 ),
-                                child: Text(
+                                child: const Text(
                                   'Yes, log out',
                                   style: TextStyle(color: Colors.white),
                                 ),

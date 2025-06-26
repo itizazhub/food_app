@@ -24,12 +24,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: RightDrawer(), // MyOrdersScreen(),
+      home: HomeScreen(), // MyOrdersScreen(),
       //FirstSplashScreen(), //FirstSplashScreen(), // ConfirmOrderScreen(), PaymentMethodScreen(),
       // CartScreen(), // ProductScreen(), // HomeScreen(),
     );
   }
 }
+
+
+// fix the code in home right drawer for user profile 
+
 
 // things to do //
 // handle get request for one or more elements

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:food_app/features/carts/presentation/screens/cart_screen.dart';
 import 'package:food_app/features/core/screens/first_splash_screen.dart';
+import 'package:food_app/features/core/theme/app_theme.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:food_app/features/orders/presentation/screens/confirm_order_screen.dart';
 import 'package:food_app/features/orders/presentation/screens/my_orders_screen.dart';
@@ -24,7 +25,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(), // MyOrdersScreen(),
+      home: FirstSplashScreen(),
+      theme: appTheme,
+      // darkTheme: ThemeData(
+      //   useMaterial3: true,
+      // ),
+      // themeMode: ThemeMode.system,
+
+      // MyOrdersScreen(),
       //FirstSplashScreen(), //FirstSplashScreen(), // ConfirmOrderScreen(), PaymentMethodScreen(),
       // CartScreen(), // ProductScreen(), // HomeScreen(),
     );

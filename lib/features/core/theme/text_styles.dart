@@ -1,24 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class TextStyles {
+class AppTextStyles {
   static final textStyleLogoPart1 = GoogleFonts.poppins(
-      color: const Color.fromARGB(255, 233, 83, 34),
-      fontSize: 34,
-      fontWeight: FontWeight.w800);
+      color: AppColors.orangeDark,
+      fontSize: AppFontSizes.fontSize6,
+      fontWeight: AppFontWeights.extraBold);
 
   static final textStyleLogoPart2 = GoogleFonts.poppins(
-      color: const Color.fromARGB(255, 245, 203, 88),
-      fontSize: 34,
-      fontWeight: FontWeight.w800);
+      color: AppColors.yellowDark,
+      fontSize: AppFontSizes.fontSize6,
+      fontWeight: AppFontWeights.extraBold);
   static final textStyleLogoPart3 = GoogleFonts.poppins(
-      color: const Color.fromARGB(255, 248, 248, 248),
-      fontSize: 34,
-      fontWeight: FontWeight.w800);
+      color: AppColors.fontLight,
+      fontSize: AppFontSizes.fontSize6,
+      fontWeight: AppFontWeights.extraBold);
+
+  static final textButtonTextStyle1 = GoogleFonts.leagueSpartan(
+    color: AppColors.orangeDark,
+    fontSize: AppFontSizes.fontSize3,
+    fontWeight: AppFontWeights.medium,
+  );
+
+  static final textButtonTextStyle2 = GoogleFonts.leagueSpartan(
+    color: AppColors.fontLight,
+    fontSize: AppFontSizes.fontSize3,
+    fontWeight: AppFontWeights.medium,
+  );
+
+  static final textStyleParagraph1 = GoogleFonts.poppins(
+    color: AppColors.fontLight,
+    fontSize: AppFontSizes.fontSize1,
+    fontWeight: AppFontWeights.medium,
+  );
 }
 
 final TextTheme textStyles =
-    TextTheme(displayLarge: TextStyles.textStyleLogoPart1);
+    TextTheme(displayLarge: AppTextStyles.textStyleLogoPart1);
 
 
 

@@ -18,6 +18,25 @@ final kColorSchemeLight = ColorScheme.fromSeed(
 
 
 
+
+
+
+
+
+/*
+| Figma Font Name | Flutter `FontWeight` |
+| --------------- | -------------------- |
+| Extra Light     | `FontWeight.w200`    |
+| Light           | `FontWeight.w300`    |
+| Regular         | `FontWeight.w400`    |
+| Medium          | `FontWeight.w500`    |
+| Semi Bold       | `FontWeight.w600`    |
+| Bold            | `FontWeight.w700`    |
+| Extra Bold      | `FontWeight.w800`    |
+
+*/
+
+
 /*
 ---colors---  const Color.fromARGB(255,)
 yellow 245, 203, 88

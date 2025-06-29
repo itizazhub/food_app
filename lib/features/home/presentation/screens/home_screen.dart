@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,9 +52,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final favs = await getFavorites();
     User? user = ref.read(authUserNotifierProvider);
     await ref.read(cartNotifierProvider.notifier).getUserCart(user: user!);
-    final cart = ref.read(cartNotifierProvider);
-    print(cart!.cartId);
-    print(cart!.items);
+    // final cart = ref.read(cartNotifierProvider);
 
     setState(() {
       categoies = cats;

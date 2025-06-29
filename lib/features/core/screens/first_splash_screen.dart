@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/core/screens/second_splash_screen.dart';
 import 'package:food_app/features/core/theme/text_styles.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'dart:async';
 
 class FirstSplashScreen extends StatefulWidget {
@@ -18,7 +18,7 @@ class _FirstSplashScreenState extends State<FirstSplashScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => SecondSplashScreen()),
+        MaterialPageRoute(builder: (context) => const SecondSplashScreen()),
       );
     });
   }
@@ -27,29 +27,26 @@ class _FirstSplashScreenState extends State<FirstSplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 280),
-            SvgPicture.asset(
-              "logo-icons/logo.svg",
-              width: 200,
-              height: 180,
-            ),
-            const SizedBox(height: 26),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "YUM",
-                  style: TextStyles.textStyleLogoPart1,
-                ),
-                Text(
-                  "QUICK",
-                  style: TextStyles.textStyleLogoPart3,
-                ),
-              ],
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 280),
+              SvgPicture.asset(
+                "logo-icons/logo.svg",
+                width: 200,
+                height: 180,
+              ),
+              const SizedBox(height: 26),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("YUM", style: AppTextStyles.textStyleLogoPart1),
+                  Text("QUICK", style: AppTextStyles.textStyleLogoPart3),
+                ],
+              ),
+              const SizedBox(height: 308),
+            ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/core/screens/on_boarding_screen.dart';
 import 'package:food_app/features/core/screens/second_splash_screen.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
@@ -27,7 +28,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   void _navigateToSplashPage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SecondSplashScreen()),
+      MaterialPageRoute(builder: (context) => const SecondSplashScreen()),
     );
   }
 
@@ -48,10 +49,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     if (user != null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => OnBoardingScreen()),
+        MaterialPageRoute(builder: (_) => const OnBoardingScreen()),
       );
-      print("Email: ${user.email}");
-      print("ID: ${user.id}");
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Welcome, ${user.username}!")),
@@ -81,31 +80,38 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             Positioned(
               top: 0,
               child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 245, 203, 88),
+                  color: AppColors.yellowDark,
                 ),
-                height: 125,
+                height: 170,
                 width: MediaQuery.of(context).size.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    IconButton(
-                      onPressed: _navigateToSplashPage,
-                      icon: const Icon(
-                        size: 18,
-                        Icons.arrow_back_ios,
-                        color: Color.fromARGB(255, 233, 83, 34),
-                      ),
+                    const SizedBox(height: 64),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          child: SvgPicture.asset(
+                            'assets/back-arrow-icons/back-arrow-icon.svg',
+                            width: 4,
+                            height: 9,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          "Log In",
+                          style: GoogleFonts.leagueSpartan(
+                            fontSize: 28,
+                            fontWeight: AppFontWeights.bold,
+                            color: AppColors.fontLight,
+                          ),
+                        ),
+                        const Spacer(),
+                      ],
                     ),
-                    Text(
-                      "Log In",
-                      style: GoogleFonts.leagueSpartan(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: Color.fromARGB(255, 248, 248, 248),
-                      ),
-                    ),
-                    const SizedBox(width: 50),
                   ],
                 ),
               ),
@@ -113,44 +119,47 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
             // Bottom section with rounded corners
             Positioned(
-              top: 110,
+              top: 134,
               bottom: 0,
               left: 0,
               right: 0,
               child: Container(
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
                   ),
                   color: Color.fromARGB(255, 248, 248, 248),
                 ),
                 // Adjust height to avoid overlap with keyboard
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 35),
                 child: SingleChildScrollView(
                   child: Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Welcome Text
                         Text(
                           "Welcome",
                           style: GoogleFonts.leagueSpartan(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                            color: const Color.fromARGB(255, 57, 23, 19),
-                          ),
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
+                              color: const Color.fromARGB(255, 57, 23, 19),
+                              height: 1),
                         ),
+                        const SizedBox(height: 17),
+
                         Text(
                           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
                           style: GoogleFonts.leagueSpartan(
                             fontSize: 14,
                             fontWeight: FontWeight.w300,
                             color: const Color.fromARGB(255, 57, 23, 19),
+                            height: 1,
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 38),
+
                         Text(
                           "Username",
                           style: GoogleFonts.leagueSpartan(
@@ -241,7 +250,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SvgPicture.asset(
-                                    "social-media-icons/GoogleIcon.svg",
+                                    "assets/social-media-icons/GoogleIcon.svg",
                                     width: 40,
                                     height: 40,
                                   ),
@@ -249,7 +258,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     width: 5,
                                   ),
                                   SvgPicture.asset(
-                                    "social-media-icons/FacebookIcon.svg",
+                                    "assets/social-media-icons/FacebookIcon.svg",
                                     width: 40,
                                     height: 40,
                                   ),
@@ -257,7 +266,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     width: 5,
                                   ),
                                   SvgPicture.asset(
-                                    "social-media-icons/FingerprintIcon.svg",
+                                    "assets/social-media-icons/FingerprintIcon.svg",
                                     width: 40,
                                     height: 40,
                                   ),
@@ -294,27 +303,27 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           items: [
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "bottom-navigation-icons/home.svg",
+                  "assets/bottom-navigation-icons/home.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "bottom-navigation-icons/categories.svg",
+                  "assets/bottom-navigation-icons/categories.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "bottom-navigation-icons/favorites.svg",
+                  "assets/bottom-navigation-icons/favorites.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "bottom-navigation-icons/list.svg",
+                  "assets/bottom-navigation-icons/list.svg",
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "bottom-navigation-icons/help.svg",
+                  "assets/bottom-navigation-icons/help.svg",
                 ),
                 label: "")
           ],

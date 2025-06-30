@@ -37,6 +37,20 @@ class AppTextStyles {
     height: 1,
   );
 
+  static final textButtonTextStyle3 = GoogleFonts.leagueSpartan(
+    color: AppColors.orangeDark,
+    fontSize: AppFontSizes.fontSize1,
+    fontWeight: AppFontWeights.medium,
+    height: 1,
+  );
+
+  static final textButtonTextStyle4 = GoogleFonts.leagueSpartan(
+    color: AppColors.orangeDark,
+    fontSize: AppFontSizes.fontSize1,
+    fontWeight: AppFontWeights.light,
+    height: 1,
+  );
+
   static final textStyleParagraph1 = GoogleFonts.poppins(
     color: AppColors.fontLight,
     fontSize: AppFontSizes.fontSize1,
@@ -49,6 +63,13 @@ class AppTextStyles {
     fontWeight: AppFontWeights.light,
     color: AppColors.fontDark,
     height: 1.1,
+  );
+
+  static final textStyleParagraph3 = GoogleFonts.leagueSpartan(
+    color: AppColors.fontDark,
+    fontSize: AppFontSizes.fontSize0,
+    fontWeight: AppFontWeights.light,
+    height: 1,
   );
 
   static final textStyleAppBarTitle = GoogleFonts.leagueSpartan(
@@ -68,6 +89,12 @@ class AppTextStyles {
     fontSize: AppFontSizes.fontSize2,
     fontWeight: AppFontWeights.medium,
     color: AppColors.fontDark,
+  );
+
+  static final input = GoogleFonts.leagueSpartan(
+    color: AppColors.fontDark,
+    fontSize: AppFontSizes.fontSize2,
+    fontWeight: AppFontWeights.regular,
   );
 }
 

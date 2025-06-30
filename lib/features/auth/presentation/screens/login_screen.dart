@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,9 +7,9 @@ import 'package:food_app/features/auth/presentation/providers/auth_provider.dart
 import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/core/screens/on_boarding_screen.dart';
 import 'package:food_app/features/core/screens/second_splash_screen.dart';
+import 'package:food_app/features/core/theme/button_styles.dart';
+import 'package:food_app/features/core/theme/text_form_field_styles.dart';
 import 'package:food_app/features/core/theme/text_styles.dart';
-import 'package:food_app/features/core/widgets/custom_filled_button.dart';
-import 'package:food_app/features/core/widgets/custom_text_form_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -20,8 +21,9 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
+  String _username = '';
+  String _password = '';
+  bool _isObscured = true;
 
   bool _isLoading = false;
 
@@ -37,11 +39,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
+    _formKey.currentState!.save();
+
     setState(() => _isLoading = true);
 
     await ref.read(authUserNotifierProvider.notifier).login(
-          username: _usernameController.text.trim(),
-          password: _passwordController.text.trim(),
+          username: _username,
+          password: _password,
         );
 
     setState(() => _isLoading = false);
@@ -66,18 +70,22 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 248, 248, 248),
-      resizeToAvoidBottomInset: true, // Ensure UI adjusts with keyboard
-      body: SafeArea(
-        child: Stack(
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: AppColors.yellowDark, // removes transparency
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 248, 248, 248),
+        resizeToAvoidBottomInset: true, // Ensure UI adjusts with keyboard
+        body: Stack(
           children: [
             Positioned(
               top: 0,
@@ -117,7 +125,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
             // Bottom section with rounded corners
             Positioned(
-              top: 114,
+              top: 114.h,
               bottom: 0,
               left: 0,
               right: 0,
@@ -130,7 +138,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   color: AppColors.fontLight,
                 ),
                 // Adjust height to avoid overlap with keyboard
-                padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 35.h),
+                padding: EdgeInsets.only(left: 32.w, right: 32.w, top: 35.h),
                 child: SingleChildScrollView(
                   child: Form(
                     key: _formKey,
@@ -153,103 +161,132 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           "Username",
                           style: AppTextStyles.textStyleAppBodyTitle2,
                         ),
-                        CustomTextFormField(
-                          controller: _usernameController,
-                          background: const Color.fromARGB(255, 243, 233, 181),
-                          radius: 12,
-                          width: double.infinity,
-                          fontSize: 20,
-                          validator: (value) {
-                            if (value == null ||
-                                value.trim().length < 2 ||
-                                value.trim().length > 50) {
-                              return "Username must be between 2 and 50 characters";
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 10),
+
+                        TextFormField(
+                            // obscureText: true,
+                            validator: (value) => value == null || value.isEmpty
+                                ? 'Enter username'
+                                : null,
+                            onChanged: (value) => _username = value.trim(),
+                            onSaved: (value) => _username = value!.trim(),
+                            decoration: TextFormFieldStyles.appInputDecoration(
+                                hintText: "Enter Username"),
+                            style: GoogleFonts.leagueSpartan(
+                              color: AppColors.fontDark,
+                              fontSize: AppFontSizes.fontSize2,
+                              fontWeight: AppFontWeights.regular,
+                            )),
+
+                        SizedBox(height: 10.h),
 
                         Text(
                           "Password",
                           style: AppTextStyles.textStyleAppBodyTitle2,
                         ),
 
-                        CustomTextFormField(
-                          background: const Color.fromARGB(255, 243, 233, 181),
-                          radius: 12,
-                          width: double.infinity,
-                          fontSize: 20,
-                          suffixIcon: const Icon(
-                            Icons.visibility,
-                            color: Color.fromARGB(255, 233, 83, 34),
+                        TextFormField(
+                          obscureText: _isObscured,
+                          validator: (value) => value == null || value.isEmpty
+                              ? 'Enter password'
+                              : null,
+                          onChanged: (value) => _password = value.trim(),
+                          onSaved: (value) => _password = value!.trim(),
+                          decoration: TextFormFieldStyles.appInputDecoration(
+                            hintText: "Enter Password",
+                            suffixIcon: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _isObscured = !_isObscured;
+                                });
+                              },
+                              child: Icon(
+                                _isObscured
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                size: 20.0,
+                                color: AppColors.orangeDark,
+                              ),
+                            ),
                           ),
-                          suffixIconBool: true,
-                          obscure: true,
-                          controller: _passwordController,
-                          validator: (value) {
-                            if (value == null || value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                            return null;
-                          },
+                          style: AppTextStyles.input,
                         ),
 
-                        const SizedBox(height: 5),
-                        TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Forgot Password",
-                              style: GoogleFonts.leagueSpartan(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: const Color.fromARGB(255, 233, 83, 34),
+                        SizedBox(height: 10.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: null,
+                              style: AppTextButtonStyles.textButtonStyle4,
+                              child: Text(
+                                'Forgot Password',
+                                style: AppTextStyles.textButtonTextStyle3,
                               ),
-                            )),
-                        const SizedBox(height: 20),
+                            )
+                          ],
+                        ),
+
+                        SizedBox(height: 60.h),
 
                         // Next Button
                         Align(
                           alignment: Alignment.center,
                           child: Column(
                             children: [
-                              CustomFilledButton(
-                                text: "Log In",
-                                isLoading: _isLoading,
-                                callBack: _isLoading ? null : _login,
+                              TextButton(
+                                onPressed: _login,
+                                style: AppTextButtonStyles.textButtonStyle3,
+                                child: Text(
+                                  'Log In',
+                                  style: AppTextStyles.textButtonTextStyle2,
+                                ),
                               ),
-                              const SizedBox(height: 10),
+                              SizedBox(height: 30.h),
                               Text(
                                 "or sign up with",
-                                style: GoogleFonts.leagueSpartan(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w300,
-                                  color: const Color.fromARGB(255, 57, 23, 19),
-                                ),
+                                style: AppTextStyles.textStyleParagraph2,
                               ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   SvgPicture.asset(
                                     "assets/social-media-icons/GoogleIcon.svg",
-                                    width: 40,
-                                    height: 40,
+                                    width: 40.w,
+                                    height: 40.h,
                                   ),
                                   SizedBox(
-                                    width: 5,
+                                    width: 5.w,
                                   ),
                                   SvgPicture.asset(
                                     "assets/social-media-icons/FacebookIcon.svg",
-                                    width: 40,
-                                    height: 40,
+                                    width: 40.w,
+                                    height: 40.h,
                                   ),
                                   SizedBox(
-                                    width: 5,
+                                    width: 5.w,
                                   ),
                                   SvgPicture.asset(
                                     "assets/social-media-icons/FingerprintIcon.svg",
-                                    width: 40,
-                                    height: 40,
+                                    width: 40.w,
+                                    height: 40.h,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20.h),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Don’t have an account? ",
+                                    style: AppTextStyles.textStyleParagraph2,
+                                  ),
+                                  TextButton(
+                                    onPressed: null,
+                                    style: AppTextButtonStyles.textButtonStyle4,
+                                    child: Text(
+                                      'SignUp',
+                                      style: AppTextStyles.textButtonTextStyle4,
+                                    ),
                                   ),
                                 ],
                               )
@@ -264,50 +301,60 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: ClipRRect(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12), // Round top-left corner
-          topRight: Radius.circular(12), // Round top-right corner
-        ),
-        child: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          backgroundColor: Color.fromARGB(255, 233, 83, 34),
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          items: [
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/bottom-navigation-icons/home.svg",
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/bottom-navigation-icons/categories.svg",
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/bottom-navigation-icons/favorites.svg",
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/bottom-navigation-icons/list.svg",
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/bottom-navigation-icons/help.svg",
-                ),
-                label: "")
-          ],
+        bottomNavigationBar: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30.r), // Round top-left corner
+            topRight: Radius.circular(30.r), // Round top-right corner
+          ),
+          child: BottomNavigationBar(
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            backgroundColor: AppColors.orangeDark,
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _currentIndex,
+            onTap: (index) {
+              setState(() {
+                _currentIndex = index;
+              });
+            },
+            items: [
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    "assets/bottom-navigation-icons/home.svg",
+                    width: 25.w,
+                    height: 22.h,
+                  ),
+                  label: ""),
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    "assets/bottom-navigation-icons/categories.svg",
+                    width: 25.w,
+                    height: 22.h,
+                  ),
+                  label: ""),
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    "assets/bottom-navigation-icons/favorites.svg",
+                    width: 25.w,
+                    height: 22.h,
+                  ),
+                  label: ""),
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    "assets/bottom-navigation-icons/list.svg",
+                    width: 25.w,
+                    height: 22.h,
+                  ),
+                  label: ""),
+              BottomNavigationBarItem(
+                  icon: SvgPicture.asset(
+                    "assets/bottom-navigation-icons/help.svg",
+                    width: 25.w,
+                    height: 22.h,
+                  ),
+                  label: "")
+            ],
+          ),
         ),
       ),
     );

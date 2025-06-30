@@ -21,6 +21,7 @@ class AppColors {
 }
 
 class AppFontSizes {
+  static final fontSize0 = 12.0.sp;
   static final fontSize1 = 14.0.sp;
   static final fontSize2 = 20.0.sp;
   static final fontSize3 = 24.0.sp;
@@ -32,6 +33,7 @@ class AppFontSizes {
 class AppRadiuses {
   static final radius1 = 15.0.r;
   static final radius2 = 30.0.r;
+  static final radius3 = 13.0.r;
 }
 
 class AppButtonWidths {
@@ -41,4 +43,12 @@ class AppButtonWidths {
 
 class AppButtonHeights {
   static final height1 = 45.0.h;
+}
+
+class AppVerticalPaddingds {
+  static final padding1 = 15.h;
+}
+
+class AppHorizentalPaddingds {
+  static final padding1 = 15.w;
 }

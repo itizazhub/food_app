@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AppFontWeights {
   static const extraLight = FontWeight.w200;
@@ -20,24 +21,24 @@ class AppColors {
 }
 
 class AppFontSizes {
-  static const fontSize1 = 14.0;
-  static const fontSize2 = 20.0;
-  static const fontSize3 = 24.0;
-  static const fontSize4 = 26.0;
-  static const fontSize5 = 28.0;
-  static const fontSize6 = 34.0;
+  static final fontSize1 = 14.0.sp;
+  static final fontSize2 = 20.0.sp;
+  static final fontSize3 = 24.0.sp;
+  static final fontSize4 = 26.0.sp;
+  static final fontSize5 = 28.0.sp;
+  static final fontSize6 = 34.0.sp;
 }
 
 class AppRadiuses {
-  static const radius1 = 15.0;
-  static const radius2 = 30.0;
+  static final radius1 = 15.0.r;
+  static final radius2 = 30.0.r;
 }
 
 class AppButtonWidths {
-  static const width1 = 207.0;
+  static final width1 = 207.0.w;
   // static const widthMedium = 100;
 }
 
 class AppButtonHeights {
-  static const height1 = 45.0;
+  static final height1 = 45.0.h;
 }

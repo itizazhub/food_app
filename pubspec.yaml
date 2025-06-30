@@ -42,6 +42,7 @@ dependencies:
   flutter_svg: ^2.1.0
   collection: ^1.18.0
   intl: ^0.18.1
+  flutter_screenutil: ^5.9.3
 
 
 dev_dependencies:
@@ -73,6 +74,7 @@ flutter:
       - assets/social-media-icons/
       - assets/back-arrow-icons/
       - assets/bottom-navigation-icons/
+      - assets/logo-icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

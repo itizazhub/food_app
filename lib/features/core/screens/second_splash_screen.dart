@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:food_app/features/auth/presentation/screens/sign_up_screen.dart';
@@ -33,55 +34,54 @@ class _SecondSplashScreenState extends State<SecondSplashScreen> {
     return Scaffold(
       backgroundColor: AppColors.orangeDark,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(height: 280),
-              SvgPicture.asset(
-                color: AppColors.yellowDark,
-                "logo-icons/logo.svg",
-                width: 200,
-                height: 180,
-              ),
-              const SizedBox(height: 26),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("YUM", style: AppTextStyles.textStyleLogoPart2),
-                  Text("QUICK", style: AppTextStyles.textStyleLogoPart3),
-                ],
-              ),
-              const SizedBox(height: 31),
-              SizedBox(
-                  width: 295,
-                  child: Text(
-                    textAlign: TextAlign.center,
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.",
-                    style: AppTextStyles.textStyleParagraph1,
-                  )),
-              const SizedBox(height: 43),
-              TextButton(
-                onPressed: () {
-                  _navigateToLogInPage();
-                },
-                style: AppTextButtonStyles.textButtonStyle1,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 255.h),
+            SvgPicture.asset(
+              color: AppColors.yellowDark,
+              "assets/logo-icons/logo.svg",
+              width: 200.w,
+              height: 180.h,
+            ),
+            SizedBox(height: 26.w),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("YUM", style: AppTextStyles.textStyleLogoPart2),
+                Text("QUICK", style: AppTextStyles.textStyleLogoPart3),
+              ],
+            ),
+            SizedBox(height: 31.h),
+            SizedBox(
+                width: 295.w,
                 child: Text(
-                  'Log In',
-                  style: AppTextStyles.textButtonTextStyle1,
-                ),
+                  textAlign: TextAlign.center,
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.",
+                  style: AppTextStyles.textStyleParagraph1,
+                )),
+            SizedBox(height: 43.h),
+            TextButton(
+              onPressed: () {
+                _navigateToLogInPage();
+              },
+              style: AppTextButtonStyles.textButtonStyle1,
+              child: Text(
+                'Log In',
+                style: AppTextStyles.textButtonTextStyle1,
               ),
-              const SizedBox(height: 4),
-              TextButton(
-                onPressed: _navigateToSignUpPage,
-                style: AppTextButtonStyles.textButtonStyle2,
-                child: Text(
-                  'Sign Up',
-                  style: AppTextStyles.textButtonTextStyle1,
-                ),
+            ),
+            SizedBox(height: 4.h),
+            TextButton(
+              onPressed: _navigateToSignUpPage,
+              style: AppTextButtonStyles.textButtonStyle2,
+              child: Text(
+                'Sign Up',
+                style: AppTextStyles.textButtonTextStyle1,
               ),
-              const SizedBox(height: 119),
-            ],
-          ),
+            ),
+            SizedBox(height: 119.h),
+          ],
         ),
       ),
     );

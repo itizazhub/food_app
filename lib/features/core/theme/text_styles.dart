@@ -4,35 +4,70 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyles {
   static final textStyleLogoPart1 = GoogleFonts.poppins(
-      color: AppColors.orangeDark,
-      fontSize: AppFontSizes.fontSize6,
-      fontWeight: AppFontWeights.extraBold);
+    color: AppColors.orangeDark,
+    fontSize: AppFontSizes.fontSize6,
+    fontWeight: AppFontWeights.extraBold,
+    height: 1,
+  );
 
   static final textStyleLogoPart2 = GoogleFonts.poppins(
-      color: AppColors.yellowDark,
-      fontSize: AppFontSizes.fontSize6,
-      fontWeight: AppFontWeights.extraBold);
+    color: AppColors.yellowDark,
+    fontSize: AppFontSizes.fontSize6,
+    fontWeight: AppFontWeights.extraBold,
+    height: 1,
+  );
   static final textStyleLogoPart3 = GoogleFonts.poppins(
-      color: AppColors.fontLight,
-      fontSize: AppFontSizes.fontSize6,
-      fontWeight: AppFontWeights.extraBold);
+    color: AppColors.fontLight,
+    fontSize: AppFontSizes.fontSize6,
+    fontWeight: AppFontWeights.extraBold,
+    height: 1,
+  );
 
   static final textButtonTextStyle1 = GoogleFonts.leagueSpartan(
     color: AppColors.orangeDark,
     fontSize: AppFontSizes.fontSize3,
     fontWeight: AppFontWeights.medium,
+    height: 1,
   );
 
   static final textButtonTextStyle2 = GoogleFonts.leagueSpartan(
     color: AppColors.fontLight,
     fontSize: AppFontSizes.fontSize3,
     fontWeight: AppFontWeights.medium,
+    height: 1,
   );
 
   static final textStyleParagraph1 = GoogleFonts.poppins(
     color: AppColors.fontLight,
     fontSize: AppFontSizes.fontSize1,
     fontWeight: AppFontWeights.medium,
+    height: 1.1,
+  );
+
+  static final textStyleParagraph2 = GoogleFonts.leagueSpartan(
+    fontSize: AppFontSizes.fontSize1,
+    fontWeight: AppFontWeights.light,
+    color: AppColors.fontDark,
+    height: 1.1,
+  );
+
+  static final textStyleAppBarTitle = GoogleFonts.leagueSpartan(
+    fontSize: AppFontSizes.fontSize5,
+    fontWeight: AppFontWeights.bold,
+    color: AppColors.fontLight,
+    height: 1,
+  );
+
+  static final textStyleAppBodyTitle1 = GoogleFonts.leagueSpartan(
+      fontSize: AppFontSizes.fontSize3,
+      fontWeight: AppFontWeights.semiBold,
+      color: AppColors.fontDark,
+      height: 1);
+
+  static final textStyleAppBodyTitle2 = GoogleFonts.leagueSpartan(
+    fontSize: AppFontSizes.fontSize2,
+    fontWeight: AppFontWeights.medium,
+    color: AppColors.fontDark,
   );
 }
 

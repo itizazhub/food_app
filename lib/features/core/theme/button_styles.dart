@@ -5,7 +5,7 @@ class AppTextButtonStyles {
   static final textButtonStyle1 = TextButton.styleFrom(
     padding: EdgeInsets.zero, // no internal padding
     backgroundColor: AppColors.yellowDark, // filled background
-    fixedSize: const Size(AppButtonWidths.width1,
+    fixedSize: Size(AppButtonWidths.width1,
         AppButtonHeights.height1), // prevent default min size
     tapTargetSize: MaterialTapTargetSize.shrinkWrap, // compact touch area
     shape: RoundedRectangleBorder(
@@ -17,7 +17,7 @@ class AppTextButtonStyles {
   static final textButtonStyle2 = TextButton.styleFrom(
     padding: EdgeInsets.zero, // no internal padding
     backgroundColor: AppColors.yellowLight, // filled background
-    fixedSize: const Size(AppButtonWidths.width1,
+    fixedSize: Size(AppButtonWidths.width1,
         AppButtonHeights.height1), // prevent default min size
     tapTargetSize: MaterialTapTargetSize.shrinkWrap, // compact touch area
     shape: RoundedRectangleBorder(

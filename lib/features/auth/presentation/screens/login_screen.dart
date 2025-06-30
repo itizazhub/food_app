@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/core/screens/on_boarding_screen.dart';
 import 'package:food_app/features/core/screens/second_splash_screen.dart';
+import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/core/widgets/custom_text_form_field.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -80,16 +82,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             Positioned(
               top: 0,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 32),
+                padding: EdgeInsets.symmetric(horizontal: 32.w),
                 decoration: const BoxDecoration(
                   color: AppColors.yellowDark,
                 ),
-                height: 170,
+                height: 170.h,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 64),
+                    SizedBox(height: 44.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -103,11 +105,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         const Spacer(),
                         Text(
                           "Log In",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 28,
-                            fontWeight: AppFontWeights.bold,
-                            color: AppColors.fontLight,
-                          ),
+                          style: AppTextStyles.textStyleAppBarTitle,
                         ),
                         const Spacer(),
                       ],
@@ -119,20 +117,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
             // Bottom section with rounded corners
             Positioned(
-              top: 134,
+              top: 114,
               bottom: 0,
               left: 0,
               right: 0,
               child: Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
+                    topLeft: Radius.circular(AppRadiuses.radius2),
+                    topRight: Radius.circular(AppRadiuses.radius2),
                   ),
-                  color: Color.fromARGB(255, 248, 248, 248),
+                  color: AppColors.fontLight,
                 ),
                 // Adjust height to avoid overlap with keyboard
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 35),
+                padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 35.h),
                 child: SingleChildScrollView(
                   child: Form(
                     key: _formKey,
@@ -141,32 +139,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       children: [
                         Text(
                           "Welcome",
-                          style: GoogleFonts.leagueSpartan(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600,
-                              color: const Color.fromARGB(255, 57, 23, 19),
-                              height: 1),
+                          style: AppTextStyles.textStyleAppBodyTitle1,
                         ),
-                        const SizedBox(height: 17),
+                        SizedBox(height: 17.h),
 
                         Text(
                           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna.",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w300,
-                            color: const Color.fromARGB(255, 57, 23, 19),
-                            height: 1,
-                          ),
+                          style: AppTextStyles.textStyleParagraph2,
                         ),
-                        const SizedBox(height: 38),
+                        SizedBox(height: 38.h),
 
                         Text(
                           "Username",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: const Color.fromARGB(255, 57, 23, 19),
-                          ),
+                          style: AppTextStyles.textStyleAppBodyTitle2,
                         ),
                         CustomTextFormField(
                           controller: _usernameController,
@@ -187,11 +172,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                         Text(
                           "Password",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: const Color.fromARGB(255, 57, 23, 19),
-                          ),
+                          style: AppTextStyles.textStyleAppBodyTitle2,
                         ),
 
                         CustomTextFormField(

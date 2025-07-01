@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/core/helper_functions/status_bar_background_color.dart';
+import 'package:food_app/features/core/screens/on_boarding_screen2.dart';
 import 'package:food_app/features/core/theme/button_styles.dart';
 import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 
-class OnBoardingScreen3 extends StatelessWidget {
-  const OnBoardingScreen3({super.key});
+class OnBoardingScreen1 extends StatelessWidget {
+  const OnBoardingScreen1({super.key});
   @override
   Widget build(BuildContext context) {
     statusBarBackgroundColor();
@@ -16,6 +17,7 @@ class OnBoardingScreen3 extends StatelessWidget {
         body: Stack(
           children: [
             backgroundImage(context),
+            skipButton(context),
             bottomContainer(context),
           ],
         ),
@@ -29,7 +31,31 @@ class OnBoardingScreen3 extends StatelessWidget {
       child: SizedBox(
           height: MediaQuery.of(context).size.height * .7,
           width: MediaQuery.of(context).size.width,
-          child: Image.asset("assets/dessert-images/3.jpg", fit: BoxFit.cover)),
+          child: Image.asset("assets/dessert-images/1.jpg", fit: BoxFit.cover)),
+    );
+  }
+
+  Widget skipButton(BuildContext context) {
+    return Positioned(
+      right: AppHorizentalPaddingds.padding35,
+      top: AppVerticalPaddingds.padding25,
+      child: TextButton(
+        onPressed: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen())),
+        style: AppTextButtonStyles.textButtonStyle4,
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          Text(
+            'Skip',
+            style: AppTextStyles.textButtonTextStyle3,
+          ),
+          SizedBox(width: AppSizedBoxWidths.width5),
+          SvgPicture.asset(
+            "assets/forward-arrow-icons/forward-arrow-icon.svg",
+            width: AppSvgWidths.width8,
+            height: AppSvgHeights.height12,
+          )
+        ]),
+      ),
     );
   }
 
@@ -52,13 +78,13 @@ class OnBoardingScreen3 extends StatelessWidget {
           children: [
             SizedBox(height: AppSizedBoxHeights.height23),
             SvgPicture.asset(
-              "assets/delivery-boy-icon.svg",
+              "assets/order.svg",
               width: AppSvgWidths.width30,
               height: AppSvgHeights.height36,
             ),
             SizedBox(height: AppSizedBoxHeights.height23),
             Text(
-              "Fast Delivery",
+              "Order For Food",
               style: AppTextStyles.textStyleAppBodyTitle3,
             ),
             SizedBox(height: AppSizedBoxHeights.height20),
@@ -68,11 +94,11 @@ class OnBoardingScreen3 extends StatelessWidget {
                 style: AppTextStyles.textStyleParagraph4),
             SizedBox(height: AppSizedBoxHeights.height30),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              container(color: AppColors.yellowLight),
-              SizedBox(width: AppSizedBoxWidths.width5),
-              container(color: AppColors.yellowLight),
-              SizedBox(width: AppSizedBoxWidths.width5),
               container(color: AppColors.orangeDark),
+              SizedBox(width: AppSizedBoxWidths.width5),
+              container(color: AppColors.yellowLight),
+              SizedBox(width: AppSizedBoxWidths.width5),
+              container(color: AppColors.yellowLight),
             ]),
             SizedBox(height: AppSizedBoxHeights.height32),
             nextButton(context),
@@ -95,11 +121,11 @@ class OnBoardingScreen3 extends StatelessWidget {
 
   Widget nextButton(BuildContext context) {
     return TextButton(
-      onPressed: () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const HomeScreen())),
+      onPressed: () => Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const OnBoardingScreen2())),
       style: AppTextButtonStyles.textButtonStyle5,
       child: Text(
-        'Get Started',
+        'Next',
         style: AppTextStyles.textButtonTextStyle5,
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
-import 'package:food_app/features/core/screens/on_boarding_screen.dart';
+import 'package:food_app/features/core/screens/on_boarding_screen1.dart';
 import 'package:food_app/features/core/theme/button_styles.dart';
 import 'package:food_app/features/core/theme/text_styles.dart';
 
@@ -38,7 +38,7 @@ class _LoginButtonState extends ConsumerState<LoginButton> {
       if (!mounted) return;
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const OnBoardingScreen()),
+        MaterialPageRoute(builder: (_) => const OnBoardingScreen1()),
       );
 
       ScaffoldMessenger.of(context).showSnackBar(

@@ -8,7 +8,7 @@ import 'package:food_app/features/auth/presentation/widgets/login_button.dart';
 import 'package:food_app/features/auth/presentation/widgets/password_text_form_field.dart';
 import 'package:food_app/features/core/constants/sizes.dart';
 
-import 'package:food_app/features/core/screens/second_splash_screen.dart';
+import 'package:food_app/features/core/screens/splash_screen2.dart';
 import 'package:food_app/features/core/theme/button_styles.dart';
 import 'package:food_app/features/core/theme/text_form_field_styles.dart';
 import 'package:food_app/features/core/theme/text_styles.dart';
@@ -53,8 +53,7 @@ class LoginScreen extends ConsumerWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SecondSplashScreen()),
+                                  builder: (context) => const SplashScreen2()),
                             );
                           },
                           child: SvgPicture.asset(

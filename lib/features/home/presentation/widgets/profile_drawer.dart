@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/addresses/presentation/screens/delivery_address.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
-import 'package:food_app/features/core/screens/second_splash_screen.dart';
+import 'package:food_app/features/core/screens/splash_screen2.dart';
 import 'package:food_app/features/orders/presentation/screens/my_orders_screen.dart';
 import 'package:food_app/features/profile/presentation/screens/my_profile_screen.dart';
 
@@ -110,8 +110,7 @@ class _ProfileDrawerState extends ConsumerState<ProfileDrawer> {
                                       .watch(cartNotifierProvider.notifier)
                                       .updateUserCart();
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          SecondSplashScreen()));
+                                      builder: (context) => SplashScreen2()));
                                 },
                                 style: TextButton.styleFrom(
                                   padding:

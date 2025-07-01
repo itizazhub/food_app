@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
-import 'package:food_app/features/core/screens/on_boarding_screen.dart';
-import 'package:food_app/features/core/screens/second_splash_screen.dart';
+import 'package:food_app/features/core/screens/on_boarding_screen1.dart';
+import 'package:food_app/features/core/screens/splash_screen2.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/core/widgets/custom_text_form_field.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,14 +26,14 @@ class _LoginScreenState extends ConsumerState<SignUpScreen> {
   Future<void> _navigateToOnBoardingPage() async {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => OnBoardingScreen()),
+      MaterialPageRoute(builder: (context) => const OnBoardingScreen1()),
     );
   }
 
   void _navigateToSplashPage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SecondSplashScreen()),
+      MaterialPageRoute(builder: (context) => SplashScreen2()),
     );
   }
 
@@ -55,7 +55,7 @@ class _LoginScreenState extends ConsumerState<SignUpScreen> {
     if (user != null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => OnBoardingScreen()),
+        MaterialPageRoute(builder: (_) => const OnBoardingScreen1()),
       );
 
       ScaffoldMessenger.of(context).showSnackBar(

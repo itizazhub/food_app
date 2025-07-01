@@ -56,7 +56,7 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
   }
 
   Future<List<Favorite>> getFavorites() async {
-    final user = ref.read(authUserNotifierProvider);
+    final user = ref.read(authUserNotifierProvider).user;
     if (user != null) {
       await ref
           .read(favoriteNotifierProvider.notifier)
@@ -125,7 +125,7 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                         builder: (context, ref, _) {
                           final favs = ref.watch(favoriteNotifierProvider);
                           final currentUser =
-                              ref.watch(authUserNotifierProvider);
+                              ref.watch(authUserNotifierProvider).user;
                           final favoriteNotifier =
                               ref.read(favoriteNotifierProvider.notifier);
                           final isFavorite = favs

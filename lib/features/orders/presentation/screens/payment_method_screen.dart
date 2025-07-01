@@ -55,7 +55,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
         ref.watch(selectedAddressNotifierProvider.notifier);
 
     await addressNotifier.getUserAddresses(
-      user: ref.watch(authUserNotifierProvider)!,
+      user: ref.watch(authUserNotifierProvider).user!,
     );
 
     final addresses = ref.watch(addressNotifierProvider);
@@ -200,7 +200,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                     ? await addressNotifier.addUserAddress(
                         address: Address(
                           addressId: "",
-                          userId: ref.watch(authUserNotifierProvider)!.id,
+                          userId: ref.watch(authUserNotifierProvider).user!.id,
                           address: _addressInput.text.trim(),
                         ),
                       )
@@ -236,7 +236,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
     cart = ref.watch(cartNotifierProvider);
     ref
         .watch(cartNotifierProvider.notifier)
-        .getUserCart(user: ref.watch(authUserNotifierProvider)!);
+        .getUserCart(user: ref.watch(authUserNotifierProvider).user!);
     cartItems = cart!.items ?? [];
     return Scaffold(
       body: SafeArea(
@@ -368,8 +368,10 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                                     orderType: "delivery",
                                     paymentMethodId: _paymentMethod.paymentId,
                                     total: cart.total,
-                                    userId:
-                                        ref.watch(authUserNotifierProvider)!.id,
+                                    userId: ref
+                                        .watch(authUserNotifierProvider)
+                                        .user!
+                                        .id,
                                   ));
                               ref
                                   .watch(cartNotifierProvider.notifier)

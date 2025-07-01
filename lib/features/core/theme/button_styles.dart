@@ -5,43 +5,55 @@ class AppTextButtonStyles {
   static final textButtonStyle1 = TextButton.styleFrom(
     padding: EdgeInsets.zero, // no internal padding
     backgroundColor: AppColors.yellowDark, // filled background
-    fixedSize: Size(AppButtonWidths.width1,
-        AppButtonHeights.height1), // prevent default min size
+    fixedSize: Size(AppButtonWidths.width207,
+        AppButtonHeights.height45), // prevent default min size
     tapTargetSize: MaterialTapTargetSize.shrinkWrap, // compact touch area
     shape: RoundedRectangleBorder(
       borderRadius:
-          BorderRadius.circular(AppRadiuses.radius2), // optional rounding
+          BorderRadius.circular(AppRadiuses.radius30), // optional rounding
     ),
   );
 
   static final textButtonStyle2 = TextButton.styleFrom(
     padding: EdgeInsets.zero, // no internal padding
     backgroundColor: AppColors.yellowLight, // filled background
-    fixedSize: Size(AppButtonWidths.width1,
-        AppButtonHeights.height1), // prevent default min size
+    fixedSize: Size(AppButtonWidths.width207,
+        AppButtonHeights.height45), // prevent default min size
     tapTargetSize: MaterialTapTargetSize.shrinkWrap, // compact touch area
     shape: RoundedRectangleBorder(
       borderRadius:
-          BorderRadius.circular(AppRadiuses.radius2), // optional rounding
+          BorderRadius.circular(AppRadiuses.radius30), // optional rounding
     ),
   );
 
   static final textButtonStyle3 = TextButton.styleFrom(
     padding: EdgeInsets.zero, // no internal padding
     backgroundColor: AppColors.orangeDark, // filled background
-    fixedSize: Size(AppButtonWidths.width1,
-        AppButtonHeights.height1), // prevent default min size
+    fixedSize: Size(AppButtonWidths.width207,
+        AppButtonHeights.height45), // prevent default min size
     tapTargetSize: MaterialTapTargetSize.shrinkWrap, // compact touch area
     shape: RoundedRectangleBorder(
       borderRadius:
-          BorderRadius.circular(AppRadiuses.radius2), // optional rounding
+          BorderRadius.circular(AppRadiuses.radius30), // optional rounding
     ),
   );
 
   static final textButtonStyle4 = TextButton.styleFrom(
     padding: EdgeInsets.zero, // no internal padding
-    backgroundColor: AppColors.fontLight, // filled background
+    backgroundColor: AppColors.transparent, // filled background
     minimumSize: Size.zero, // prevent default min size
     tapTargetSize: MaterialTapTargetSize.shrinkWrap, // compact touch area
+  );
+
+  static final textButtonStyle5 = TextButton.styleFrom(
+    padding: EdgeInsets.zero, // no internal padding
+    backgroundColor: AppColors.orangeDark, // filled background
+    fixedSize: Size(AppButtonWidths.width133,
+        AppButtonHeights.height36), // prevent default min size
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap, // compact touch area
+    shape: RoundedRectangleBorder(
+      borderRadius:
+          BorderRadius.circular(AppRadiuses.radius30), // optional rounding
+    ),
   );
 }

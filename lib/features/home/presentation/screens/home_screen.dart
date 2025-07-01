@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
@@ -50,7 +51,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final bests = await getBestSellers();
     final recommends = await getRecommendeds();
     final favs = await getFavorites();
-    User? user = ref.read(authUserNotifierProvider);
+    User? user = ref.read(authUserNotifierProvider).user;
     await ref.read(cartNotifierProvider.notifier).getUserCart(user: user!);
     // final cart = ref.read(cartNotifierProvider);
 
@@ -91,7 +92,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Future<List<Product>> getFavorites() async {
-    User? user = ref.watch(authUserNotifierProvider);
+    User? user = ref.watch(authUserNotifierProvider).user;
     await ref
         .read(favoriteNotifierProvider.notifier)
         .getUserFavoriteUseCase(user: user!);
@@ -395,27 +396,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           items: [
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "bottom-navigation-icons/home.svg",
+                  "assets/bottom-navigation-icons/home.svg",
+                  width: 25.w,
+                  height: 22.h,
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "bottom-navigation-icons/categories.svg",
+                  "assets/bottom-navigation-icons/categories.svg",
+                  width: 25.w,
+                  height: 22.h,
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "bottom-navigation-icons/favorites.svg",
+                  "assets/bottom-navigation-icons/favorites.svg",
+                  width: 25.w,
+                  height: 22.h,
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "bottom-navigation-icons/list.svg",
+                  "assets/bottom-navigation-icons/list.svg",
+                  width: 25.w,
+                  height: 22.h,
                 ),
                 label: ""),
             BottomNavigationBarItem(
                 icon: SvgPicture.asset(
-                  "bottom-navigation-icons/help.svg",
+                  "assets/bottom-navigation-icons/help.svg",
+                  width: 25.w,
+                  height: 22.h,
                 ),
                 label: "")
           ],

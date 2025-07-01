@@ -57,8 +57,6 @@ class _LoginScreenState extends ConsumerState<SignUpScreen> {
         context,
         MaterialPageRoute(builder: (_) => OnBoardingScreen()),
       );
-      print("Email: ${user.email}");
-      print("ID: ${user.id}");
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Welcome, ${user.username}!")),

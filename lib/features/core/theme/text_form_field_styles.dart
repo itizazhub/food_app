@@ -13,19 +13,19 @@ class TextFormFieldStyles {
       filled: true,
       fillColor: AppColors.yellowLight,
       contentPadding: EdgeInsets.symmetric(
-        vertical: AppVerticalPaddingds.padding1,
-        horizontal: AppHorizentalPaddingds.padding1,
+        vertical: AppVerticalPaddingds.padding15,
+        horizontal: AppHorizentalPaddingds.padding15,
       ),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppRadiuses.radius3),
+        borderRadius: BorderRadius.circular(AppRadiuses.radius13),
         borderSide: const BorderSide(color: AppColors.yellowDark),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppRadiuses.radius3),
+        borderRadius: BorderRadius.circular(AppRadiuses.radius13),
         borderSide: const BorderSide(color: AppColors.yellowDark),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppRadiuses.radius3),
+        borderRadius: BorderRadius.circular(AppRadiuses.radius13),
         borderSide: const BorderSide(color: AppColors.yellowDark),
       ),
     );

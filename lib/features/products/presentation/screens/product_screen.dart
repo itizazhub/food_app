@@ -96,7 +96,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     int quantity = existingCartItem?.quantity ?? _quantity;
 
     final favs = ref.watch(favoriteNotifierProvider);
-    final currentUser = ref.watch(authUserNotifierProvider);
+    final currentUser = ref.watch(authUserNotifierProvider).user;
     final favoriteNotifier = ref.read(favoriteNotifierProvider.notifier);
     final isFavorite =
         favs.any((fav) => fav.productId == widget.product.productId);

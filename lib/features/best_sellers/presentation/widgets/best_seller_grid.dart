@@ -139,7 +139,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                         builder: (context, ref, _) {
                           final favs = ref.watch(favoriteNotifierProvider);
                           final currentUser =
-                              ref.watch(authUserNotifierProvider);
+                              ref.watch(authUserNotifierProvider).user;
                           final favoriteNotifier =
                               ref.read(favoriteNotifierProvider.notifier);
                           final isFavorite = favs

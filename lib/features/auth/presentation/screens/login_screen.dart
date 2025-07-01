@@ -4,77 +4,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/auth/presentation/widgets/login_button.dart';
+import 'package:food_app/features/auth/presentation/widgets/password_text_form_field.dart';
 import 'package:food_app/features/core/constants/sizes.dart';
-import 'package:food_app/features/core/screens/on_boarding_screen.dart';
+
 import 'package:food_app/features/core/screens/second_splash_screen.dart';
 import 'package:food_app/features/core/theme/button_styles.dart';
 import 'package:food_app/features/core/theme/text_form_field_styles.dart';
 import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends ConsumerStatefulWidget {
+class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
   @override
-  ConsumerState<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends ConsumerState<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  String _username = '';
-  String _password = '';
-  bool _isObscured = true;
-
-  bool _isLoading = false;
-
-  int _currentIndex = 0;
-
-  void _navigateToSplashPage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SecondSplashScreen()),
-    );
-  }
-
-  Future<void> _login() async {
-    if (!_formKey.currentState!.validate()) return;
-
-    _formKey.currentState!.save();
-
-    setState(() => _isLoading = true);
-
-    await ref.read(authUserNotifierProvider.notifier).login(
-          username: _username,
-          password: _password,
-        );
-
-    setState(() => _isLoading = false);
-
-    final user = ref.watch(authUserNotifierProvider);
-
-    if (user != null) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const OnBoardingScreen()),
-      );
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Welcome, ${user.username}!")),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Login failed. Please try again.")),
-      );
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authUserState = ref.read(authUserNotifierProvider);
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: AppColors.yellowDark, // removes transparency
@@ -83,7 +28,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 248, 248, 248),
+        backgroundColor: AppColors.fontLight,
         resizeToAvoidBottomInset: true, // Ensure UI adjusts with keyboard
         body: Stack(
           children: [
@@ -104,6 +49,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const SecondSplashScreen()),
+                            );
+                          },
                           child: SvgPicture.asset(
                             'assets/back-arrow-icons/back-arrow-icon.svg',
                             width: 4,
@@ -132,8 +85,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(AppRadiuses.radius2),
-                    topRight: Radius.circular(AppRadiuses.radius2),
+                    topLeft: Radius.circular(AppRadiuses.radius30),
+                    topRight: Radius.circular(AppRadiuses.radius30),
                   ),
                   color: AppColors.fontLight,
                 ),
@@ -141,7 +94,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 padding: EdgeInsets.only(left: 32.w, right: 32.w, top: 35.h),
                 child: SingleChildScrollView(
                   child: Form(
-                    key: _formKey,
+                    key: authUserState.logInFormKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -167,8 +120,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             validator: (value) => value == null || value.isEmpty
                                 ? 'Enter username'
                                 : null,
-                            onChanged: (value) => _username = value.trim(),
-                            onSaved: (value) => _username = value!.trim(),
+                            onChanged: (value) =>
+                                authUserState.username = value.trim(),
+                            onSaved: (value) =>
+                                authUserState.username = value!.trim(),
                             decoration: TextFormFieldStyles.appInputDecoration(
                                 hintText: "Enter Username"),
                             style: GoogleFonts.leagueSpartan(
@@ -184,32 +139,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           style: AppTextStyles.textStyleAppBodyTitle2,
                         ),
 
-                        TextFormField(
-                          obscureText: _isObscured,
-                          validator: (value) => value == null || value.isEmpty
-                              ? 'Enter password'
-                              : null,
-                          onChanged: (value) => _password = value.trim(),
-                          onSaved: (value) => _password = value!.trim(),
-                          decoration: TextFormFieldStyles.appInputDecoration(
-                            hintText: "Enter Password",
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                setState(() {
-                                  _isObscured = !_isObscured;
-                                });
-                              },
-                              child: Icon(
-                                _isObscured
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                                size: 20.0,
-                                color: AppColors.orangeDark,
-                              ),
-                            ),
-                          ),
-                          style: AppTextStyles.input,
-                        ),
+                        const PasswordTextFormField(),
 
                         SizedBox(height: 10.h),
                         Row(
@@ -233,14 +163,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           alignment: Alignment.center,
                           child: Column(
                             children: [
-                              TextButton(
-                                onPressed: _login,
-                                style: AppTextButtonStyles.textButtonStyle3,
-                                child: Text(
-                                  'Log In',
-                                  style: AppTextStyles.textButtonTextStyle2,
-                                ),
-                              ),
+                              const LoginButton(),
                               SizedBox(height: 30.h),
                               Text(
                                 "or sign up with",
@@ -311,12 +234,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             showUnselectedLabels: false,
             backgroundColor: AppColors.orangeDark,
             type: BottomNavigationBarType.fixed,
-            currentIndex: _currentIndex,
-            onTap: (index) {
-              setState(() {
-                _currentIndex = index;
-              });
-            },
+            currentIndex: 0,
             items: [
               BottomNavigationBarItem(
                   icon: SvgPicture.asset(

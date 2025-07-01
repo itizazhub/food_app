@@ -3,13 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/core/constants/sizes.dart';
-import 'package:food_app/features/core/screens/on_boarding_screen2.dart';
 import 'package:food_app/features/core/theme/button_styles.dart';
 import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 
-class OnBoardingScreen extends StatelessWidget {
-  const OnBoardingScreen({super.key});
+class OnBoardingScreen3 extends StatelessWidget {
+  const OnBoardingScreen3({super.key});
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
@@ -27,30 +26,8 @@ class OnBoardingScreen extends StatelessWidget {
               child: SizedBox(
                   height: MediaQuery.of(context).size.height * .7,
                   width: MediaQuery.of(context).size.width,
-                  child: Image.asset("assets/onboard.jpg", fit: BoxFit.cover)),
-            ),
-            Positioned(
-              right: 35.w,
-              top: 25.h,
-              child: TextButton(
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const HomeScreen())),
-                style: AppTextButtonStyles.textButtonStyle4,
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Text(
-                    'Skip',
-                    style: AppTextStyles.textButtonTextStyle3,
-                  ),
-                  SizedBox(width: 5.w),
-                  SvgPicture.asset(
-                    "assets/forward-arrow-icons/forward-arrow-icon.svg",
-                    width: 8.w,
-                    height: 13.h,
-                  )
-                ]),
-              ),
+                  child: Image.asset("assets/dessert-images/2.jpg",
+                      fit: BoxFit.cover)),
             ),
             Positioned(
               bottom: 0,
@@ -69,13 +46,13 @@ class OnBoardingScreen extends StatelessWidget {
                   children: [
                     SizedBox(height: 23.h),
                     SvgPicture.asset(
-                      "assets/order.svg",
+                      "assets/delivery-boy-icon.svg",
                       width: 30.w,
                       height: 36.h,
                     ),
                     SizedBox(height: 23.h),
                     Text(
-                      "Order For Food",
+                      "Fast Delivery",
                       style: AppTextStyles.textStyleAppBodyTitle3,
                     ),
                     SizedBox(height: 20.h),
@@ -88,25 +65,25 @@ class OnBoardingScreen extends StatelessWidget {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                          color: AppColors.yellowLight,
+                        ),
+                        height: 4.h,
+                        width: 20.w,
+                      ),
+                      SizedBox(width: 5.w),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(12.r)),
+                          color: AppColors.yellowLight,
+                        ),
+                        height: 4.h,
+                        width: 20.w,
+                      ),
+                      SizedBox(width: 5.w),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(12.r)),
                           color: AppColors.orangeDark,
-                        ),
-                        height: 4.h,
-                        width: 20.w,
-                      ),
-                      SizedBox(width: 5.w),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12.r)),
-                          color: AppColors.yellowLight,
-                        ),
-                        height: 4.h,
-                        width: 20.w,
-                      ),
-                      SizedBox(width: 5.w),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12.r)),
-                          color: AppColors.yellowLight,
                         ),
                         height: 4.h,
                         width: 20.w,
@@ -117,10 +94,10 @@ class OnBoardingScreen extends StatelessWidget {
                       onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const OnBoardingScreen2())),
+                              builder: (context) => const HomeScreen())),
                       style: AppTextButtonStyles.textButtonStyle5,
                       child: Text(
-                        'Next',
+                        'Get Started',
                         style: AppTextStyles.textButtonTextStyle5,
                       ),
                     ),

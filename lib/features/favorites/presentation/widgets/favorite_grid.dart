@@ -32,7 +32,7 @@ class _FavoriteGridState extends ConsumerState<FavoriteGrid> {
   }
 
   Future<void> _initializeData() async {
-    final user = ref.read(authUserNotifierProvider);
+    final user = ref.read(authUserNotifierProvider).user;
     if (user == null) return;
 
     final favoriteNotifier = ref.read(favoriteNotifierProvider.notifier);
@@ -118,7 +118,7 @@ class _FavoriteGridState extends ConsumerState<FavoriteGrid> {
                         builder: (context, ref, _) {
                           final favs = ref.watch(favoriteNotifierProvider);
                           final currentUser =
-                              ref.watch(authUserNotifierProvider);
+                              ref.watch(authUserNotifierProvider).user;
                           final notifier =
                               ref.read(favoriteNotifierProvider.notifier);
                           final isFavorite =

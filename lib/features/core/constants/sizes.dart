@@ -9,6 +9,7 @@ class AppFontWeights {
   static const semiBold = FontWeight.w600;
   static const bold = FontWeight.w700;
   static const extraBold = FontWeight.w800;
+  static const black = FontWeight.w900;
 }
 
 class AppColors {
@@ -18,6 +19,7 @@ class AppColors {
   static const orangeLight = Color.fromARGB(255, 255, 222, 207);
   static const fontDark = Color.fromARGB(255, 57, 23, 19);
   static const fontLight = Color.fromARGB(255, 248, 248, 248);
+  static const transparent = Color.fromARGB(0, 255, 255, 255);
 }
 
 class AppFontSizes {
@@ -28,27 +30,30 @@ class AppFontSizes {
   static final fontSize4 = 26.0.sp;
   static final fontSize5 = 28.0.sp;
   static final fontSize6 = 34.0.sp;
+  static final fontSize7 = 17.0.sp;
 }
 
 class AppRadiuses {
-  static final radius1 = 15.0.r;
-  static final radius2 = 30.0.r;
-  static final radius3 = 13.0.r;
+  static final radius15 = 15.0.r;
+  static final radius30 = 30.0.r;
+  static final radius13 = 13.0.r;
 }
 
 class AppButtonWidths {
-  static final width1 = 207.0.w;
+  static final width207 = 207.0.w;
+  static final width133 = 133.0.w;
   // static const widthMedium = 100;
 }
 
 class AppButtonHeights {
-  static final height1 = 45.0.h;
+  static final height45 = 45.0.h;
+  static final height36 = 36.0.h;
 }
 
 class AppVerticalPaddingds {
-  static final padding1 = 15.h;
+  static final padding15 = 15.h;
 }
 
 class AppHorizentalPaddingds {
-  static final padding1 = 15.w;
+  static final padding15 = 15.w;
 }

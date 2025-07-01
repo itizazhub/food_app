@@ -74,7 +74,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
         ref.watch(selectedAddressNotifierProvider.notifier);
 
     await addressNotifier.getUserAddresses(
-      user: ref.watch(authUserNotifierProvider)!,
+      user: ref.watch(authUserNotifierProvider).user!,
     );
 
     final addresses = ref.watch(addressNotifierProvider);
@@ -219,7 +219,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
                     ? await addressNotifier.addUserAddress(
                         address: Address(
                           addressId: "",
-                          userId: ref.watch(authUserNotifierProvider)!.id,
+                          userId: ref.watch(authUserNotifierProvider).user!.id,
                           address: _addressInput.text.trim(),
                         ),
                       )

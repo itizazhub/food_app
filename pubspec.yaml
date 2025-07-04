@@ -76,6 +76,15 @@ flutter:
       - assets/bottom-navigation-icons/
       - assets/logo-icons/
       - assets/dessert-images/
+      - assets/meal-images/
+      - assets/cart-icons/
+      - assets/categories-icons/
+      - assets/drinks-images/
+      - assets/notification-icons/
+      - assets/profile-icons/
+      - assets/rating-icons/
+      - assets/snacks-images/
+      - assets/vegan-images/
       - assets/forward-arrow-icons/
 
   # An image asset can refer to one or more resolution-specific "variants", see

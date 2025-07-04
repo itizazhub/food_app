@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/best_sellers/presentation/providers/best_seller_products_provider.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/home/domain/entities/category.dart';
 import 'package:food_app/features/home/domain/entities/favorite.dart';
@@ -22,7 +23,6 @@ class BestSellerGrid extends ConsumerStatefulWidget {
 }
 
 class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
-  List<Product> bestSellerProducts = [];
   List<Category> categories = [];
   @override
   void initState() {
@@ -31,11 +31,9 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
   }
 
   Future<void> _initializeData() async {
-    final best = await getBestSellers();
     final cats = await getCategoies();
 
     setState(() {
-      bestSellerProducts = best;
       categories = cats;
     });
   }
@@ -47,17 +45,6 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
     return categories;
   }
 
-  Future<List<Product>> getBestSellers() async {
-    await ref.read(bestSellersNotifier.notifier).getBestSellers();
-    final bestBellers = ref.watch(bestSellersNotifier);
-    List<String> keys = bestBellers.map((bestSellerProduct) {
-      return bestSellerProduct.productId;
-    }).toList();
-    await ref.read(productsNotifierProvider.notifier).getProducts(keys: keys);
-    final products = ref.watch(productsNotifierProvider);
-    return products;
-  }
-
   void goToProductScreen({required Product product}) {
     Navigator.pushReplacement(
       context,
@@ -67,6 +54,16 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
 
   @override
   Widget build(BuildContext context) {
+    final bestSellersState = ref.watch(bestSellersNotifierProvider);
+
+    if (bestSellersState.isLoading) {
+      return const CircularProgressIndicator();
+    }
+
+    if (bestSellersState.failure != null) {
+      return Text("Error: ${bestSellersState.failure!.message}");
+    }
+    final bestSellersProducts = bestSellersState.products;
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -76,9 +73,9 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
         mainAxisSpacing: 8.0, // Spacing between grid items vertically
         childAspectRatio: 0.7, // Adjust this for aspect ratio of the grid items
       ),
-      itemCount: bestSellerProducts.length,
+      itemCount: bestSellersProducts.length,
       itemBuilder: (BuildContext context, int index) {
-        final product = bestSellerProducts[index];
+        final product = bestSellersProducts[index];
         final url = categories
             .firstWhere(
               (category) => category.categoryId == product.categoryId,
@@ -86,10 +83,8 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                   categoryId: '', category: '', imageUrl: ''), // or show error
             )
             .imageUrl;
-        print("This is category url: $url");
-
         return InkWell(
-          onTap: () => goToProductScreen(product: product),
+          // onTap: () => goToProductScreen(product: product),
           child: Card(
             elevation: 0,
             color: const Color.fromARGB(255, 248, 248, 248),
@@ -231,7 +226,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                       ),
                       child: Row(
                         children: [
-                          Text("3.5",
+                          Text(product.rating.toStringAsFixed(1),
                               style: GoogleFonts.leagueSpartan(
                                 color: Color.fromARGB(255, 248, 248, 248),
                                 fontWeight: FontWeight.normal,

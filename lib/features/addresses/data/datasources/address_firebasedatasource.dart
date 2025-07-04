@@ -22,18 +22,15 @@ class AddressFirebasedatasource {
         print("Get address request status code ${response.statusCode}");
 
         Map<String, dynamic> result = jsonDecode(response.body);
-        print(result);
 
         List<AddressModel> allAddresses = result.entries.map((jsonUserAddress) {
           return AddressModel.fromJson(
               key: jsonUserAddress.key, json: jsonUserAddress.value);
         }).toList();
-        print("all addresses $allAddresses");
 
         List<AddressModel> userAddresses = allAddresses.where((address) {
           return address.userId == user.id;
         }).toList();
-        print("user Addresses $userAddresses");
 
         return Right(userAddresses);
       } else {

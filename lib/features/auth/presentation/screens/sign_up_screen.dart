@@ -204,7 +204,6 @@ class SignUpScreen extends StatelessWidget {
             showUnselectedLabels: false,
             backgroundColor: AppColors.orangeDark,
             type: BottomNavigationBarType.fixed,
-            currentIndex: 0,
             items: [
               item("assets/bottom-navigation-icons/home.svg"),
               item("assets/bottom-navigation-icons/categories.svg"),

@@ -26,15 +26,13 @@ class CartFirebasedatasource {
       final response = await http.get(url, headers: _headers);
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final result = jsonDecode(response.body) as Map<String, dynamic>?;
-        print(result);
+
         if (result != null && result.isNotEmpty) {
           final firstEntry = result.entries.first;
           return Right(
             CartModel.fromJson(key: firstEntry.key, json: firstEntry.value),
           );
         }
-
-        // No cart found → create a new one
         return await _createNewCart(user);
       } else {
         return Left(

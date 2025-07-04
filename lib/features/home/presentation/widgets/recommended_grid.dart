@@ -264,15 +264,17 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                         onTap: () async {
                           if (!isAdded) {
                             cartNotifier.addItemToCart(
-                                cartItem: CartItem(
-                                    productId:
-                                        recommendedProducts[index].productId,
-                                    quantity: 1,
-                                    price: recommendedProducts[index].price,
-                                    imageUrl:
-                                        recommendedProducts[index].imageUrl),
-                                maxQuantity:
-                                    recommendedProducts[index].stockQuantity);
+                              cartItem: CartItem(
+                                productId: recommendedProducts[index].productId,
+                                quantity: 1,
+                                price: recommendedProducts[index].price,
+                                imageUrl: recommendedProducts[index].imageUrl,
+                                productName:
+                                    recommendedProducts[index].productName,
+                              ),
+                              maxQuantity:
+                                  recommendedProducts[index].stockQuantity,
+                            );
                           } else {
                             cartNotifier.removeItemFromCart(
                                 cartItem: cartItems.firstWhere((cartItem) {

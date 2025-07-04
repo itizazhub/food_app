@@ -5,23 +5,27 @@ class CartItemModel {
   final int quantity;
   final double price;
   final String imageUrl;
+  final String productName;
   CartItemModel({
     required this.productId,
     required this.quantity,
     required this.price,
     required this.imageUrl,
+    required this.productName,
   });
 
   factory CartItemModel.fromJson(Map<String, dynamic> json) {
     return CartItemModel(
-        productId: json['product_id'],
-        quantity: (json["quantity"] != null)
-            ? int.tryParse(json["quantity"].toString()) ?? 0
-            : 0,
-        price: (json["price"] != null)
-            ? double.tryParse(json["price"].toString()) ?? 0.0
-            : 0.0,
-        imageUrl: json["image_url"]);
+      productId: json['product_id'],
+      quantity: (json["quantity"] != null)
+          ? int.tryParse(json["quantity"].toString()) ?? 0
+          : 0,
+      price: (json["price"] != null)
+          ? double.tryParse(json["price"].toString()) ?? 0.0
+          : 0.0,
+      imageUrl: json["image_url"],
+      productName: json["product_name"],
+    );
   }
 
   factory CartItemModel.fromEntity({required CartItem cartItem}) {
@@ -30,6 +34,7 @@ class CartItemModel {
       quantity: cartItem.quantity,
       price: cartItem.price,
       imageUrl: cartItem.imageUrl,
+      productName: cartItem.productName,
     );
   }
 
@@ -39,24 +44,33 @@ class CartItemModel {
       'quantity': quantity,
       'image_url': imageUrl,
       'price': price,
+      'product_name': productName,
     };
   }
 
   CartItem toEnity() {
     return CartItem(
-        productId: productId,
-        quantity: quantity,
-        price: price,
-        imageUrl: imageUrl);
+      productId: productId,
+      quantity: quantity,
+      price: price,
+      imageUrl: imageUrl,
+      productName: productName,
+    );
   }
 
-  CartItemModel copyWith(
-      {String? productId, int? quantity, double? price, String? imageUrl}) {
+  CartItemModel copyWith({
+    String? productId,
+    int? quantity,
+    double? price,
+    String? imageUrl,
+    String? productName,
+  }) {
     return CartItemModel(
       productId: productId ?? this.productId,
       quantity: quantity ?? this.quantity,
       price: price ?? this.price,
       imageUrl: imageUrl ?? this.imageUrl,
+      productName: productName ?? this.productName,
     );
   }
 }

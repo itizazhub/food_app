@@ -4,11 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
 import 'package:food_app/features/best_sellers/presentation/screens/best_seller_screen.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/carts/presentation/screens/cart_screen.dart';
 import 'package:food_app/features/carts/presentation/widgets/cart_list_view.dart';
 import 'package:food_app/features/categories/presentation/screens/categories_screen.dart';
+import 'package:food_app/features/core/constants/sizes.dart';
+import 'package:food_app/features/core/helper_functions/status_bar_background_color.dart';
 import 'package:food_app/features/core/widgets/show_right_drawer.dart';
 import 'package:food_app/features/favorites/presentation/screens/favorite_screen.dart';
 import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
@@ -168,20 +171,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    statusBarBackgroundColor();
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 148, 100, 100),
+      backgroundColor: const Color.fromARGB(255, 248, 248, 248),
+      resizeToAvoidBottomInset: true, // Ensure UI adjusts with keyboard
       body: SafeArea(
         child: Stack(
           children: [
             Positioned(
               top: 0,
               child: Container(
-                padding:
-                    EdgeInsets.only(top: 40, bottom: 10, left: 30, right: 30),
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 245, 203, 88),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppHorizentalPaddingds.padding32),
+                decoration: const BoxDecoration(
+                  color: AppColors.yellowDark,
                 ),
-                height: MediaQuery.of(context).size.height * 0.25,
+                height: AppContainerHeights.height170,
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: [
@@ -198,10 +203,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       child: const CartListView(),
                                       context: context);
                                 },
-                                child: CustomIcon(path: "cart-icons/cart.svg")),
+                                child: CustomIcon(
+                                    path: "assets/cart-icons/cart.svg")),
                             const SizedBox(width: 8),
                             CustomIcon(
-                                path: "notification-icons/notification.svg"),
+                                path:
+                                    "assets/notification-icons/notification.svg"),
                             const SizedBox(width: 8),
                             InkWell(
                                 onTap: () {
@@ -210,7 +217,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       context: context);
                                 },
                                 child: CustomIcon(
-                                    path: "profile-icons/profile.svg")),
+                                    path: "assets/profile-icons/profile.svg")),
                           ],
                         ),
                       ],
@@ -247,20 +254,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.22,
+              top: 114.h,
+              bottom: 0,
               left: 0,
               right: 0,
-              bottom: 0,
               child: Container(
-                width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(vertical: 20),
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 248, 248, 248),
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(AppRadiuses.radius30),
+                    topRight: Radius.circular(AppRadiuses.radius30),
                   ),
+                  color: AppColors.fontLight,
                 ),
+                padding: EdgeInsets.only(
+                    left: AppHorizentalPaddingds.padding32,
+                    right: AppHorizentalPaddingds.padding32,
+                    top: AppVerticalPaddingds.padding35),
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.only(
@@ -332,7 +341,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             borderRadius: BorderRadius.circular(
                                 23), // Optional: Adds rounded corners to the image
                             child: Image.asset(
-                              "meal-images/1.jpg",
+                              "assets/meal-images/1.jpg",
                               fit: BoxFit
                                   .cover, // Optional: Ensures the image covers the entire container
                             ),
@@ -382,55 +391,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12), // Round top-left corner
-          topRight: Radius.circular(12), // Round top-right corner
+          topLeft: Radius.circular(AppRadiuses.radius30),
+          topRight: Radius.circular(AppRadiuses.radius30),
         ),
         child: BottomNavigationBar(
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          backgroundColor: Color.fromARGB(255, 233, 83, 34),
-          type: BottomNavigationBarType.fixed,
-          currentIndex: _currentIndex,
-          onTap:
-              _onNavItemTapped, // Call this function when a nav item is tapped
-          items: [
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/bottom-navigation-icons/home.svg",
-                  width: 25.w,
-                  height: 22.h,
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/bottom-navigation-icons/categories.svg",
-                  width: 25.w,
-                  height: 22.h,
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/bottom-navigation-icons/favorites.svg",
-                  width: 25.w,
-                  height: 22.h,
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/bottom-navigation-icons/list.svg",
-                  width: 25.w,
-                  height: 22.h,
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "assets/bottom-navigation-icons/help.svg",
-                  width: 25.w,
-                  height: 22.h,
-                ),
-                label: "")
-          ],
-        ),
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            backgroundColor: AppColors.orangeDark,
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _currentIndex,
+            onTap: _onNavItemTapped,
+            items: [
+              item("assets/bottom-navigation-icons/home.svg"),
+              item("assets/bottom-navigation-icons/categories.svg"),
+              item("assets/bottom-navigation-icons/favorites.svg"),
+              item("assets/bottom-navigation-icons/list.svg"),
+              item("assets/bottom-navigation-icons/help.svg"),
+            ]),
       ),
     );
   }

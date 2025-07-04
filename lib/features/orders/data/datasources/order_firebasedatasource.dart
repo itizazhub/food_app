@@ -76,7 +76,6 @@ class OrderFirebasedatasource {
       _baseUrl,
       "orders/${order.orderId}.json",
     );
-    print("order is ${order.orderId}");
 
     try {
       final response = await http.delete(url, headers: _headers);

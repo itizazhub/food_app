@@ -268,6 +268,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                       quantity: quantity,
                                       price: widget.product.price,
                                       imageUrl: widget.product.imageUrl,
+                                      productName: widget.product.productName,
                                     ),
                                     maxQuantity: widget.product.stockQuantity,
                                   );
@@ -336,6 +337,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                 quantity: quantity,
                                 price: widget.product.price,
                                 imageUrl: widget.product.imageUrl,
+                                productName: widget.product.productName,
                               ),
                               maxQuantity: widget.product.stockQuantity,
                             );

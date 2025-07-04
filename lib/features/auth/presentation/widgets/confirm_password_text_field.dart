@@ -5,22 +5,17 @@ import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/core/theme/text_form_field_styles.dart';
 import 'package:food_app/features/core/theme/text_styles.dart';
 
-class PasswordTextFormField extends ConsumerStatefulWidget {
-  const PasswordTextFormField({super.key});
+class ConfirmPasswordTextField extends ConsumerStatefulWidget {
+  const ConfirmPasswordTextField({super.key});
 
   @override
-  ConsumerState<PasswordTextFormField> createState() =>
-      _PasswordTextFormFieldState();
+  ConsumerState<ConfirmPasswordTextField> createState() =>
+      _ConfirmPasswordTextFieldState();
 }
 
-class _PasswordTextFormFieldState extends ConsumerState<PasswordTextFormField> {
+class _ConfirmPasswordTextFieldState
+    extends ConsumerState<ConfirmPasswordTextField> {
   bool _isObscured = true;
-  bool isPasswordStrong(String password) {
-    return RegExp(
-            r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#\$%^&*()_\-=\[\]{};:\"\\|,.<>\/?]).{8,}$')
-        .hasMatch(password);
-  }
-
   @override
   Widget build(BuildContext context) {
     final authUserState = ref.read(authUserNotifierProvider);
@@ -28,16 +23,18 @@ class _PasswordTextFormFieldState extends ConsumerState<PasswordTextFormField> {
       obscureText: _isObscured,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Enter password';
+          return 'Re-enter password';
         }
-        if (!isPasswordStrong(value)) {
-          return 'Password must be 8+ chars, include number, letter, special char';
+        if (authUserState.confirmPassword != authUserState.password) {
+          return 'Passwords do not match';
         }
+
+        return null;
       },
-      onChanged: (value) => authUserState.password = value.trim(),
-      onSaved: (value) => authUserState.password = value!.trim(),
+      onChanged: (value) => authUserState.confirmPassword = value.trim(),
+      onSaved: (value) => authUserState.confirmPassword = value!.trim(),
       decoration: TextFormFieldStyles.appInputDecoration(
-        hintText: "Enter password",
+        hintText: "Re-enter password",
         suffixIcon: InkWell(
           onTap: () {
             setState(() {

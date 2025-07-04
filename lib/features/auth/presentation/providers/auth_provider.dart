@@ -30,18 +30,20 @@ final updateUserPasswordProvider = Provider<UpdateUserPassword>((ref) =>
     UpdateUserPassword(authRepository: ref.read(authRepositoryProvider)));
 
 class AuthUserState {
-  final User? user;
+  User? user;
   String? username;
   String? password;
-  final bool isLoading;
-  final GlobalKey<FormState> logInFormKey;
+  bool isLoading;
+  String? confirmPassword;
+  String? email;
 
   AuthUserState({
     required this.user,
     required this.isLoading,
     required this.password,
     required this.username,
-    required this.logInFormKey,
+    required this.confirmPassword,
+    required this.email,
   });
 
   AuthUserState copyWith({
@@ -49,24 +51,26 @@ class AuthUserState {
     bool? isLoading,
     String? username,
     String? password,
-    GlobalKey<FormState>? logInFormKey,
+    String? confirmPassword,
+    String? email,
   }) {
     return AuthUserState(
       user: user ?? this.user,
       username: username ?? this.username,
       password: password ?? this.password,
       isLoading: isLoading ?? this.isLoading,
-      logInFormKey: logInFormKey ?? this.logInFormKey,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
+      email: email ?? this.email,
     );
   }
 
   factory AuthUserState.initial() => AuthUserState(
-        user: null,
-        isLoading: false,
-        username: null,
-        password: null,
-        logInFormKey: GlobalKey<FormState>(),
-      );
+      user: null,
+      isLoading: false,
+      username: null,
+      password: null,
+      confirmPassword: null,
+      email: null);
 }
 
 final authUserNotifierProvider =

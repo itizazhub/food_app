@@ -9,6 +9,7 @@ class ProductModel {
     required this.price,
     required this.productName,
     required this.stockQuantity,
+    required this.rating,
   });
   String productId;
   String categoryId;
@@ -17,6 +18,7 @@ class ProductModel {
   double price;
   String productName;
   int stockQuantity;
+  double rating;
 
   factory ProductModel.fromJson(
       {required String key, required Map<String, dynamic> json}) {
@@ -30,6 +32,9 @@ class ProductModel {
           : (json["price"] as num).toDouble(),
       productName: json["product_name"],
       stockQuantity: int.tryParse(json["stock_quantity"].toString()) ?? 0,
+      rating: (json["rating"] is String)
+          ? double.tryParse(json["rating"]) ?? 0.0
+          : (json["rating"] as num).toDouble(),
     );
   }
 
@@ -42,6 +47,7 @@ class ProductModel {
       price: product.price,
       productName: product.productName,
       stockQuantity: product.stockQuantity,
+      rating: product.rating,
     );
   }
   Map<String, dynamic> toJson() {
@@ -52,6 +58,7 @@ class ProductModel {
       "price": price,
       "product_name": productName,
       "stock_quantity": stockQuantity,
+      "rating": rating,
     };
   }
 
@@ -64,6 +71,7 @@ class ProductModel {
       price: price,
       productName: productName,
       stockQuantity: stockQuantity,
+      rating: rating,
     );
   }
 }

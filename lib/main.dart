@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_app/features/auth/presentation/screens/login_screen.dart';
+import 'package:food_app/features/auth/presentation/screens/sign_up_screen.dart';
 import 'package:food_app/features/carts/presentation/screens/cart_screen.dart';
 import 'package:food_app/features/core/screens/on_boarding_screen1.dart';
+import 'package:food_app/features/core/screens/splash_screen1.dart';
 import 'package:food_app/features/core/theme/app_theme.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:food_app/features/orders/presentation/screens/confirm_order_screen.dart';
@@ -31,7 +33,7 @@ class MyApp extends StatelessWidget {
       builder: (_, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: OnBoardingScreen1(),
+          home: const HomeScreen(),
           theme: appTheme,
           // darkTheme: ThemeData(
           //   useMaterial3: true,

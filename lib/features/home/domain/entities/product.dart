@@ -7,6 +7,7 @@ class Product {
     required this.price,
     required this.productName,
     required this.stockQuantity,
+    required this.rating,
   });
 
   String productId;
@@ -16,6 +17,7 @@ class Product {
   double price;
   String productName;
   int stockQuantity;
+  double rating;
 
   Product copyWith({
     String? productId,
@@ -25,6 +27,7 @@ class Product {
     double? price,
     String? productName,
     int? stockQuantity,
+    double? rating,
   }) {
     return Product(
       productId: productId ?? this.productId,
@@ -34,6 +37,7 @@ class Product {
       price: price ?? this.price,
       productName: productName ?? this.productName,
       stockQuantity: stockQuantity ?? this.stockQuantity,
+      rating: rating ?? this.rating,
     );
   }
 }

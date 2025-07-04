@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:collection/collection.dart';
 import 'package:dartz/dartz.dart';
-import 'package:food_app/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/core/error/failures.dart';
 import 'package:http/http.dart' as http;
@@ -18,8 +17,7 @@ class UserFirebaseDatasource {
         "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app",
         "users.json");
     try {
-      final response =
-          await http.get(url, headers: {"Content-Type": "application/json"});
+      final response = await http.get(url, headers: _headers);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print("Get users request status code ${response.statusCode}");
@@ -46,8 +44,7 @@ class UserFirebaseDatasource {
 
     try {
       final response = await http.post(url,
-          headers: {"Content-Type": "application/json"},
-          body: json.encode(user.toJson()));
+          headers: _headers, body: json.encode(user.toJson()));
 
       final result = json.decode(response.body);
 
@@ -72,7 +69,7 @@ class UserFirebaseDatasource {
     final url = Uri.https(_baseUrl, "users/${user.id}.json");
     try {
       final response = await http.put(url,
-          headers: {"Content-Type": "application/json"},
+          headers: _headers,
           body: json.encode(UserModel.fromEntity(user).toJson()));
       // Correcting the status code check
       if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -102,7 +99,7 @@ class UserFirebaseDatasource {
 
       try {
         final response = await http.put(url,
-            headers: {"Content-Type": "application/json"},
+            headers: _headers,
             body: json.encode(UserModel.fromEntity(user).toJson()));
         // Correcting the status code check
         if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -130,8 +127,7 @@ class UserFirebaseDatasource {
       "users/$userId.json",
     );
     try {
-      final response =
-          await http.get(url, headers: {"Content-Type": "application/json"});
+      final response = await http.get(url, headers: _headers);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print("Get user request status code ${response.statusCode}");

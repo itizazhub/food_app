@@ -6,28 +6,30 @@ import 'package:food_app/features/core/screens/on_boarding_screen1.dart';
 import 'package:food_app/features/core/theme/button_styles.dart';
 import 'package:food_app/features/core/theme/text_styles.dart';
 
-class LoginButton extends ConsumerStatefulWidget {
-  const LoginButton({super.key, required this.formKey});
+class SignUpButton extends ConsumerStatefulWidget {
+  const SignUpButton({super.key, required this.formKey});
   final GlobalKey<FormState> formKey;
 
   @override
-  ConsumerState<LoginButton> createState() => _LoginButtonState();
+  ConsumerState<SignUpButton> createState() => _SignUpButtonState();
 }
 
-class _LoginButtonState extends ConsumerState<LoginButton> {
-  Future<void> _login() async {
-    final notifier = ref.read(authUserNotifierProvider.notifier);
+class _SignUpButtonState extends ConsumerState<SignUpButton> {
+  Future<void> _signUp() async {
     final state = ref.read(authUserNotifierProvider);
+    final formKey = widget.formKey;
+    if (!formKey.currentState!.validate()) return;
 
-    if (!widget.formKey.currentState!.validate()) return;
+    formKey.currentState!.save();
 
-    widget.formKey.currentState!.save();
-
-    if (state.username != null && state.password != null) {
-      await notifier.login(
-        username: state.username!,
-        password: state.password!,
-      );
+    if (state.username != null &&
+        state.password != null &&
+        state.email != null) {
+      await ref.read(authUserNotifierProvider.notifier).signup(
+            username: state.username!,
+            password: state.password!,
+            email: state.email!,
+          );
     }
 
     final updatedState = ref.read(authUserNotifierProvider);
@@ -45,7 +47,7 @@ class _LoginButtonState extends ConsumerState<LoginButton> {
     } else {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Login failed. Please try again.")),
+        const SnackBar(content: Text("Signup failed. Please try again.")),
       );
     }
   }
@@ -55,7 +57,7 @@ class _LoginButtonState extends ConsumerState<LoginButton> {
     final state = ref.watch(authUserNotifierProvider);
 
     return TextButton(
-      onPressed: state.isLoading ? null : _login,
+      onPressed: state.isLoading ? null : _signUp,
       style: AppTextButtonStyles.textButtonStyle3,
       child: state.isLoading
           ? SizedBox(
@@ -64,7 +66,7 @@ class _LoginButtonState extends ConsumerState<LoginButton> {
               child: const CircularProgressIndicator(strokeWidth: 2),
             )
           : Text(
-              'Log In',
+              'Sign Up',
               style: AppTextStyles.textButtonTextStyle2,
             ),
     );

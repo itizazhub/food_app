@@ -47,7 +47,7 @@ class ProductFirebasedatasource {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print("Get product $key success: ${response.statusCode}");
         final result = jsonDecode(response.body);
-        print("product result is: $result");
+
         return Right(ProductModel.fromJson(key: key, json: result));
       } else {
         print("Get product $key failed: ${response.statusCode}");
@@ -80,7 +80,6 @@ class ProductFirebasedatasource {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         print("Get product by category success: ${response.statusCode}");
         Map<String, dynamic> result = jsonDecode(response.body);
-        print("product result is: $result");
 
         return Right(result.entries.map((productJson) {
           return ProductModel.fromJson(

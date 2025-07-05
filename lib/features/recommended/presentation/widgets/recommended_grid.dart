@@ -66,10 +66,10 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
   }
 
   void goToProductScreen({required Product product}) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ProductScreen(product: product)),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => ProductScreen(product: product)),
+    // );
   }
 
   @override

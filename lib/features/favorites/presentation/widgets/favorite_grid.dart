@@ -1,12 +1,11 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_app/features/categories/domain/entities/category.dart';
 import 'package:food_app/features/categories/presentation/providers/categories_provider.dart';
 import 'package:food_app/features/products/domain/entities/product.dart';
 import 'package:food_app/features/products/presentation/providers/products_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/favorites/domain/entities/favorite.dart';
@@ -21,38 +20,6 @@ class FavoriteGrid extends ConsumerStatefulWidget {
 }
 
 class _FavoriteGridState extends ConsumerState<FavoriteGrid> {
-  List<Product> favoriteProducts = [];
-  List<Category> categories = [];
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    final user = ref.read(authUserNotifierProvider).user;
-    if (user == null) return;
-
-    final favoriteNotifier = ref.read(favoriteNotifierProvider.notifier);
-    final categoryNotifier = ref.read(categoriesNotifierProvider.notifier);
-    final productNotifier = ref.read(productsNotifierProvider.notifier);
-
-    await favoriteNotifier.getUserFavoriteUseCase(user: user);
-    final favorites = ref.read(favoriteNotifierProvider);
-    final productIds = favorites.map((f) => f.productId).toList();
-
-    await productNotifier.getProducts(keys: productIds);
-    await categoryNotifier.getCategories();
-
-    setState(() {
-      favoriteProducts = ref.read(productsNotifierProvider);
-      categories = ref.read(categoriesNotifierProvider);
-      isLoading = false;
-    });
-  }
-
   void goToProductScreen({required Product product}) {
     Navigator.pushReplacement(
       context,
@@ -62,7 +29,18 @@ class _FavoriteGridState extends ConsumerState<FavoriteGrid> {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
+    final currentUser = ref.watch(authUserNotifierProvider).user;
+    final favState = ref.watch(favoriteNotifierProvider);
+    final favStateNotifier = ref.watch(favoriteNotifierProvider.notifier);
+    final categoryState = ref.watch(categoriesNotifierProvider);
+    final prodState = ref.watch(productsNotifierProvider);
+    final categories = categoryState.categories;
+    final products = prodState.products
+        .where((fav) => favState.favorites
+            .any((product) => product.productId == fav.productId))
+        .toList();
+
+    if (favState.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -75,12 +53,11 @@ class _FavoriteGridState extends ConsumerState<FavoriteGrid> {
         mainAxisSpacing: 8.0,
         childAspectRatio: 0.7,
       ),
-      itemCount: favoriteProducts.length,
+      itemCount: products.length,
       itemBuilder: (BuildContext context, int index) {
-        final product = favoriteProducts[index];
-        final category = categories.firstWhere(
+        final product = products[index];
+        final category = categories.firstWhereOrNull(
           (c) => c.categoryId == product.categoryId,
-          orElse: () => Category(categoryId: '', category: '', imageUrl: ''),
         );
 
         return InkWell(
@@ -109,32 +86,27 @@ class _FavoriteGridState extends ConsumerState<FavoriteGrid> {
                     Positioned(
                       top: 8,
                       left: 8,
-                      child: CustomIcon(path: category.imageUrl),
+                      child: CustomIcon(path: category!.imageUrl),
                     ),
                     Positioned(
                       top: 8,
                       right: 8,
                       child: Consumer(
                         builder: (context, ref, _) {
-                          final favs = ref.watch(favoriteNotifierProvider);
-                          final currentUser =
-                              ref.watch(authUserNotifierProvider).user;
-                          final notifier =
-                              ref.read(favoriteNotifierProvider.notifier);
-                          final isFavorite =
-                              favs.any((f) => f.productId == product.productId);
+                          final isFavorite = products
+                              .any((f) => f.productId == product.productId);
 
                           return InkWell(
                             onTap: () async {
                               if (currentUser == null) return;
 
                               if (isFavorite) {
-                                final fav = favs.firstWhere(
+                                final fav = favState.favorites.firstWhereOrNull(
                                     (f) => f.productId == product.productId);
-                                await notifier.removeUserFavorite(
-                                    favorite: fav);
+                                await favStateNotifier.removeUserFavorite(
+                                    favorite: fav!);
                               } else {
-                                await notifier.addUserFavorite(
+                                await favStateNotifier.addUserFavorite(
                                   favorite: Favorite(
                                     favoriteId: '',
                                     productId: product.productId,
@@ -143,17 +115,11 @@ class _FavoriteGridState extends ConsumerState<FavoriteGrid> {
                                 );
                               }
 
-                              await notifier.getUserFavorite(user: currentUser);
+                              await favStateNotifier.getUserFavorite(
+                                  user: currentUser);
                               await ref
                                   .read(productsNotifierProvider.notifier)
-                                  .getProducts(
-                                      keys: favs
-                                          .map((f) => f.productId)
-                                          .toList());
-                              setState(() {
-                                favoriteProducts =
-                                    ref.read(productsNotifierProvider);
-                              });
+                                  .getProducts();
                             },
                             child: CircleAvatar(
                               radius: 15,
@@ -220,14 +186,14 @@ class _FavoriteGridState extends ConsumerState<FavoriteGrid> {
                       child: Row(
                         children: [
                           Text(
-                            "3.5",
+                            product.rating.toStringAsFixed(1),
                             style: GoogleFonts.leagueSpartan(
                               fontSize: 11,
                               color: const Color(0xFFF8F8F8),
                             ),
                           ),
                           const SizedBox(width: 2),
-                          SvgPicture.asset("rating-icons/rating.svg",
+                          SvgPicture.asset("assets/rating-icons/rating.svg",
                               height: 12),
                         ],
                       ),

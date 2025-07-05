@@ -24,17 +24,20 @@ class FavoriteModel {
         userId: favorite.userId);
   }
 
-  Map<String, dynamic> toJson({required FavoriteModel favoriteModel}) {
-    return {
-      "product_id": favoriteModel.productId,
-      "user_id": favoriteModel.userId
-    };
+  Map<String, dynamic> toJson() {
+    return {"product_id": productId, "user_id": userId};
   }
 
-  Favorite toEntity({required FavoriteModel favoriteModel}) {
+  Favorite toEntity() {
     return Favorite(
-        favoriteId: favoriteModel.favoriteId,
-        productId: favoriteModel.productId,
-        userId: favoriteModel.userId);
+        favoriteId: favoriteId, productId: productId, userId: userId);
+  }
+
+  FavoriteModel copyWith(
+      {String? favoriteId, String? productId, String? userId}) {
+    return FavoriteModel(
+        favoriteId: favoriteId ?? this.favoriteId,
+        productId: productId ?? this.productId,
+        userId: userId ?? this.userId);
   }
 }

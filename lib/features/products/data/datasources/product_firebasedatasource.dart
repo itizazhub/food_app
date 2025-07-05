@@ -9,37 +9,10 @@ class ProductFirebasedatasource {
       "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app";
   final _headers = {"Content-Type": "application/json"};
 
-  Future<Either<Failure, List<ProductModel>>> getProducts({
-    required List<String> keys,
-  }) async {
-    List<ProductModel> products = [];
-    List<String> errorMessages = [];
-    for (String key in keys) {
-      final productOrFailure = await getProduct(key: key);
-      productOrFailure.fold(
-        (failure) {
-          errorMessages.add("[$key] ${failure.message}");
-        },
-        (product) {
-          products.add(product);
-        },
-      );
-    }
-    if (errorMessages.isNotEmpty) {
-      final errorString = errorMessages.join('\n');
-      return Left(
-          SomeSpecificError("Failed to fetch some products:\n$errorString"));
-    }
-
-    return Right(products);
-  }
-
-  Future<Either<Failure, ProductModel>> getProduct({
-    required String key,
-  }) async {
+  Future<Either<Failure, List<ProductModel>>> getProducts() async {
     final url = Uri.https(
       _baseUrl,
-      "products/$key.json",
+      "products.json",
     );
 
     try {
@@ -49,17 +22,17 @@ class ProductFirebasedatasource {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        print("Get product $key success: ${response.statusCode}");
-        final result = jsonDecode(response.body);
+        Map<String, dynamic> result = jsonDecode(response.body);
 
-        return Right(ProductModel.fromJson(key: key, json: result));
+        return Right(result.entries
+            .map((jsonProduct) => ProductModel.fromJson(
+                key: jsonProduct.key, json: jsonProduct.value))
+            .toList());
       } else {
-        print("Get product $key failed: ${response.statusCode}");
         return Left(SomeSpecificError(
             "Failed to fetch product: ${response.statusCode}"));
       }
     } catch (e) {
-      print("Exception while fetching product $key: $e");
       return Left(SomeSpecificError("Exception: $e"));
     }
   }

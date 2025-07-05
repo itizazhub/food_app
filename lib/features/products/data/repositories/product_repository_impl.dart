@@ -9,15 +9,12 @@ class ProductRepositoryImpl implements ProductRepository {
 
   ProductFirebasedatasource productFirebasedatasource;
   @override
-  Future<Either<Failure, List<Product>>> getProducts({
-    required List<String> keys,
-  }) async {
+  Future<Either<Failure, List<Product>>> getProducts() async {
     try {
-      final productsOrFailure =
-          await productFirebasedatasource.getProducts(keys: keys);
+      final productsOrFailure = await productFirebasedatasource.getProducts();
 
       return productsOrFailure.fold(
-        (failure) => Left(SomeSpecificError(failure.message)),
+        (failure) => Left(failure),
         (products) => Right(
           products.map((productModel) => productModel.toEntity()).toList(),
         ),

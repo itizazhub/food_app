@@ -7,7 +7,7 @@ import 'package:food_app/features/favorites/domain/repositories/favorite_reposit
 class AddUserFavorite {
   AddUserFavorite({required this.favoriteRepository});
   FavoriteRepository favoriteRepository;
-  Future<Either<Failure, String>> call({required Favorite favorite}) {
+  Future<Either<Failure, Favorite>> call({required Favorite favorite}) {
     return favoriteRepository.addUserFavorite(favorite: favorite);
   }
 }

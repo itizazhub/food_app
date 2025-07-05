@@ -6,7 +6,7 @@ import 'package:food_app/features/products/domain/repositories/product_repositor
 class GetProducts {
   GetProducts({required this.productRepository});
   ProductRepository productRepository;
-  Future<Either<Failure, List<Product>>> call({required List<String> keys}) {
-    return productRepository.getProducts(keys: keys);
+  Future<Either<Failure, List<Product>>> call() {
+    return productRepository.getProducts();
   }
 }

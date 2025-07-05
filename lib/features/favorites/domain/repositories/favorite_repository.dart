@@ -5,7 +5,8 @@ import 'package:food_app/features/favorites/domain/entities/favorite.dart';
 
 abstract class FavoriteRepository {
   Future<Either<Failure, List<Favorite>>> getUserFavorite({required User user});
-  Future<Either<Failure, String>> addUserFavorite({required Favorite favorite});
+  Future<Either<Failure, Favorite>> addUserFavorite(
+      {required Favorite favorite});
   Future<Either<Failure, String>> removeUserFavorite(
       {required Favorite favorite});
 }

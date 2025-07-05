@@ -1,31 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:food_app/features/auth/domain/entities/user.dart';
-import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
 import 'package:food_app/features/best_sellers/presentation/screens/best_seller_screen.dart';
 import 'package:food_app/features/best_sellers/presentation/widgets/best_seller_list_view.dart';
-import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/carts/presentation/screens/cart_screen.dart';
 import 'package:food_app/features/carts/presentation/widgets/cart_list_view.dart';
+import 'package:food_app/features/categories/domain/entities/category.dart';
+import 'package:food_app/features/categories/presentation/providers/categories_provider.dart';
 import 'package:food_app/features/categories/presentation/screens/categories_screen.dart';
 import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/core/helper_functions/status_bar_background_color.dart';
 import 'package:food_app/features/core/widgets/show_right_drawer.dart';
 import 'package:food_app/features/favorites/presentation/screens/favorite_screen.dart';
-import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/core/widgets/custom_input_text_field.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/home/presentation/widgets/profile_drawer.dart';
-import 'package:food_app/features/home/presentation/widgets/recommended_grid.dart';
-import 'package:food_app/features/home/domain/entities/category.dart';
-import 'package:food_app/features/home/domain/entities/product.dart';
-import 'package:food_app/features/home/presentation/providers/best_sellers_provider.dart';
-import 'package:food_app/features/home/presentation/providers/categories_provider.dart';
-import 'package:food_app/features/home/presentation/providers/products_provider.dart';
-import 'package:food_app/features/home/presentation/providers/recommendeds_provider.dart';
 import 'package:food_app/features/recommended/presentation/screens/recommended_screen.dart';
 import 'package:food_app/features/recommended/presentation/widgets/recommended_grid.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -38,76 +28,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  List<Category> categoies = [];
-  List<Product> recommendedProducts = [];
-  List<Product> bestSellerProducts = [];
-  List<Product> favorites = [];
   int _currentIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    final cats = await getCategoies();
-    final bests = await getBestSellers();
-    final recommends = await getRecommendeds();
-    final favs = await getFavorites();
-    User? user = ref.read(authUserNotifierProvider).user;
-    await ref.read(cartNotifierProvider.notifier).getUserCart(user: user!);
-    // final cart = ref.read(cartNotifierProvider);
-
-    setState(() {
-      categoies = cats;
-      bestSellerProducts = bests;
-      recommendedProducts = recommends;
-      favorites = favs;
-    });
-  }
-
-  Future<List<Category>> getCategoies() async {
-    await ref.read(categoriesNotifierProvider.notifier).getCategories();
-    final categories = ref.watch(categoriesNotifierProvider);
-    return categories;
-  }
-
-  Future<List<Product>> getBestSellers() async {
-    await ref.read(bestSellersNotifier.notifier).getBestSellers();
-    final bestBellers = ref.watch(bestSellersNotifier);
-    List<String> keys = bestBellers.map((bestSellerProduct) {
-      return bestSellerProduct.productId;
-    }).toList();
-    await ref.read(productsNotifierProvider.notifier).getProducts(keys: keys);
-    final products = ref.watch(productsNotifierProvider);
-    return products;
-  }
-
-  Future<List<Product>> getRecommendeds() async {
-    await ref.read(recommendedNotifierProvider.notifier).getRecommendeds();
-    final recommendeds = ref.watch(recommendedNotifierProvider);
-    List<String> keys = recommendeds.map((recommendedProduct) {
-      return recommendedProduct.productId;
-    }).toList();
-    await ref.read(productsNotifierProvider.notifier).getProducts(keys: keys);
-    final products = ref.watch(productsNotifierProvider);
-    return products;
-  }
-
-  Future<List<Product>> getFavorites() async {
-    User? user = ref.watch(authUserNotifierProvider).user;
-    await ref
-        .read(favoriteNotifierProvider.notifier)
-        .getUserFavoriteUseCase(user: user!);
-    final favs = ref.watch(favoriteNotifierProvider);
-    List<String> keys = favs.map((fav) {
-      return fav.productId;
-    }).toList();
-    await ref.read(productsNotifierProvider.notifier).getProducts(keys: keys);
-    final products = ref.watch(productsNotifierProvider);
-    return products;
-  }
 
   void _onNavItemTapped(int index) {
     setState(() {
@@ -117,11 +38,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // Handle screen navigation based on selected index
     if (_currentIndex == 1) {
       Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CategoriesScreen(
-                categoryId: categoies[0].categoryId)), //RecommendationsScreen()
-      );
+          context,
+          MaterialPageRoute(
+            builder: (context) => RecommendedScreen(),
+          ) //RecommendationsScreen()
+          );
     } else if (_currentIndex == 4) {
       Navigator.push(
         context,
@@ -172,6 +93,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final categoriesState = ref.watch(categoriesNotifierProvider);
+    final categories = categoriesState.categories;
     statusBarBackgroundColor();
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 248, 248, 248),
@@ -282,7 +205,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            for (Category category in categoies)
+                            for (Category category in categories)
                               InkWell(
                                 onTap: () {
                                   goToCategoriesScreen(
@@ -293,7 +216,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   height: 62,
                                   background:
                                       const Color.fromARGB(255, 255, 222, 207),
-                                  path: category.imageUrl,
+                                  path: "assets/${category.imageUrl}",
                                   label: category.category,
                                   padding: 6,
                                   radius: 23,
@@ -380,7 +303,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        RecommendedGrid(),
+                        const RecommendedGrid(),
                       ],
                     ),
                   ),

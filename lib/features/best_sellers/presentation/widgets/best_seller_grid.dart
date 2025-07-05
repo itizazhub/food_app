@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,10 +6,11 @@ import 'package:food_app/features/auth/presentation/providers/auth_provider.dart
 import 'package:food_app/features/best_sellers/presentation/providers/best_seller_products_provider.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/categories/domain/entities/category.dart';
-import 'package:food_app/features/home/domain/entities/favorite.dart';
+import 'package:food_app/features/favorites/domain/entities/favorite.dart';
+import 'package:food_app/features/favorites/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/products/domain/entities/product.dart';
 import 'package:food_app/features/categories/presentation/providers/categories_provider.dart';
-import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
+import 'package:food_app/features/products/presentation/providers/products_provider.dart';
 import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -29,9 +31,12 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(authUserNotifierProvider).user;
     final bestSellersState = ref.watch(bestSellersNotifierProvider);
     final categoriesState = ref.watch(categoriesNotifierProvider);
     final categories = categoriesState.categories;
+    final favState = ref.watch(favoriteNotifierProvider);
+    final favStateNotifier = ref.watch(favoriteNotifierProvider.notifier);
 
     if (bestSellersState.isLoading || categoriesState.isLoading) {
       return const CircularProgressIndicator();
@@ -40,7 +45,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
     if (bestSellersState.failure != null || categoriesState.failure != null) {
       return Text("Error: ${bestSellersState.failure!.message}");
     }
-    final bestSellersProducts = bestSellersState.products;
+    final products = bestSellersState.products;
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -50,9 +55,9 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
         mainAxisSpacing: 8.0, // Spacing between grid items vertically
         childAspectRatio: 0.7, // Adjust this for aspect ratio of the grid items
       ),
-      itemCount: bestSellersProducts.length,
+      itemCount: products.length,
       itemBuilder: (BuildContext context, int index) {
-        final product = bestSellersProducts[index];
+        final product = products[index];
         final url = categories
             .firstWhere(
               (category) => category.categoryId == product.categoryId,
@@ -109,25 +114,20 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                       right: 8,
                       child: Consumer(
                         builder: (context, ref, _) {
-                          final favs = ref.watch(favoriteNotifierProvider);
-                          final currentUser =
-                              ref.watch(authUserNotifierProvider).user;
-                          final favoriteNotifier =
-                              ref.read(favoriteNotifierProvider.notifier);
-                          final isFavorite = favs
-                              .any((fav) => fav.productId == product.productId);
+                          final isFavorite = products
+                              .any((f) => f.productId == product.productId);
 
                           return InkWell(
                             onTap: () async {
                               if (currentUser == null) return;
 
                               if (isFavorite) {
-                                final toRemove = favs.firstWhere((fav) =>
-                                    fav.productId == product.productId);
-                                await favoriteNotifier.removeUserFavorite(
-                                    favorite: toRemove);
+                                final fav = favState.favorites.firstWhereOrNull(
+                                    (f) => f.productId == product.productId);
+                                await favStateNotifier.removeUserFavorite(
+                                    favorite: fav!);
                               } else {
-                                await favoriteNotifier.addUserFavorite(
+                                await favStateNotifier.addUserFavorite(
                                   favorite: Favorite(
                                     favoriteId: '',
                                     productId: product.productId,
@@ -136,8 +136,11 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                                 );
                               }
 
-                              await favoriteNotifier.getUserFavorite(
+                              await favStateNotifier.getUserFavorite(
                                   user: currentUser);
+                              await ref
+                                  .read(productsNotifierProvider.notifier)
+                                  .getProducts();
                             },
                             child: CircleAvatar(
                               radius: 15,

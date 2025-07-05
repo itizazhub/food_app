@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:food_app/features/home/domain/entities/product.dart';
+import 'package:food_app/features/products/domain/entities/product.dart';
 import 'package:food_app/features/reviews/data/datasources/review_firebasedatabase.dart';
 import 'package:food_app/features/reviews/data/repositories/review_repository_impl.dart';
 import 'package:food_app/features/reviews/domain/entities/review.dart';

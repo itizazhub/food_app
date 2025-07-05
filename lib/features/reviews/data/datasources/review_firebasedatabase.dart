@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:food_app/features/core/error/failures.dart';
-import 'package:food_app/features/home/domain/entities/product.dart';
+import 'package:food_app/features/products/domain/entities/product.dart';
 import 'package:food_app/features/reviews/data/models/review_model.dart';
 import 'package:food_app/features/reviews/domain/entities/review.dart';
 import 'package:http/http.dart' as http;

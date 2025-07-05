@@ -1,15 +1,16 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
-import 'package:food_app/features/home/domain/entities/category.dart';
-import 'package:food_app/features/home/domain/entities/favorite.dart';
-import 'package:food_app/features/home/domain/entities/product.dart';
-import 'package:food_app/features/home/presentation/providers/categories_provider.dart';
-import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
-import 'package:food_app/features/home/presentation/providers/products_provider.dart';
-import 'package:food_app/features/home/presentation/providers/recommendeds_provider.dart';
+import 'package:food_app/features/categories/domain/entities/category.dart';
+import 'package:food_app/features/favorites/domain/entities/favorite.dart';
+import 'package:food_app/features/products/domain/entities/product.dart';
+import 'package:food_app/features/categories/presentation/providers/categories_provider.dart';
+import 'package:food_app/features/favorites/presentation/providers/favorite_provider.dart';
+import 'package:food_app/features/products/presentation/providers/products_provider.dart';
+import 'package:food_app/features/recommended/presentation/providers/recommendeds_provider.dart';
 import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,59 +22,23 @@ class RecommendedGrid extends ConsumerStatefulWidget {
 }
 
 class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
-  List<Product> recommendedProducts = [];
-  List<Category> categories = [];
-  List<Favorite> favorites = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    final recommended = await getRecommendeds();
-    final cats = await getCategories();
-    final favs = await getFavorites();
-    setState(() {
-      recommendedProducts = recommended;
-      categories = cats;
-      favorites = favs;
-    });
-  }
-
-  Future<List<Category>> getCategories() async {
-    await ref.read(categoriesNotifierProvider.notifier).getCategories();
-    return ref.read(categoriesNotifierProvider);
-  }
-
-  Future<List<Product>> getRecommendeds() async {
-    await ref.read(recommendedNotifierProvider.notifier).getRecommendeds();
-    final recommendeds = ref.read(recommendedNotifierProvider);
-    final keys = recommendeds.map((e) => e.productId).toList();
-    await ref.read(productsNotifierProvider.notifier).getProducts(keys: keys);
-    return ref.read(productsNotifierProvider);
-  }
-
-  Future<List<Favorite>> getFavorites() async {
-    final user = ref.read(authUserNotifierProvider).user;
-    if (user != null) {
-      await ref
-          .read(favoriteNotifierProvider.notifier)
-          .getUserFavorite(user: user);
-    }
-    return ref.read(favoriteNotifierProvider);
-  }
-
   void goToProductScreen({required Product product}) {
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => ProductScreen(product: product)),
-    // );
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ProductScreen(product: product)),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = ref.watch(authUserNotifierProvider).user;
+    final favState = ref.watch(favoriteNotifierProvider);
+    final favStateNotifier = ref.watch(favoriteNotifierProvider.notifier);
+    final categoryState = ref.watch(categoriesNotifierProvider);
+    final categories = categoryState.categories;
+    final recommendedState = ref.watch(recommendedNotifierProvider);
+    final products = recommendedState.products;
+
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -83,16 +48,16 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
         mainAxisSpacing: 8.0,
         childAspectRatio: 0.7,
       ),
-      itemCount: recommendedProducts.length,
+      itemCount: products.length,
       itemBuilder: (context, index) {
-        final product = recommendedProducts[index];
+        final product = products[index];
         final category = categories.firstWhere(
           (c) => c.categoryId == product.categoryId,
           orElse: () => Category(categoryId: '', category: '', imageUrl: ''),
         );
 
         return InkWell(
-          onTap: () => goToProductScreen(product: recommendedProducts[index]),
+          onTap: () => goToProductScreen(product: product),
           child: Card(
             elevation: 0,
             color: const Color.fromARGB(255, 248, 248, 248),
@@ -116,32 +81,29 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                     Positioned(
                       top: 8,
                       left: 8,
-                      child: CustomIcon(path: category.imageUrl),
+                      child: CustomIcon(
+                        path: "assets/${category.imageUrl}",
+                      ),
                     ),
                     Positioned(
                       top: 8,
                       right: 8,
                       child: Consumer(
                         builder: (context, ref, _) {
-                          final favs = ref.watch(favoriteNotifierProvider);
-                          final currentUser =
-                              ref.watch(authUserNotifierProvider).user;
-                          final favoriteNotifier =
-                              ref.read(favoriteNotifierProvider.notifier);
-                          final isFavorite = favs
-                              .any((fav) => fav.productId == product.productId);
+                          final isFavorite = products
+                              .any((f) => f.productId == product.productId);
 
                           return InkWell(
                             onTap: () async {
                               if (currentUser == null) return;
 
                               if (isFavorite) {
-                                final toRemove = favs.firstWhere((fav) =>
-                                    fav.productId == product.productId);
-                                await favoriteNotifier.removeUserFavorite(
-                                    favorite: toRemove);
+                                final fav = favState.favorites.firstWhereOrNull(
+                                    (f) => f.productId == product.productId);
+                                await favStateNotifier.removeUserFavorite(
+                                    favorite: fav!);
                               } else {
-                                await favoriteNotifier.addUserFavorite(
+                                await favStateNotifier.addUserFavorite(
                                   favorite: Favorite(
                                     favoriteId: '',
                                     productId: product.productId,
@@ -150,8 +112,11 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                                 );
                               }
 
-                              await favoriteNotifier.getUserFavorite(
+                              await favStateNotifier.getUserFavorite(
                                   user: currentUser);
+                              await ref
+                                  .read(productsNotifierProvider.notifier)
+                                  .getProducts();
                             },
                             child: CircleAvatar(
                               radius: 15,
@@ -181,7 +146,7 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                           ),
                         ),
                         child: Text(
-                          "\$${product.price.toString()}",
+                          "\$${product.price.toStringAsFixed(2)}",
                           style: GoogleFonts.leagueSpartan(
                             color: Colors.white,
                             fontWeight: FontWeight.w400,
@@ -217,14 +182,14 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                       child: Row(
                         children: [
                           Text(
-                            "3.5",
+                            product.rating.toStringAsFixed(1),
                             style: GoogleFonts.leagueSpartan(
                               color: Colors.white,
                               fontWeight: FontWeight.normal,
                               fontSize: 11,
                             ),
                           ),
-                          SvgPicture.asset("rating-icons/rating.svg")
+                          SvgPicture.asset("assets/rating-icons/rating.svg")
                         ],
                       ),
                     )

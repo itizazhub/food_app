@@ -6,7 +6,6 @@ import 'package:food_app/features/carts/domain/entities/cart.dart';
 import 'package:food_app/features/carts/domain/entities/cart_item.dart';
 import 'package:food_app/features/carts/domain/usecases/get_user_cart.dart';
 import 'package:food_app/features/carts/domain/usecases/update_user_cart.dart';
-import 'package:food_app/features/home/presentation/providers/categories_provider.dart';
 
 final cartFirebasedatasource = Provider<CartFirebasedatasource>((ref) {
   return CartFirebasedatasource();

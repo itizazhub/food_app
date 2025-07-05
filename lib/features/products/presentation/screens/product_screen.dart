@@ -5,9 +5,9 @@ import 'package:food_app/features/auth/presentation/providers/auth_provider.dart
 import 'package:food_app/features/carts/domain/entities/cart_item.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
-import 'package:food_app/features/home/domain/entities/favorite.dart';
+import 'package:food_app/features/favorites/domain/entities/favorite.dart';
 import 'package:food_app/features/products/domain/entities/product.dart';
-import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
+import 'package:food_app/features/favorites/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -99,7 +99,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     final currentUser = ref.watch(authUserNotifierProvider).user;
     final favoriteNotifier = ref.read(favoriteNotifierProvider.notifier);
     final isFavorite =
-        favs.any((fav) => fav.productId == widget.product.productId);
+        favs.favorites.any((fav) => fav.productId == widget.product.productId);
 
     return Scaffold(
       body: SafeArea(
@@ -143,7 +143,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                           if (currentUser == null) return;
 
                           if (isFavorite) {
-                            final toRemove = favs.firstWhere(
+                            final toRemove = favs.favorites.firstWhere(
                               (fav) =>
                                   fav.productId == widget.product.productId,
                             );

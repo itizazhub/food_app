@@ -112,7 +112,7 @@ class _RecommendedScreenState extends ConsumerState<RecommendedScreen> {
                     ),
                     const SizedBox(height: 10),
                     // For example, you can add a list of products here
-                    RecommendedGrid(),
+                    const RecommendedGrid(),
                   ],
                 ),
               ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/best_sellers/presentation/widgets/best_seller_grid.dart';
-import 'package:food_app/features/home/presentation/widgets/recommended_grid.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 

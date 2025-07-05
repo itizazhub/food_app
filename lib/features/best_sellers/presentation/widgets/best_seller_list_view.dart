@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/best_sellers/presentation/providers/best_seller_products_provider.dart';
-import 'package:food_app/features/home/domain/entities/product.dart';
+import 'package:food_app/features/products/domain/entities/product.dart';
 import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -43,8 +43,7 @@ class _BestSellerListViewState extends ConsumerState<BestSellerListView> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
-                // onTap: () =>
-                //     goToProductScreen(product: product),
+                onTap: () => goToProductScreen(product: product),
                 child: Stack(
                   children: [
                     Container(

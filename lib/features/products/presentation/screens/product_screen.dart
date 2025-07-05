@@ -6,7 +6,7 @@ import 'package:food_app/features/carts/domain/entities/cart_item.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/home/domain/entities/favorite.dart';
-import 'package:food_app/features/home/domain/entities/product.dart';
+import 'package:food_app/features/products/domain/entities/product.dart';
 import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';

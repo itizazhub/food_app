@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_app/features/best_sellers/presentation/widgets/best_seller_grid.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
-import 'package:food_app/features/home/domain/entities/category.dart';
-import 'package:food_app/features/home/domain/entities/product.dart';
-import 'package:food_app/features/home/presentation/providers/categories_provider.dart';
-import 'package:food_app/features/home/presentation/providers/products_by_category_provider.dart';
-import 'package:food_app/features/home/presentation/widgets/recommended_grid.dart';
+import 'package:food_app/features/products/domain/entities/product.dart';
+import 'package:food_app/features/categories/presentation/providers/categories_provider.dart';
+import 'package:food_app/features/products/presentation/providers/products_by_category_provider.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,42 +20,6 @@ class CategoriesScreen extends ConsumerStatefulWidget {
 class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
   int _currentIndex = 0;
   int selectedIndex = 0;
-  List<Category> categories = [];
-  List<Product> productsByCategory = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    final productsByCat =
-        await getProductsByCategory(categoryId: widget.categoryId);
-
-    final cats = await getCategories();
-    print("alllllllllllll products: $productsByCat");
-    setState(() {
-      categories = cats;
-      selectedIndex = categories
-          .indexWhere((category) => category.categoryId == widget.categoryId);
-      productsByCategory = productsByCat;
-    });
-  }
-
-  Future<List<Category>> getCategories() async {
-    await ref.read(categoriesNotifierProvider.notifier).getCategories();
-    final categories = ref.read(categoriesNotifierProvider);
-    return categories;
-  }
-
-  Future<List<Product>> getProductsByCategory(
-      {required String categoryId}) async {
-    await ref
-        .read(productsByCategoryNotifierProvider.notifier)
-        .getProductsByCategory(categoryId: categoryId);
-    return ref.read(productsByCategoryNotifierProvider);
-  }
 
   void goToProductScreen({required Product product}) {
     Navigator.pushReplacement(
@@ -82,6 +43,17 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final categoryState = ref.watch(categoriesNotifierProvider);
+    final categories = categoryState.categories;
+    final state = ref.watch(productsByCategoryNotifierProvider);
+    final stateNotifier =
+        ref.watch(productsByCategoryNotifierProvider.notifier);
+    List<Product> products = state.products;
+
+    if (categoryState.isLoading || state.isLoading) {
+      return CircularProgressIndicator();
+    }
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SafeArea(
@@ -148,12 +120,12 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                               setState(() {
                                 selectedIndex = index;
                               });
-                              final newProducts = await getProductsByCategory(
+                              await stateNotifier.getProductsByCategory(
                                 categoryId: categories[index].categoryId,
                               );
-                              setState(() {
-                                productsByCategory = newProducts;
-                              });
+                              // setState(() {
+                              //   productsByCategory = newProducts;
+                              // });
                             },
                             child: CustomIcon(
                               width: 50,
@@ -187,12 +159,12 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                       ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: productsByCategory.length,
+                          itemCount: products.length,
                           itemBuilder: (context, index) {
+                            final product = products[index];
                             return InkWell(
                               onTap: () {
-                                goToProductScreen(
-                                    product: productsByCategory[index]);
+                                goToProductScreen(product: product);
                               },
                               child: Card(
                                 elevation: 0,
@@ -206,7 +178,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                                     ClipRRect(
                                       borderRadius: BorderRadius.circular(18),
                                       child: Image.asset(
-                                        productsByCategory[index].imageUrl,
+                                        product.imageUrl,
                                         fit: BoxFit.cover,
                                         height: 174,
                                         width: double.infinity,
@@ -216,7 +188,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                                     Row(
                                       children: [
                                         Text(
-                                          productsByCategory[index].productName,
+                                          product.productName,
                                           style: GoogleFonts.leagueSpartan(
                                             color: const Color.fromARGB(
                                                 255, 57, 23, 19),
@@ -237,7 +209,8 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                                           child: Row(
                                             children: [
                                               Text(
-                                                "3.5",
+                                                product.rating
+                                                    .toStringAsFixed(1),
                                                 style:
                                                     GoogleFonts.leagueSpartan(
                                                   color: Colors.white,
@@ -253,7 +226,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                                         ),
                                         const Spacer(),
                                         Text(
-                                          "\$${productsByCategory[index].price.toString()}",
+                                          "\$${product.price.toString()}",
                                           style: GoogleFonts.leagueSpartan(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w400,
@@ -264,7 +237,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      productsByCategory[index].description,
+                                      product.description,
                                       style: GoogleFonts.leagueSpartan(
                                         color: const Color.fromARGB(
                                             255, 57, 23, 19),

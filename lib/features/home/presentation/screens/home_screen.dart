@@ -6,6 +6,7 @@ import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
 import 'package:food_app/features/best_sellers/presentation/screens/best_seller_screen.dart';
+import 'package:food_app/features/best_sellers/presentation/widgets/best_seller_list_view.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/carts/presentation/screens/cart_screen.dart';
 import 'package:food_app/features/carts/presentation/widgets/cart_list_view.dart';
@@ -15,7 +16,6 @@ import 'package:food_app/features/core/helper_functions/status_bar_background_co
 import 'package:food_app/features/core/widgets/show_right_drawer.dart';
 import 'package:food_app/features/favorites/presentation/screens/favorite_screen.dart';
 import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
-import 'package:food_app/features/home/presentation/widgets/best_seller_list_view.dart';
 import 'package:food_app/features/core/widgets/custom_input_text_field.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/home/presentation/widgets/profile_drawer.dart';
@@ -27,6 +27,7 @@ import 'package:food_app/features/home/presentation/providers/categories_provide
 import 'package:food_app/features/home/presentation/providers/products_provider.dart';
 import 'package:food_app/features/home/presentation/providers/recommendeds_provider.dart';
 import 'package:food_app/features/recommended/presentation/screens/recommended_screen.dart';
+import 'package:food_app/features/recommended/presentation/widgets/recommended_grid.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {

@@ -5,6 +5,10 @@ import 'package:food_app/features/products/data/models/product_model.dart';
 import 'package:http/http.dart' as http;
 
 class ProductFirebasedatasource {
+  final _baseUrl =
+      "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app";
+  final _headers = {"Content-Type": "application/json"};
+
   Future<Either<Failure, List<ProductModel>>> getProducts({
     required List<String> keys,
   }) async {
@@ -34,14 +38,14 @@ class ProductFirebasedatasource {
     required String key,
   }) async {
     final url = Uri.https(
-      "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app",
+      _baseUrl,
       "products/$key.json",
     );
 
     try {
       final response = await http.get(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: _headers,
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -63,7 +67,7 @@ class ProductFirebasedatasource {
   Future<Either<Failure, List<ProductModel>>> getProductsByCategory(
       {required String categoryId}) async {
     final url = Uri.https(
-      "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app",
+      _baseUrl,
       "products.json",
       {
         "orderBy": '"category_id"',
@@ -74,7 +78,7 @@ class ProductFirebasedatasource {
     try {
       final response = await http.get(
         url,
-        headers: {"Content-Type": "application/json"},
+        headers: _headers,
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -86,12 +90,10 @@ class ProductFirebasedatasource {
               key: productJson.key, json: productJson.value);
         }).toList());
       } else {
-        print("Get product by category failed: ${response.statusCode}");
         return Left(SomeSpecificError(
             "Failed to fetch product: ${response.statusCode}"));
       }
     } catch (e) {
-      print("Exception while fetching product by category: $e");
       return Left(SomeSpecificError("Exception: $e"));
     }
   }

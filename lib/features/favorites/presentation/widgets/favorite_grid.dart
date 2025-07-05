@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_app/features/categories/domain/entities/category.dart';
+import 'package:food_app/features/categories/presentation/providers/categories_provider.dart';
+import 'package:food_app/features/products/domain/entities/product.dart';
+import 'package:food_app/features/products/presentation/providers/products_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
-import 'package:food_app/features/home/domain/entities/category.dart';
-import 'package:food_app/features/home/domain/entities/favorite.dart';
-import 'package:food_app/features/home/domain/entities/product.dart';
-import 'package:food_app/features/home/presentation/providers/categories_provider.dart';
-import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
-import 'package:food_app/features/home/presentation/providers/products_provider.dart';
+import 'package:food_app/features/favorites/domain/entities/favorite.dart';
+import 'package:food_app/features/favorites/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 
 class FavoriteGrid extends ConsumerStatefulWidget {

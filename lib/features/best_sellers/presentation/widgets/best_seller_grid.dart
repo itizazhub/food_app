@@ -4,14 +4,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
 import 'package:food_app/features/best_sellers/presentation/providers/best_seller_products_provider.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
-import 'package:food_app/features/home/domain/entities/category.dart';
+import 'package:food_app/features/categories/domain/entities/category.dart';
 import 'package:food_app/features/home/domain/entities/favorite.dart';
-import 'package:food_app/features/home/domain/entities/product.dart';
-import 'package:food_app/features/home/presentation/providers/best_sellers_provider.dart';
-import 'package:food_app/features/home/presentation/providers/categories_provider.dart';
+import 'package:food_app/features/products/domain/entities/product.dart';
+import 'package:food_app/features/categories/presentation/providers/categories_provider.dart';
 import 'package:food_app/features/home/presentation/providers/favorite_provider.dart';
-import 'package:food_app/features/home/presentation/providers/products_provider.dart';
-import 'package:food_app/features/home/presentation/providers/recommendeds_provider.dart';
 import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -23,28 +20,6 @@ class BestSellerGrid extends ConsumerStatefulWidget {
 }
 
 class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
-  List<Category> categories = [];
-  @override
-  void initState() {
-    super.initState();
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    final cats = await getCategoies();
-
-    setState(() {
-      categories = cats;
-    });
-  }
-
-  Future<List<Category>> getCategoies() async {
-    await ref.read(categoriesNotifierProvider.notifier).getCategories();
-    final categories = ref.watch(categoriesNotifierProvider);
-
-    return categories;
-  }
-
   void goToProductScreen({required Product product}) {
     Navigator.pushReplacement(
       context,
@@ -55,12 +30,14 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
   @override
   Widget build(BuildContext context) {
     final bestSellersState = ref.watch(bestSellersNotifierProvider);
+    final categoriesState = ref.watch(categoriesNotifierProvider);
+    final categories = categoriesState.categories;
 
-    if (bestSellersState.isLoading) {
+    if (bestSellersState.isLoading || categoriesState.isLoading) {
       return const CircularProgressIndicator();
     }
 
-    if (bestSellersState.failure != null) {
+    if (bestSellersState.failure != null || categoriesState.failure != null) {
       return Text("Error: ${bestSellersState.failure!.message}");
     }
     final bestSellersProducts = bestSellersState.products;
@@ -84,7 +61,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
             )
             .imageUrl;
         return InkWell(
-          // onTap: () => goToProductScreen(product: product),
+          onTap: () => goToProductScreen(product: product),
           child: Card(
             elevation: 0,
             color: const Color.fromARGB(255, 248, 248, 248),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
 import 'package:food_app/features/best_sellers/presentation/widgets/best_seller_grid.dart';
 import 'package:food_app/features/core/constants/sizes.dart';
+import 'package:food_app/features/core/helper_functions/status_bar_background_color.dart';
+import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -43,64 +46,67 @@ class _BestSellerScreenState extends ConsumerState<BestSellerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    statusBarBackgroundColor();
     return Scaffold(
-      // backgroundColor: Color.fromARGB(255, 245, 203, 88),
-      resizeToAvoidBottomInset: true, // Ensure UI adjusts with keyboard
+      backgroundColor: AppColors.fontLight,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(children: [
-          // Top section (title, back button)
           Positioned(
             top: 0,
             child: Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppHorizentalPaddingds.padding32),
+              decoration: const BoxDecoration(color: AppColors.yellowDark),
+              height: AppContainerHeights.height170,
               width: MediaQuery.of(context).size.width,
-              height: 110,
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 245, 203, 88),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  IconButton(
-                    onPressed: () {
-                      // Go back to the previous screen
-                      Navigator.pop(context);
-                    },
-                    icon: Icon(
-                      size: 18,
-                      Icons.arrow_back_ios,
-                      color: Color.fromARGB(255, 233, 83, 34),
-                    ),
+                  SizedBox(height: AppSizedBoxHeights.height76),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: SvgPicture.asset(
+                          'assets/back-arrow-icons/back-arrow-icon.svg',
+                          width: AppSvgWidths.width4,
+                          height: AppSvgHeights.height9,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        "Best Seller",
+                        style: AppTextStyles.textStyleAppBarTitle,
+                      ),
+                      const Spacer(),
+                    ],
                   ),
-                  Text(
-                    "Best Seller",
-                    style: GoogleFonts.leagueSpartan(
-                      fontSize: 28,
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromARGB(255, 248, 248, 248),
-                    ),
-                  ),
-                  SizedBox(width: 50), // You can remove this if not needed
                 ],
               ),
             ),
           ),
-
-          // Bottom section with rounded corners
           Positioned(
+            top: 130.h,
             bottom: 0,
             left: 0,
             right: 0,
-            top: 100,
             child: Container(
-              height: MediaQuery.of(context).size.height * .8,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 248, 248, 248),
+              decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20)),
+                  topLeft: Radius.circular(AppRadiuses.radius30),
+                  topRight: Radius.circular(AppRadiuses.radius30),
+                ),
+                color: AppColors.fontLight,
               ),
-              // Adjust height to avoid overlap with keyboard
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              padding: EdgeInsets.only(
+                left: AppHorizentalPaddingds.padding32,
+                right: AppHorizentalPaddingds.padding32,
+                top: AppVerticalPaddingds.padding35,
+              ),
               child: SingleChildScrollView(
                 child: Column(
                   children: [

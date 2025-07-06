@@ -24,6 +24,7 @@ import 'package:food_app/features/core/widgets/custom_input_text_field.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/home/presentation/widgets/profile_drawer.dart';
 import 'package:food_app/features/orders/presentation/providers/order_provider.dart';
+import 'package:food_app/features/orders/presentation/screens/my_orders_screen.dart';
 import 'package:food_app/features/products/presentation/providers/products_provider.dart';
 import 'package:food_app/features/recommended/presentation/providers/recommendeds_provider.dart';
 import 'package:food_app/features/recommended/presentation/screens/recommended_screen.dart';
@@ -48,12 +49,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (_currentIndex == 1) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => RecommendedScreen()));
-    } else if (_currentIndex == 4) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const Text("help")));
     } else if (_currentIndex == 2) {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => FavoriteScreen()));
+    } else if (_currentIndex == 3) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const MyOrdersScreen()));
+    } else if (_currentIndex == 4) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => const Text("help")));
     }
   }
 

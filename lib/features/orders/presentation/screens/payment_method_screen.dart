@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/core/date_functions/get_current_formatted_date.dart';
+import 'package:food_app/features/core/helper_functions/status_bar_background_color.dart';
+import 'package:food_app/features/core/theme/text_styles.dart';
 
 import 'package:food_app/features/orders/domain/entities/order.dart';
 import 'package:food_app/features/orders/presentation/providers/order_provider.dart';
@@ -238,190 +243,227 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
         .watch(cartNotifierProvider.notifier)
         .getUserCart(user: ref.watch(authUserNotifierProvider).user!);
     cartItems = cart!.items ?? [];
+    statusBarBackgroundColor();
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Positioned(top: 0, child: _buildTopHeader()),
-            Positioned(
-              top: 100,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 248, 248, 248),
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20)),
-                ),
-                child: SingleChildScrollView(
+        backgroundColor: AppColors.fontLight,
+        resizeToAvoidBottomInset: true,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: AppHorizentalPaddingds.padding32),
+                  decoration: const BoxDecoration(color: AppColors.yellowDark),
+                  height: AppContainerHeights.height170,
+                  width: MediaQuery.of(context).size.width,
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildShippingAddressSection(),
-                        const SizedBox(height: 25),
-                        Text(
-                          "Order Summary",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const Divider(),
-                        SingleChildScrollView(
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemCount: cartItems.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Text("${cartItems[index].productId} "),
-                                  trailing: Text(
-                                      "${cartItems[index].quantity} items"),
-                                );
-                              }),
-                        ),
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Total",
-                                style: GoogleFonts.leagueSpartan(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text("\$${(cart.total + 8).toString()}"),
-                            ]),
-                        const Divider(),
-                        Text(
-                          "Payment Method",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        RadioListTile(
-                            title: const Text("Cash on Delivery"),
-                            value: "Cash",
-                            groupValue: paymentMethod,
-                            onChanged: (value) {
-                              setState(() {
-                                paymentMethod = "Cash";
-                              });
-                            }),
-                        RadioListTile(
-                            title: const Text("Card at Door Step"),
-                            value: "Card",
-                            groupValue: paymentMethod,
-                            onChanged: (value) {
-                              setState(() {
-                                paymentMethod = "Card";
-                              });
-                            }),
-                        const Divider(),
-                        Text(
-                          "Delivery Time",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Estimated Delivery"),
-                            Text("25 mins")
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Align(
-                          alignment: Alignment.center,
-                          child: CustomFilledButton(
-                            text: "Order Now",
-                            callBack: () async {
-                              await ref
-                                  .watch(
-                                      paymentMethodsNotifierProvider.notifier)
-                                  .getPaymentMethods();
-                              final paymentMethods = await ref
-                                  .watch(paymentMethodsNotifierProvider);
-                              final _paymentMethod =
-                                  paymentMethods.firstWhere((element) {
-                                return element.payment == paymentMethod;
-                              });
-
-                              await ref
-                                  .watch(orderNotifierProvider.notifier)
-                                  .addOrder(
-                                      order: Order(
-                                    addressId: ref
-                                        .watch(selectedAddressNotifierProvider)!
-                                        .addressId,
-                                    items: cartItems,
-                                    orderDate: getCurrentFormattedDate(),
-                                    orderId: "",
-                                    orderStatus:
-                                        "-OPVnopZWgoqB8b3oK8I", // statusId
-                                    orderType: "delivery",
-                                    paymentMethodId: _paymentMethod.paymentId,
-                                    total: cart.total,
-                                    userId: ref
-                                        .watch(authUserNotifierProvider)
-                                        .user!
-                                        .id,
-                                  ));
-                              ref
-                                  .watch(cartNotifierProvider.notifier)
-                                  .clearCart();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const OrderConfirmedScreen()),
-                              );
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(height: AppSizedBoxHeights.height76),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
                             },
+                            child: SvgPicture.asset(
+                              'assets/back-arrow-icons/back-arrow-icon.svg',
+                              width: AppSvgWidths.width4,
+                              height: AppSvgHeights.height9,
+                            ),
                           ),
-                        ),
-                      ]),
+                          const Spacer(),
+                          Text(
+                            "Payment Method",
+                            style: AppTextStyles.textStyleAppBarTitle,
+                          ),
+                          const Spacer(),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: _buildBottomNavBar(),
-    );
-  }
+              Positioned(
+                top: 130.h,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(AppRadiuses.radius30),
+                      topRight: Radius.circular(AppRadiuses.radius30),
+                    ),
+                    color: AppColors.fontLight,
+                  ),
+                  padding: EdgeInsets.only(
+                    left: AppHorizentalPaddingds.padding32,
+                    right: AppHorizentalPaddingds.padding32,
+                    top: AppVerticalPaddingds.padding35,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildShippingAddressSection(),
+                          const SizedBox(height: 25),
+                          Text(
+                            "Order Summary",
+                            style: GoogleFonts.leagueSpartan(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const Divider(),
+                          SingleChildScrollView(
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: cartItems.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    title:
+                                        Text("${cartItems[index].productId} "),
+                                    trailing: Text(
+                                        "${cartItems[index].quantity} items"),
+                                  );
+                                }),
+                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Total",
+                                  style: GoogleFonts.leagueSpartan(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text("\$${(cart.total + 8).toString()}"),
+                              ]),
+                          const Divider(),
+                          Text(
+                            "Payment Method",
+                            style: GoogleFonts.leagueSpartan(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          RadioListTile(
+                              title: const Text("Cash on Delivery"),
+                              value: "Cash",
+                              groupValue: paymentMethod,
+                              onChanged: (value) {
+                                setState(() {
+                                  paymentMethod = "Cash";
+                                });
+                              }),
+                          RadioListTile(
+                              title: const Text("Card at Door Step"),
+                              value: "Card",
+                              groupValue: paymentMethod,
+                              onChanged: (value) {
+                                setState(() {
+                                  paymentMethod = "Card";
+                                });
+                              }),
+                          const Divider(),
+                          Text(
+                            "Delivery Time",
+                            style: GoogleFonts.leagueSpartan(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Estimated Delivery"),
+                              Text("25 mins")
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          Align(
+                            alignment: Alignment.center,
+                            child: CustomFilledButton(
+                              text: "Order Now",
+                              callBack: () async {
+                                await ref
+                                    .watch(
+                                        paymentMethodsNotifierProvider.notifier)
+                                    .getPaymentMethods();
+                                final paymentMethods = await ref
+                                    .watch(paymentMethodsNotifierProvider);
+                                final _paymentMethod =
+                                    paymentMethods.firstWhere((element) {
+                                  return element.payment == paymentMethod;
+                                });
 
-  Widget _buildTopHeader() {
-    return Container(
-      height: 110,
-      width: MediaQuery.of(context).size.width,
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: const BoxDecoration(color: Color.fromARGB(255, 245, 203, 88)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back_ios,
-                size: 18, color: Color.fromARGB(255, 233, 83, 34)),
-            onPressed: () => Navigator.pop(context),
+                                await ref
+                                    .watch(orderNotifierProvider.notifier)
+                                    .addOrder(
+                                        order: Order(
+                                      addressId: ref
+                                          .watch(
+                                              selectedAddressNotifierProvider)!
+                                          .addressId,
+                                      items: cartItems,
+                                      orderDate: getCurrentFormattedDate(),
+                                      orderId: "",
+                                      orderStatus:
+                                          "-OPVnopZWgoqB8b3oK8I", // statusId
+                                      orderType: "delivery",
+                                      paymentMethodId: _paymentMethod.paymentId,
+                                      total: cart.total,
+                                      userId: ref
+                                          .watch(authUserNotifierProvider)
+                                          .user!
+                                          .id,
+                                    ));
+                                ref
+                                    .watch(cartNotifierProvider.notifier)
+                                    .clearCart();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const OrderConfirmedScreen()),
+                                );
+                              },
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
+              ),
+            ],
           ),
-          Text(
-            "Payment Method",
-            style: GoogleFonts.leagueSpartan(
-              fontSize: 28,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-            ),
+        ),
+        bottomNavigationBar: ClipRRect(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(AppRadiuses.radius30),
+            topRight: Radius.circular(AppRadiuses.radius30),
           ),
-          const SizedBox(width: 50),
-        ],
-      ),
-    );
+          child: BottomNavigationBar(
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            backgroundColor: AppColors.orangeDark,
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _currentIndex,
+            onTap: _onNavItemTapped,
+            items: [
+              item("assets/bottom-navigation-icons/home.svg"),
+              item("assets/bottom-navigation-icons/categories.svg"),
+              item("assets/bottom-navigation-icons/favorites.svg"),
+              item("assets/bottom-navigation-icons/list.svg"),
+              item("assets/bottom-navigation-icons/help.svg"),
+            ],
+          ),
+        ));
   }
 
   Widget _buildShippingAddressSection() {
@@ -466,35 +508,6 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildBottomNavBar() {
-    return ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-      child: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: _onNavItemTapped,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromARGB(255, 233, 83, 34),
-        items: [
-          _navItem("home"),
-          _navItem("categories"),
-          _navItem("favorites"),
-          _navItem("list"),
-          _navItem("help"),
-        ],
-      ),
-    );
-  }
-
-  BottomNavigationBarItem _navItem(String iconName) {
-    return BottomNavigationBarItem(
-      icon:
-          SvgPicture.asset("bottom-navigation-icons/$iconName.svg", height: 24),
-      label: '',
     );
   }
 }

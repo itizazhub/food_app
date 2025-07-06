@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
+import 'package:food_app/features/core/helper_functions/status_bar_background_color.dart';
+import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/products/domain/entities/product.dart';
 import 'package:food_app/features/categories/presentation/providers/categories_provider.dart';
@@ -52,8 +55,9 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     final stateNotifier =
         ref.watch(productsByCategoryNotifierProvider.notifier);
     List<Product> products = state.products;
-
+    statusBarBackgroundColor();
     return Scaffold(
+      backgroundColor: AppColors.fontLight,
       resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(
@@ -61,52 +65,58 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
             Positioned(
               top: 0,
               child: Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppHorizentalPaddingds.padding32),
+                decoration: const BoxDecoration(color: AppColors.yellowDark),
+                height: AppContainerHeights.height170,
                 width: MediaQuery.of(context).size.width,
-                height: 110,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 245, 203, 88),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        size: 18,
-                        Icons.arrow_back_ios,
-                        color: Color.fromARGB(255, 233, 83, 34),
-                      ),
+                    SizedBox(height: AppSizedBoxHeights.height76),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: SvgPicture.asset(
+                            'assets/back-arrow-icons/back-arrow-icon.svg',
+                            width: AppSvgWidths.width4,
+                            height: AppSvgHeights.height9,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          "Meals",
+                          style: AppTextStyles.textStyleAppBarTitle,
+                        ),
+                        const Spacer(),
+                      ],
                     ),
-                    Text(
-                      "Meals",
-                      style: GoogleFonts.leagueSpartan(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: Color.fromARGB(255, 248, 248, 248),
-                      ),
-                    ),
-                    const SizedBox(width: 50),
                   ],
                 ),
               ),
             ),
             Positioned(
+              top: 130.h,
               bottom: 0,
               left: 0,
               right: 0,
-              top: 100,
               child: Container(
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 248, 248, 248),
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(AppRadiuses.radius30),
+                    topRight: Radius.circular(AppRadiuses.radius30),
                   ),
+                  color: AppColors.fontLight,
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: EdgeInsets.only(
+                  left: AppHorizentalPaddingds.padding32,
+                  right: AppHorizentalPaddingds.padding32,
+                  top: AppVerticalPaddingds.padding35,
+                ),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [

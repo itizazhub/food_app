@@ -98,6 +98,8 @@ class AppSizedBoxHeights {
   static final height40 = 40.0.h;
   static final height45 = 45.0.h;
   static final height60 = 60.0.h;
+  static final height76 = 76.0.h;
+
   static final height120 = 120.0.h;
   static final height255 = 255.0.h;
   static final height308 = 308.0.h;

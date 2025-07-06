@@ -10,28 +10,37 @@ import 'package:food_app/features/core/error/failures.dart';
 
 class FavoriteState {
   final List<Favorite> favorites;
-  final bool isLoading;
+  final Set<String> loadingProductIds; // productId currently updating
+  final bool isFetchingFavorites; // for the initial fetch
   final Failure? failure;
 
-  const FavoriteState({
+  FavoriteState({
     required this.favorites,
-    this.isLoading = false,
-    this.failure,
+    required this.loadingProductIds,
+    required this.isFetchingFavorites,
+    required this.failure,
   });
+
+  factory FavoriteState.initial() => FavoriteState(
+        favorites: [],
+        loadingProductIds: {},
+        isFetchingFavorites: false,
+        failure: null,
+      );
 
   FavoriteState copyWith({
     List<Favorite>? favorites,
-    bool? isLoading,
+    Set<String>? loadingProductIds,
+    bool? isFetchingFavorites,
     Failure? failure,
   }) {
     return FavoriteState(
       favorites: favorites ?? this.favorites,
-      isLoading: isLoading ?? this.isLoading,
+      loadingProductIds: loadingProductIds ?? this.loadingProductIds,
+      isFetchingFavorites: isFetchingFavorites ?? this.isFetchingFavorites,
       failure: failure,
     );
   }
-
-  factory FavoriteState.initial() => const FavoriteState(favorites: []);
 }
 
 /// DataSource Provider
@@ -85,15 +94,26 @@ class FavoriteNotifier extends StateNotifier<FavoriteState> {
   }) : super(FavoriteState.initial());
 
   Future<void> addUserFavorite({required Favorite favorite}) async {
-    state = state.copyWith(isLoading: true, failure: null);
+    state = state.copyWith(
+      loadingProductIds: {...state.loadingProductIds, favorite.productId},
+      failure: null,
+    );
+
     final result = await addUserFavoriteUseCase(favorite: favorite);
 
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, failure: failure),
-      (favorite) {
+      (failure) {
         state = state.copyWith(
-          favorites: [...state.favorites, favorite],
-          isLoading: false,
+          loadingProductIds: {...state.loadingProductIds}
+            ..remove(favorite.productId),
+          failure: failure,
+        );
+      },
+      (createdFavorite) {
+        state = state.copyWith(
+          favorites: [...state.favorites, createdFavorite],
+          loadingProductIds: {...state.loadingProductIds}
+            ..remove(favorite.productId),
           failure: null,
         );
       },
@@ -101,23 +121,46 @@ class FavoriteNotifier extends StateNotifier<FavoriteState> {
   }
 
   Future<void> removeUserFavorite({required Favorite favorite}) async {
+    state = state.copyWith(
+      loadingProductIds: {...state.loadingProductIds, favorite.productId},
+      failure: null,
+    );
+
     final result = await removeUserFavoriteUseCase(favorite: favorite);
+
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, failure: failure),
-      (success) => state = state.copyWith(favorites: [
-        ...state.favorites.where((f) => f.favoriteId != favorite.favoriteId)
-      ], isLoading: false, failure: SomeSpecificError(success)),
+      (failure) {
+        state = state.copyWith(
+          loadingProductIds: {...state.loadingProductIds}
+            ..remove(favorite.productId),
+          failure: failure,
+        );
+      },
+      (_) {
+        final updatedFavorites = state.favorites
+            .where((f) => f.favoriteId != favorite.favoriteId)
+            .toList();
+
+        state = state.copyWith(
+          favorites: updatedFavorites,
+          loadingProductIds: {...state.loadingProductIds}
+            ..remove(favorite.productId),
+          failure: null,
+        );
+      },
     );
   }
 
   Future<void> getUserFavorite({required User user}) async {
-    state = state.copyWith(isLoading: true, failure: null);
+    state = state.copyWith(isFetchingFavorites: true, failure: null);
+
     final result = await getUserFavoriteUseCase(user: user);
 
     result.fold(
-      (failure) => state = state.copyWith(isLoading: false, failure: failure),
+      (failure) =>
+          state = state.copyWith(isFetchingFavorites: false, failure: failure),
       (favorites) => state = state.copyWith(
-        isLoading: false,
+        isFetchingFavorites: false,
         favorites: favorites,
         failure: null,
       ),

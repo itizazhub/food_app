@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/products/domain/entities/product.dart';
 import 'package:food_app/features/categories/presentation/providers/categories_provider.dart';
@@ -8,6 +9,8 @@ import 'package:food_app/features/products/presentation/providers/products_by_ca
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
 import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../../core/constants/sizes.dart';
 
 class CategoriesScreen extends ConsumerStatefulWidget {
   final String categoryId;
@@ -49,10 +52,6 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
     final stateNotifier =
         ref.watch(productsByCategoryNotifierProvider.notifier);
     List<Product> products = state.products;
-
-    if (categoryState.isLoading || state.isLoading) {
-      return CircularProgressIndicator();
-    }
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -133,7 +132,7 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                               background: selectedIndex == index
                                   ? const Color.fromARGB(255, 245, 203, 88)
                                   : const Color.fromARGB(255, 255, 222, 207),
-                              path: category.imageUrl,
+                              path: "assets/${category.imageUrl}",
                               label: category.category,
                               padding: 6,
                               radius: 23,
@@ -156,100 +155,110 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
                         ],
                       ),
                       const SizedBox(height: 20),
-                      ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: products.length,
-                          itemBuilder: (context, index) {
-                            final product = products[index];
-                            return InkWell(
-                              onTap: () {
-                                goToProductScreen(product: product);
-                              },
-                              child: Card(
-                                elevation: 0,
-                                color: const Color.fromARGB(255, 248, 248, 248),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ClipRRect(
+                      categoryState.isLoading || state.isLoading
+                          ? const SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: products.length,
+                              itemBuilder: (context, index) {
+                                final product = products[index];
+                                return InkWell(
+                                  onTap: () {
+                                    goToProductScreen(product: product);
+                                  },
+                                  child: Card(
+                                    elevation: 0,
+                                    color: const Color.fromARGB(
+                                        255, 248, 248, 248),
+                                    shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18),
-                                      child: Image.asset(
-                                        product.imageUrl,
-                                        fit: BoxFit.cover,
-                                        height: 174,
-                                        width: double.infinity,
-                                      ),
                                     ),
-                                    const SizedBox(height: 10),
-                                    Row(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(18),
+                                          child: Image.asset(
+                                            product.imageUrl,
+                                            fit: BoxFit.cover,
+                                            height: 174,
+                                            width: double.infinity,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              product.productName,
+                                              style: GoogleFonts.leagueSpartan(
+                                                color: const Color.fromARGB(
+                                                    255, 57, 23, 19),
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 6),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                color: const Color.fromARGB(
+                                                    255, 233, 83, 34),
+                                              ),
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    product.rating
+                                                        .toStringAsFixed(1),
+                                                    style: GoogleFonts
+                                                        .leagueSpartan(
+                                                      color: Colors.white,
+                                                      fontSize: 11,
+                                                    ),
+                                                  ),
+                                                  SvgPicture.asset(
+                                                    "assets/rating-icons/rating.svg",
+                                                    height: 14,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const Spacer(),
+                                            Text(
+                                              "\$${product.price.toString()}",
+                                              style: GoogleFonts.leagueSpartan(
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w400,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 10),
                                         Text(
-                                          product.productName,
+                                          product.description,
                                           style: GoogleFonts.leagueSpartan(
                                             color: const Color.fromARGB(
                                                 255, 57, 23, 19),
                                             fontWeight: FontWeight.normal,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 6),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            color: const Color.fromARGB(
-                                                255, 233, 83, 34),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                product.rating
-                                                    .toStringAsFixed(1),
-                                                style:
-                                                    GoogleFonts.leagueSpartan(
-                                                  color: Colors.white,
-                                                  fontSize: 11,
-                                                ),
-                                              ),
-                                              SvgPicture.asset(
-                                                "rating-icons/rating.svg",
-                                                height: 14,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const Spacer(),
-                                        Text(
-                                          "\$${product.price.toString()}",
-                                          style: GoogleFonts.leagueSpartan(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w400,
                                             fontSize: 12,
                                           ),
                                         ),
                                       ],
                                     ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      product.description,
-                                      style: GoogleFonts.leagueSpartan(
-                                        color: const Color.fromARGB(
-                                            255, 57, 23, 19),
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          })
+                                  ),
+                                );
+                              })
                     ],
                   ),
                 ),
@@ -259,38 +268,23 @@ class _CategoriesScreenState extends ConsumerState<CategoriesScreen> {
         ),
       ),
       bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(AppRadiuses.radius30),
+          topRight: Radius.circular(AppRadiuses.radius30),
         ),
         child: BottomNavigationBar(
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          backgroundColor: const Color.fromARGB(255, 233, 83, 34),
+          backgroundColor: AppColors.orangeDark,
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
           onTap: _onNavItemTapped,
           items: [
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset("bottom-navigation-icons/home.svg"),
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset("bottom-navigation-icons/categories.svg"),
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset("bottom-navigation-icons/favorites.svg"),
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset("bottom-navigation-icons/list.svg"),
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: SvgPicture.asset("bottom-navigation-icons/help.svg"),
-              label: "",
-            ),
+            item("assets/bottom-navigation-icons/home.svg"),
+            item("assets/bottom-navigation-icons/categories.svg"),
+            item("assets/bottom-navigation-icons/favorites.svg"),
+            item("assets/bottom-navigation-icons/list.svg"),
+            item("assets/bottom-navigation-icons/help.svg"),
           ],
         ),
       ),

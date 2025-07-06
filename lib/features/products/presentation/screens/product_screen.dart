@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
 import 'package:food_app/features/carts/domain/entities/cart_item.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
-import 'package:food_app/features/favorites/domain/entities/favorite.dart';
 import 'package:food_app/features/products/domain/entities/product.dart';
-import 'package:food_app/features/favorites/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
+import 'package:food_app/features/recommended/presentation/widgets/favorite_button.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductScreen extends ConsumerStatefulWidget {
@@ -97,11 +96,13 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
         .firstOrNull;
     int quantity = existingCartItem?.quantity ?? _quantity;
 
-    final favs = ref.watch(favoriteNotifierProvider);
-    final currentUser = ref.watch(authUserNotifierProvider).user;
-    final favoriteNotifier = ref.read(favoriteNotifierProvider.notifier);
-    final isFavorite =
-        favs.favorites.any((fav) => fav.productId == widget.product.productId);
+    // final currentUser = ref.watch(authUserNotifierProvider).user;
+    final currentUser = User(
+        id: "-OPUxrBC0UHpf4kMnQMT",
+        username: "test",
+        email: "test@gmail.com",
+        password: "testUpdatedAgain1/",
+        isAdmin: false);
 
     return Scaffold(
       body: SafeArea(
@@ -140,40 +141,8 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(24.0),
-                      child: InkWell(
-                        onTap: () async {
-                          if (currentUser == null) return;
-
-                          if (isFavorite) {
-                            final toRemove = favs.favorites.firstWhere(
-                              (fav) =>
-                                  fav.productId == widget.product.productId,
-                            );
-                            await favoriteNotifier.removeUserFavorite(
-                                favorite: toRemove);
-                          } else {
-                            await favoriteNotifier.addUserFavorite(
-                              favorite: Favorite(
-                                favoriteId: '',
-                                productId: widget.product.productId,
-                                userId: currentUser.id,
-                              ),
-                            );
-                          }
-
-                          await favoriteNotifier.getUserFavorite(
-                              user: currentUser);
-                        },
-                        child: CircleAvatar(
-                          radius: 15,
-                          backgroundColor: Colors.white.withOpacity(0.5),
-                          child: Icon(
-                            isFavorite ? Icons.favorite : Icons.favorite_border,
-                            size: 16,
-                            color: isFavorite ? Colors.red : Colors.black,
-                          ),
-                        ),
-                      ),
+                      child: FavoriteButton(
+                          product: widget.product, user: currentUser),
                     ),
                   ],
                 ),

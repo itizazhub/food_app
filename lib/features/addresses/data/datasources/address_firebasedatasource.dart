@@ -19,8 +19,6 @@ class AddressFirebasedatasource {
           await http.get(url, headers: {"Content-Type": "application/json"});
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        print("Get address request status code ${response.statusCode}");
-
         Map<String, dynamic> result = jsonDecode(response.body);
 
         List<AddressModel> allAddresses = result.entries.map((jsonUserAddress) {
@@ -58,7 +56,6 @@ class AddressFirebasedatasource {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        print("User address removed successfully: ${response.statusCode}");
         return Right("User address removed successfully");
       } else {
         return Left(SomeSpecificError(
@@ -86,8 +83,6 @@ class AddressFirebasedatasource {
       final result = json.decode(response.body);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        print("Post user  address added successfully ${response.statusCode}");
-
         return Right(AddressModel.fromEntity(address: address)
             .copyWith(addressId: result["name"]));
       } else {
@@ -102,7 +97,6 @@ class AddressFirebasedatasource {
   Future<Either<Failure, AddressModel>> updateUserAddress({
     required Address address,
   }) async {
-    print("this is address id ${address.addressId}");
     final url = Uri.https(
       "food-app-35ca7-default-rtdb.asia-southeast1.firebasedatabase.app",
       "addresses/${address.addressId}.json",
@@ -116,8 +110,6 @@ class AddressFirebasedatasource {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        print("User address updated successfully ${response.statusCode}");
-
         return Right(AddressModel.fromEntity(address: address));
       } else {
         return Left(SomeSpecificError(

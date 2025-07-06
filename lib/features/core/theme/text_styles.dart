@@ -100,8 +100,27 @@ class AppTextStyles {
     height: 1.1,
   );
 
+  static final textStyleParagraph6 = GoogleFonts.leagueSpartan(
+    color: AppColors.orangeDark,
+    fontSize: AppFontSizes.fontSize13,
+    fontWeight: AppFontWeights.medium,
+    height: 1.1,
+  );
+  static final textStyleParagraph7 = GoogleFonts.leagueSpartan(
+    color: AppColors.fontLight,
+    fontSize: AppFontSizes.fontSize12,
+    fontWeight: AppFontWeights.regular,
+  );
+
   static final textStyleAppBarTitle = GoogleFonts.leagueSpartan(
     fontSize: AppFontSizes.fontSize28,
+    fontWeight: AppFontWeights.bold,
+    color: AppColors.fontLight,
+    height: 1,
+  );
+
+  static final textStyleAppBarTitle2 = GoogleFonts.leagueSpartan(
+    fontSize: AppFontSizes.fontSize30,
     fontWeight: AppFontWeights.bold,
     color: AppColors.fontLight,
     height: 1,
@@ -123,6 +142,13 @@ class AppTextStyles {
     fontSize: AppFontSizes.fontSize24,
     fontWeight: AppFontWeights.black,
     color: AppColors.orangeDark,
+    height: 1,
+  );
+
+  static final textStyleAppBodyTitle4 = GoogleFonts.leagueSpartan(
+    fontSize: AppFontSizes.fontSize16,
+    fontWeight: AppFontWeights.medium,
+    color: AppColors.fontDark,
     height: 1,
   );
 

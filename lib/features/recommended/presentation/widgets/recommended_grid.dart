@@ -1,8 +1,11 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/core/constants/sizes.dart';
+import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
 import 'package:food_app/features/categories/domain/entities/category.dart';
 import 'package:food_app/features/favorites/domain/entities/favorite.dart';
@@ -44,8 +47,8 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
       shrinkWrap: true,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
+        crossAxisSpacing: 5.0,
+        mainAxisSpacing: 5.0,
         childAspectRatio: 0.7,
       ),
       itemCount: products.length,
@@ -74,14 +77,17 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                       child: Image.asset(
                         product.imageUrl,
                         fit: BoxFit.cover,
-                        height: 140,
-                        width: double.infinity,
+                        height: 140.h,
+                        width: 160.w,
                       ),
                     ),
                     Positioned(
                       top: 8,
                       left: 8,
                       child: CustomIcon(
+                        width: 26.w,
+                        height: 26.h,
+                        radius: 9.r,
                         path: "assets/${category.imageUrl}",
                       ),
                     ),
@@ -119,13 +125,13 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                                   .getProducts();
                             },
                             child: CircleAvatar(
-                              radius: 15,
+                              radius: 12.r,
                               backgroundColor: Colors.white.withOpacity(0.5),
                               child: Icon(
                                 isFavorite
                                     ? Icons.favorite
                                     : Icons.favorite_border,
-                                size: 16,
+                                size: 14.r,
                                 color: isFavorite ? Colors.red : Colors.black,
                               ),
                             ),
@@ -138,37 +144,29 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                       right: 0,
                       child: Container(
                         padding: const EdgeInsets.only(top: 2, left: 2),
-                        decoration: const BoxDecoration(
-                          color: Color.fromARGB(255, 233, 83, 34),
+                        decoration: BoxDecoration(
+                          color: const Color.fromARGB(255, 233, 83, 34),
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(6),
-                            bottomLeft: Radius.circular(6),
+                            topLeft: Radius.circular(30.r),
+                            bottomLeft: Radius.circular(30.r),
                           ),
                         ),
                         child: Text(
                           "\$${product.price.toStringAsFixed(2)}",
-                          style: GoogleFonts.leagueSpartan(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
-                          ),
+                          style: AppTextStyles.textStyleParagraph7,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: AppSizedBoxHeights.height10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
                       child: Text(
                         product.productName,
-                        style: GoogleFonts.leagueSpartan(
-                          color: const Color.fromARGB(255, 57, 23, 19),
-                          fontWeight: FontWeight.normal,
-                          fontSize: 16,
-                        ),
+                        style: AppTextStyles.textStyleAppBodyTitle4,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
@@ -176,18 +174,14 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 4),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(27.r),
                         color: const Color.fromARGB(255, 233, 83, 34),
                       ),
                       child: Row(
                         children: [
                           Text(
                             product.rating.toStringAsFixed(1),
-                            style: GoogleFonts.leagueSpartan(
-                              color: Colors.white,
-                              fontWeight: FontWeight.normal,
-                              fontSize: 11,
-                            ),
+                            style: AppTextStyles.textStyleParagraph7,
                           ),
                           SvgPicture.asset("assets/rating-icons/rating.svg")
                         ],
@@ -199,14 +193,10 @@ class _RecommendedGridState extends ConsumerState<RecommendedGrid> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: 125,
+                      width: 115.w,
                       child: Text(
                         product.description,
-                        style: GoogleFonts.leagueSpartan(
-                          color: const Color.fromARGB(255, 57, 23, 19),
-                          fontWeight: FontWeight.normal,
-                          fontSize: 12,
-                        ),
+                        style: AppTextStyles.textStyleParagraph5,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),

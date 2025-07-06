@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_app/features/best_sellers/presentation/providers/best_seller_products_provider.dart';
+import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:food_app/features/products/domain/entities/product.dart';
 import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,7 +36,7 @@ class _BestSellerListViewState extends ConsumerState<BestSellerListView> {
     final bestSellersProducts = bestSellersState.products;
 
     return SizedBox(
-      height: 125,
+      height: 108.h,
       child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: bestSellersProducts.length,
@@ -47,39 +49,31 @@ class _BestSellerListViewState extends ConsumerState<BestSellerListView> {
                 child: Stack(
                   children: [
                     Container(
-                      height: 108,
-                      width: 70,
+                      height: 108.h,
+                      width: 70.w,
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            23), // Optional: Adds rounded corners to the image
+                        borderRadius: BorderRadius.circular(20.r),
                         child: Image.asset(
                           product.imageUrl,
-                          fit: BoxFit
-                              .cover, // Optional: Ensures the image covers the entire container
+                          fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     Positioned(
-                      bottom:
-                          10, // Adjust the bottom position to place text appropriately
-                      right:
-                          0, // Adjust the left position to place text appropriately
+                      bottom: 16.h,
+                      right: 0,
                       child: Container(
                         padding: const EdgeInsets.only(top: 2, left: 2),
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                             color: Color.fromARGB(255, 233, 83, 34),
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(6),
-                                bottomLeft: Radius.circular(6))),
+                                topLeft: Radius.circular(30.r),
+                                bottomLeft: Radius.circular(30.r))),
 
                         // Optional: Adds a background to the text for better readability
                         child: Text(
                           "\$${product.price.toString()}",
-                          style: GoogleFonts.leagueSpartan(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 12,
-                          ),
+                          style: AppTextStyles.textStyleParagraph7,
                         ),
                       ),
                     ),

@@ -96,16 +96,14 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                       top: 8,
                       left: 8,
                       child: CustomIcon(
-                        path: categories
-                            .firstWhere(
+                        path: "assets/${categories.firstWhere(
                               (category) =>
                                   category.categoryId == product.categoryId,
                               orElse: () => Category(
                                   categoryId: '',
                                   category: '',
                                   imageUrl: ''), // or show error
-                            )
-                            .imageUrl,
+                            ).imageUrl}",
                       ),
                     ),
                     // Favorite Icon (Top-right)
@@ -212,7 +210,7 @@ class _BestSellerGridState extends ConsumerState<BestSellerGrid> {
                                 fontWeight: FontWeight.normal,
                                 fontSize: 11,
                               )),
-                          SvgPicture.asset("rating-icons/rating.svg")
+                          SvgPicture.asset("assets/rating-icons/rating.svg")
                         ],
                       ),
                     )

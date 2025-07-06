@@ -24,12 +24,15 @@ class AppColors {
 
 class AppFontSizes {
   static final fontSize12 = 12.0.sp;
+  static final fontSize13 = 13.0.sp;
   static final fontSize14 = 14.0.sp;
+  static final fontSize16 = 16.0.sp;
   static final fontSize17 = 17.0.sp;
   static final fontSize20 = 20.0.sp;
   static final fontSize24 = 24.0.sp;
   static final fontSize26 = 26.0.sp;
   static final fontSize28 = 28.0.sp;
+  static final fontSize30 = 30.0.sp;
   static final fontSize34 = 34.0.sp;
 }
 

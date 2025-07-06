@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/auth/presentation/providers/auth_provider.dart';
+import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
 import 'package:food_app/features/carts/domain/entities/cart_item.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/favorites/domain/entities/favorite.dart';
 import 'package:food_app/features/products/domain/entities/product.dart';
@@ -236,7 +238,8 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                         fontSize: 11,
                                       ),
                                     ),
-                                    SvgPicture.asset("rating-icons/rating.svg"),
+                                    SvgPicture.asset(
+                                        "assets/rating-icons/rating.svg"),
                                   ],
                                 ),
                               ),
@@ -353,38 +356,23 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
         ),
       ),
       bottomNavigationBar: ClipRRect(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(AppRadiuses.radius30),
+          topRight: Radius.circular(AppRadiuses.radius30),
         ),
         child: BottomNavigationBar(
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          backgroundColor: mainColor,
+          backgroundColor: AppColors.orangeDark,
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
           onTap: _onNavItemTapped,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home), // Replace with actual asset if needed
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.category),
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.help),
-              label: "",
-            ),
+          items: [
+            item("assets/bottom-navigation-icons/home.svg"),
+            item("assets/bottom-navigation-icons/categories.svg"),
+            item("assets/bottom-navigation-icons/favorites.svg"),
+            item("assets/bottom-navigation-icons/list.svg"),
+            item("assets/bottom-navigation-icons/help.svg"),
           ],
         ),
       ),

@@ -86,7 +86,7 @@ class _FavoriteGridState extends ConsumerState<FavoriteGrid> {
                     Positioned(
                       top: 8,
                       left: 8,
-                      child: CustomIcon(path: category!.imageUrl),
+                      child: CustomIcon(path: "assets/${category!.imageUrl}"),
                     ),
                     Positioned(
                       top: 8,

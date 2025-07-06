@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
+import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/favorites/presentation/widgets/favorite_grid.dart';
 
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
@@ -123,42 +125,22 @@ class _FavoriteScreenState extends ConsumerState<FavoriteScreen> {
       ),
       bottomNavigationBar: ClipRRect(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12), // Round top-left corner
-          topRight: Radius.circular(12), // Round top-right corner
+          topLeft: Radius.circular(AppRadiuses.radius30),
+          topRight: Radius.circular(AppRadiuses.radius30),
         ),
         child: BottomNavigationBar(
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          backgroundColor: Color.fromARGB(255, 233, 83, 34),
+          backgroundColor: AppColors.orangeDark,
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentIndex,
           onTap: _onNavItemTapped,
           items: [
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "bottom-navigation-icons/home.svg",
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "bottom-navigation-icons/categories.svg",
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "bottom-navigation-icons/favorites.svg",
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "bottom-navigation-icons/list.svg",
-                ),
-                label: ""),
-            BottomNavigationBarItem(
-                icon: SvgPicture.asset(
-                  "bottom-navigation-icons/help.svg",
-                ),
-                label: "")
+            item("assets/bottom-navigation-icons/home.svg"),
+            item("assets/bottom-navigation-icons/categories.svg"),
+            item("assets/bottom-navigation-icons/favorites.svg"),
+            item("assets/bottom-navigation-icons/list.svg"),
+            item("assets/bottom-navigation-icons/help.svg"),
           ],
         ),
       ),

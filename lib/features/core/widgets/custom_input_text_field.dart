@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomInputTextField extends StatelessWidget {
@@ -38,7 +39,7 @@ class CustomInputTextField extends StatelessWidget {
           color: fontColor,
         ),
         decoration: InputDecoration(
-          contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+          contentPadding: EdgeInsets.fromLTRB(15.w, 0, 0, 0),
           fillColor: background,
           filled: true,
           suffixIcon: suffixIconBool ? suffixIcon : null,

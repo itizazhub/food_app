@@ -78,9 +78,9 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
     final selectedAddressNotifier =
         ref.watch(selectedAddressNotifierProvider.notifier);
 
-    await addressNotifier.getUserAddresses(
-      user: ref.watch(authUserNotifierProvider).user!,
-    );
+    // await addressNotifier.getUserAddresses(
+    //   user: ref.watch(authUserNotifierProvider).user!,
+    // );
 
     final addresses = ref.watch(addressNotifierProvider);
     // String? tempSelected = selectedAddress;
@@ -317,42 +317,54 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
                   children: [
                     _buildShippingAddressSection(),
                     const SizedBox(height: 25),
-                    Text(
-                      "Order Summary",
-                      style: GoogleFonts.leagueSpartan(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const Divider(),
+                    Text("Order Summary",
+                        style: AppTextStyles.textStyleAppBodyTitle2),
+                    const Divider(color: AppColors.orangeLight),
                     ConfirmOrderListView(),
+                    SizedBox(height: AppSizedBoxHeights.height40),
                     Row(
                       children: [
-                        Text("Subtotal"),
+                        Text("Subtotal",
+                            style: AppTextStyles.textStyleAppBodyTitle2),
                         Spacer(),
                         Text(
-                            "\$${ref.watch(cartNotifierProvider)!.total.toStringAsFixed(2)}")
+                            "\$${ref.watch(cartNotifierProvider).cart!.total.toStringAsFixed(2)}",
+                            style: AppTextStyles.textStyleAppBodyTitle2)
                       ],
                     ),
+                    SizedBox(height: AppSizedBoxHeights.height20),
                     Row(
                       children: [
-                        Text("Tax and fees"),
+                        Text("Tax and fees",
+                            style: AppTextStyles.textStyleAppBodyTitle2),
                         Spacer(),
-                        Text("\$5.00")
+                        Text("\$5.00",
+                            style: AppTextStyles.textStyleAppBodyTitle2)
                       ],
                     ),
-                    Row(
-                      children: [Text("Delivery"), Spacer(), Text("\$3.00")],
-                    ),
-                    Divider(),
+                    SizedBox(height: AppSizedBoxHeights.height20),
                     Row(
                       children: [
-                        Text("Total"),
+                        Text("Delivery",
+                            style: AppTextStyles.textStyleAppBodyTitle2),
+                        Spacer(),
+                        Text("\$3.00",
+                            style: AppTextStyles.textStyleAppBodyTitle2)
+                      ],
+                    ),
+                    const Divider(color: AppColors.orangeLight),
+                    SizedBox(height: AppSizedBoxHeights.height20),
+                    Row(
+                      children: [
+                        Text("Total",
+                            style: AppTextStyles.textStyleAppBodyTitle2),
                         Spacer(),
                         Text(
-                            "\$${(ref.watch(cartNotifierProvider)!.total + 8).toStringAsFixed(2)}")
+                            "\$${(ref.watch(cartNotifierProvider).cart!.total + 8).toStringAsFixed(2)}",
+                            style: AppTextStyles.textStyleAppBodyTitle2)
                       ],
                     ),
+                    SizedBox(height: AppSizedBoxHeights.height40),
                     Align(
                       alignment: Alignment.center,
                       child: CustomFilledButton(
@@ -364,6 +376,7 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
                         callBack: goToPaymentMethodScreen,
                       ),
                     ),
+                    SizedBox(height: AppSizedBoxHeights.height35),
                   ],
                 ),
               ),
@@ -403,11 +416,8 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
           children: [
             Text(
               "Shipping Address",
-              style: GoogleFonts.leagueSpartan(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-                color: const Color.fromARGB(255, 233, 83, 34),
-              ),
+              style: AppTextStyles.textStyleAppBarTitle3
+                  .copyWith(color: AppColors.fontDark),
             ),
             const SizedBox(width: 5),
             InkWell(
@@ -426,15 +436,12 @@ class _ConfirmOrderScreenState extends ConsumerState<ConfirmOrderScreen> {
             borderRadius: BorderRadius.circular(18),
           ),
           child: Text(
-            ref.watch(selectedAddressNotifierProvider) == null
-                ? "Tap on edit icon"
-                : ref.watch(selectedAddressNotifierProvider)!.address,
-            style: GoogleFonts.leagueSpartan(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: const Color.fromARGB(255, 15, 15, 14),
-            ),
-          ),
+              ref.watch(selectedAddressNotifierProvider) == null
+                  ? "Tap on edit icon"
+                  : ref.watch(selectedAddressNotifierProvider)!.address,
+              style: AppTextStyles.textStyleParagraph8.copyWith(
+                fontWeight: AppFontWeights.regular,
+              )),
         ),
       ],
     );

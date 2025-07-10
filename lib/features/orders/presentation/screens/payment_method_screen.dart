@@ -59,9 +59,9 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
     final selectedAddressNotifier =
         ref.watch(selectedAddressNotifierProvider.notifier);
 
-    await addressNotifier.getUserAddresses(
-      user: ref.watch(authUserNotifierProvider).user!,
-    );
+    // await addressNotifier.getUserAddresses(
+    //   user: ref.watch(authUserNotifierProvider).user!,
+    // );
 
     final addresses = ref.watch(addressNotifierProvider);
     // String? tempSelected = selectedAddress;
@@ -238,11 +238,11 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    cart = ref.watch(cartNotifierProvider);
-    ref
-        .watch(cartNotifierProvider.notifier)
-        .getUserCart(user: ref.watch(authUserNotifierProvider).user!);
-    cartItems = cart!.items ?? [];
+    final cartState = ref.watch(cartNotifierProvider);
+    // ref
+    //     .watch(cartNotifierProvider.notifier)
+    //     .getUserCart(user: ref.watch(authUserNotifierProvider).user!);
+    cartItems = cartState.cart!.items ?? [];
     statusBarBackgroundColor();
     return Scaffold(
         backgroundColor: AppColors.fontLight,
@@ -313,12 +313,9 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                           const SizedBox(height: 25),
                           Text(
                             "Order Summary",
-                            style: GoogleFonts.leagueSpartan(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: AppTextStyles.textStyleAppBodyTitle2,
                           ),
-                          const Divider(),
+                          const Divider(color: AppColors.orangeLight),
                           SingleChildScrollView(
                             child: ListView.builder(
                                 shrinkWrap: true,
@@ -326,35 +323,42 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                                 itemCount: cartItems.length,
                                 itemBuilder: (context, index) {
                                   return ListTile(
-                                    title:
-                                        Text("${cartItems[index].productId} "),
+                                    title: Text(
+                                      "${cartItems[index].productName}",
+                                      style:
+                                          AppTextStyles.textStyleAppBodyTitle2,
+                                    ),
                                     trailing: Text(
-                                        "${cartItems[index].quantity} items"),
+                                      "${cartItems[index].quantity} items",
+                                      style: AppTextStyles.textStyleParagraph8
+                                          .copyWith(
+                                              color: AppColors.orangeDark),
+                                    ),
                                   );
                                 }),
                           ),
+                          SizedBox(height: AppSizedBoxHeights.height20),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
                                   "Total",
-                                  style: GoogleFonts.leagueSpartan(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                  style: AppTextStyles.textStyleAppBodyTitle2,
                                 ),
-                                Text("\$${(cart.total + 8).toString()}"),
+                                Text(
+                                  "\$${(cartState.cart!.total + 8).toString()}",
+                                  style: AppTextStyles.textStyleAppBodyTitle2,
+                                ),
                               ]),
-                          const Divider(),
+                          const Divider(color: AppColors.orangeLight),
+                          SizedBox(height: AppSizedBoxHeights.height10),
                           Text(
                             "Payment Method",
-                            style: GoogleFonts.leagueSpartan(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: AppTextStyles.textStyleAppBodyTitle2,
                           ),
                           RadioListTile(
-                              title: const Text("Cash on Delivery"),
+                              title: Text("Cash on Delivery",
+                                  style: AppTextStyles.textStyleAppBodyTitle4),
                               value: "Cash",
                               groupValue: paymentMethod,
                               onChanged: (value) {
@@ -363,7 +367,8 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                                 });
                               }),
                           RadioListTile(
-                              title: const Text("Card at Door Step"),
+                              title: Text("Card at Door Step",
+                                  style: AppTextStyles.textStyleAppBodyTitle4),
                               value: "Card",
                               groupValue: paymentMethod,
                               onChanged: (value) {
@@ -371,22 +376,22 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                                   paymentMethod = "Card";
                                 });
                               }),
-                          const Divider(),
+                          const Divider(color: AppColors.orangeLight),
                           Text(
                             "Delivery Time",
-                            style: GoogleFonts.leagueSpartan(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: AppTextStyles.textStyleAppBodyTitle2,
                           ),
-                          const Row(
+                          SizedBox(height: AppSizedBoxHeights.height10),
+                          Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Estimated Delivery"),
-                              Text("25 mins")
+                              Text("Estimated Delivery",
+                                  style: AppTextStyles.textStyleAppBodyTitle4),
+                              Text("25 mins",
+                                  style: AppTextStyles.textStyleAppBodyTitle4)
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: AppSizedBoxHeights.height32),
                           Align(
                             alignment: Alignment.center,
                             child: CustomFilledButton(
@@ -418,11 +423,11 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                                           "-OPVnopZWgoqB8b3oK8I", // statusId
                                       orderType: "delivery",
                                       paymentMethodId: _paymentMethod.paymentId,
-                                      total: cart.total,
-                                      userId: ref
-                                          .watch(authUserNotifierProvider)
-                                          .user!
-                                          .id,
+                                      total: cartState.cart!.total,
+                                      userId: "-OPUxrBC0UHpf4kMnQMT", // ref
+                                      // .watch(authUserNotifierProvider)
+                                      //.user!
+                                      //.id,
                                     ));
                                 ref
                                     .watch(cartNotifierProvider.notifier)
@@ -436,6 +441,7 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
                               },
                             ),
                           ),
+                          SizedBox(height: AppSizedBoxHeights.height32),
                         ]),
                   ),
                 ),
@@ -474,11 +480,8 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
           children: [
             Text(
               "Shipping Address",
-              style: GoogleFonts.leagueSpartan(
-                fontSize: 24,
-                fontWeight: FontWeight.w500,
-                color: const Color.fromARGB(255, 233, 83, 34),
-              ),
+              style: AppTextStyles.textStyleAppBarTitle3
+                  .copyWith(color: AppColors.fontDark),
             ),
             const SizedBox(width: 5),
             InkWell(
@@ -500,10 +503,8 @@ class _PaymentMethodScreenState extends ConsumerState<PaymentMethodScreen> {
             ref.watch(selectedAddressNotifierProvider) == null
                 ? "Tap on edit icon"
                 : ref.watch(selectedAddressNotifierProvider)!.address,
-            style: GoogleFonts.leagueSpartan(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: const Color.fromARGB(255, 15, 15, 14),
+            style: AppTextStyles.textStyleParagraph8.copyWith(
+              fontWeight: AppFontWeights.regular,
             ),
           ),
         ),

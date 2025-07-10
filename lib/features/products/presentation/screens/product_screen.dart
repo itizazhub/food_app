@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.dart';
 import 'package:food_app/features/carts/domain/entities/cart_item.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/core/constants/sizes.dart';
+import 'package:food_app/features/core/helper_functions/status_bar_background_color.dart';
+import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/products/domain/entities/product.dart';
 import 'package:food_app/features/home/presentation/screens/home_screen.dart';
@@ -45,16 +48,12 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
       children: [
         Text(
           label,
-          style: GoogleFonts.leagueSpartan(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: const Color.fromARGB(255, 51, 29, 22),
-          ),
+          style: AppTextStyles.textStyleParagraph2,
         ),
         const Spacer(),
         Text(
           '\$${price.toStringAsFixed(2)}',
-          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+          style: AppTextStyles.textStyleParagraph2,
         ),
         const SizedBox(width: 10),
         GestureDetector(
@@ -89,12 +88,13 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     const mainColor = Color.fromARGB(255, 233, 83, 34);
     const bgColor = Color.fromARGB(255, 248, 248, 248);
 
-    final cartItems = ref.watch(cartNotifierProvider)?.items ?? [];
+    final cartItems = ref.watch(cartNotifierProvider).cart?.items ?? [];
     final cartNotifier = ref.read(cartNotifierProvider.notifier);
     final existingCartItem = cartItems
         .where((item) => item.productId == widget.product.productId)
         .firstOrNull;
     int quantity = existingCartItem?.quantity ?? _quantity;
+    print(quantity);
 
     // final currentUser = ref.watch(authUserNotifierProvider).user;
     final currentUser = User(
@@ -104,90 +104,90 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
         password: "testUpdatedAgain1/",
         isAdmin: false);
 
+    statusBarBackgroundColor();
     return Scaffold(
+      backgroundColor: AppColors.fontLight,
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Stack(
           children: [
             Positioned(
               top: 0,
               child: Container(
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppHorizentalPaddingds.padding32),
+                decoration: const BoxDecoration(color: AppColors.yellowDark),
+                height: AppContainerHeights.height170,
                 width: MediaQuery.of(context).size.width,
-                height: 110,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 245, 203, 88),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    SizedBox(height: AppSizedBoxHeights.height76),
                     Row(
                       children: [
-                        IconButton(
-                          onPressed: () => Navigator.pop(context),
-                          icon: const Icon(
-                            Icons.arrow_back_ios,
-                            size: 18,
-                            color: mainColor,
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: SvgPicture.asset(
+                            'assets/back-arrow-icons/back-arrow-icon.svg',
+                            width: AppSvgWidths.width4,
+                            height: AppSvgHeights.height9,
                           ),
                         ),
+                        const Spacer(),
                         Text(
                           widget.product.productName,
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w700,
-                            color: bgColor,
-                          ),
-                        )
+                          style: AppTextStyles.textStyleAppBarTitle,
+                        ),
+                        const Spacer(),
+                        FavoriteButton(
+                            product: widget.product, user: currentUser),
                       ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: FavoriteButton(
-                          product: widget.product, user: currentUser),
                     ),
                   ],
                 ),
               ),
             ),
             Positioned(
+              top: 130.h,
               bottom: 0,
               left: 0,
               right: 0,
-              top: 100,
               child: Container(
-                decoration: const BoxDecoration(
-                  color: bgColor,
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(AppRadiuses.radius30),
+                    topRight: Radius.circular(AppRadiuses.radius30),
                   ),
+                  color: AppColors.fontLight,
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                padding: EdgeInsets.only(
+                  left: AppHorizentalPaddingds.padding32,
+                  right: AppHorizentalPaddingds.padding32,
+                  top: AppVerticalPaddingds.padding35,
+                ),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(18),
+                        borderRadius: BorderRadius.circular(36.r),
                         child: Image.asset(
                           widget.product.imageUrl,
                           fit: BoxFit.cover,
-                          height: 320,
+                          height: 230.h,
                           width: double.infinity,
                         ),
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: AppSizedBoxHeights.height32),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
                               Text(
-                                "\$${widget.product.price}",
-                                style: GoogleFonts.leagueSpartan(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w500,
-                                  color: mainColor,
-                                ),
+                                "\$${widget.product.price.toStringAsFixed(2)}",
+                                style: AppTextStyles.textStyleAppBodyTitle5,
                               ),
                               const SizedBox(width: 4),
                               Container(
@@ -200,7 +200,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      "3.5",
+                                      widget.product.rating.toStringAsFixed(1),
                                       style: GoogleFonts.leagueSpartan(
                                         color: bgColor,
                                         fontWeight: FontWeight.normal,
@@ -230,7 +230,10 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                 ),
                               ),
                               const SizedBox(width: 10),
-                              Text("$quantity"),
+                              Text(
+                                "$quantity",
+                                style: AppTextStyles.textStyleParagraph8,
+                              ),
                               const SizedBox(width: 10),
                               GestureDetector(
                                 onTap: () {
@@ -257,16 +260,12 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                           ),
                         ],
                       ),
-                      const Divider(),
+                      const Divider(color: AppColors.orangeLight),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           widget.product.description,
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: const Color.fromARGB(255, 51, 29, 22),
-                          ),
+                          style: AppTextStyles.textStyleParagraph8,
                           textAlign: TextAlign.start,
                         ),
                       ),
@@ -275,11 +274,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Toppings",
-                          style: GoogleFonts.leagueSpartan(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                            color: const Color.fromARGB(255, 51, 29, 22),
-                          ),
+                          style: AppTextStyles.textStyleAppBodyTitle2,
                         ),
                       ),
                       const SizedBox(height: 8),

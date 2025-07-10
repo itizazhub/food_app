@@ -56,4 +56,16 @@ class AppTextButtonStyles {
           BorderRadius.circular(AppRadiuses.radius30), // optional rounding
     ),
   );
+
+  static final textButtonStyle6 = TextButton.styleFrom(
+    padding: EdgeInsets.zero, // no internal padding
+    backgroundColor: AppColors.fontLight, // filled background
+    fixedSize: Size(AppButtonWidths.width100,
+        AppButtonHeights.height26), // prevent default min size
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap, // compact touch area
+    shape: RoundedRectangleBorder(
+      borderRadius:
+          BorderRadius.circular(AppRadiuses.radius100), // optional rounding
+    ),
+  );
 }

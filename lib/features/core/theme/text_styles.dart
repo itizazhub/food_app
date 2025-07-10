@@ -65,6 +65,13 @@ class AppTextStyles {
     height: 1,
   );
 
+  static final textButtonTextStyle7 = GoogleFonts.leagueSpartan(
+    color: AppColors.orangeDark,
+    fontSize: AppFontSizes.fontSize15,
+    fontWeight: AppFontWeights.regular,
+    height: 1,
+  );
+
   static final textStyleParagraph1 = GoogleFonts.poppins(
     color: AppColors.fontLight,
     fontSize: AppFontSizes.fontSize14,
@@ -112,15 +119,37 @@ class AppTextStyles {
     fontWeight: AppFontWeights.regular,
   );
 
+  static final textStyleParagraph8 = GoogleFonts.leagueSpartan(
+    color: AppColors.fontDark,
+    fontSize: AppFontSizes.fontSize16,
+    fontWeight: AppFontWeights.light,
+  );
+  static final textStyleParagraph9 = GoogleFonts.leagueSpartan(
+    color: AppColors.fontLight,
+    fontSize: AppFontSizes.fontSize15,
+    fontWeight: AppFontWeights.medium,
+  );
   static final textStyleAppBarTitle = GoogleFonts.leagueSpartan(
     fontSize: AppFontSizes.fontSize28,
     fontWeight: AppFontWeights.bold,
     color: AppColors.fontLight,
     height: 1,
   );
+  static final textStyleParagraph10 = GoogleFonts.leagueSpartan(
+    fontSize: AppFontSizes.fontSize14,
+    fontWeight: AppFontWeights.light,
+    color: AppColors.fontLight,
+    height: 1.1,
+  );
 
   static final textStyleAppBarTitle2 = GoogleFonts.leagueSpartan(
     fontSize: AppFontSizes.fontSize30,
+    fontWeight: AppFontWeights.bold,
+    color: AppColors.fontLight,
+    height: 1,
+  );
+  static final textStyleAppBarTitle3 = GoogleFonts.leagueSpartan(
+    fontSize: AppFontSizes.fontSize24,
     fontWeight: AppFontWeights.bold,
     color: AppColors.fontLight,
     height: 1,
@@ -136,6 +165,7 @@ class AppTextStyles {
     fontSize: AppFontSizes.fontSize20,
     fontWeight: AppFontWeights.medium,
     color: AppColors.fontDark,
+    height: 1,
   );
 
   static final textStyleAppBodyTitle3 = GoogleFonts.inter(
@@ -150,6 +180,18 @@ class AppTextStyles {
     fontWeight: AppFontWeights.medium,
     color: AppColors.fontDark,
     height: 1,
+  );
+  static final textStyleAppBodyTitle5 = GoogleFonts.inter(
+    fontSize: AppFontSizes.fontSize24,
+    fontWeight: AppFontWeights.bold,
+    color: AppColors.orangeDark,
+    height: 1,
+  );
+
+  static final textStyleAppBodyTitle6 = GoogleFonts.leagueSpartan(
+    fontSize: AppFontSizes.fontSize20,
+    fontWeight: AppFontWeights.medium,
+    color: AppColors.fontLight,
   );
 
   static final input = GoogleFonts.leagueSpartan(

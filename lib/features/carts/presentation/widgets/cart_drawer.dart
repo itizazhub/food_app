@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
+import 'package:food_app/features/core/theme/text_styles.dart';
 
 Widget cartDrawer() {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const ListTile(
-        leading: Icon(Icons.shopping_cart),
-        title: Text("Your Cart"),
+      ListTile(
+        leading: const Icon(Icons.shopping_cart),
+        title: Text(
+          "Cart",
+          style: AppTextStyles.textStyleAppBarTitle3,
+        ),
       ),
       const Divider(),
       Expanded(

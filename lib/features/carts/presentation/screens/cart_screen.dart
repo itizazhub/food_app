@@ -56,9 +56,9 @@ class _CartScreenState extends ConsumerState<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cart = ref.watch(cartNotifierProvider);
+    final cartState = ref.watch(cartNotifierProvider);
 
-    final cartItems = cart?.items ?? [];
+    final cartItems = cartState.cart?.items ?? [];
 
     statusBarBackgroundColor();
     return Scaffold(
@@ -142,7 +142,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                               Text("Subtotal"),
                               Spacer(),
                               Text(
-                                  "\$${ref.watch(cartNotifierProvider)!.total.toStringAsFixed(2)}")
+                                  "\$${ref.watch(cartNotifierProvider).cart!.total.toStringAsFixed(2)}")
                             ],
                           )
                         : SizedBox.shrink(),
@@ -171,7 +171,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                               Text("Total"),
                               Spacer(),
                               Text(
-                                  "\$${(ref.watch(cartNotifierProvider)!.total + 8).toStringAsFixed(2)}")
+                                  "\$${(ref.watch(cartNotifierProvider).cart!.total + 8).toStringAsFixed(2)}")
                             ],
                           )
                         : SizedBox.shrink(),

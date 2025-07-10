@@ -8,6 +8,7 @@ import 'package:food_app/features/auth/presentation/widgets/bottom_navbar_item.d
 import 'package:food_app/features/best_sellers/presentation/providers/best_seller_products_provider.dart';
 import 'package:food_app/features/best_sellers/presentation/screens/best_seller_screen.dart';
 import 'package:food_app/features/best_sellers/presentation/widgets/best_seller_list_view.dart';
+import 'package:food_app/features/carts/presentation/providers/cart_provider.dart';
 import 'package:food_app/features/carts/presentation/screens/cart_screen.dart';
 import 'package:food_app/features/carts/presentation/widgets/cart_list_view.dart';
 import 'package:food_app/features/categories/domain/entities/category.dart';
@@ -345,6 +346,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           await ref
                               .read(productsNotifierProvider.notifier)
                               .getProducts();
+                          await ref
+                              .read(cartNotifierProvider.notifier)
+                              .getUserCart(user: user);
                         },
                         child: const Text("update"),
                       ),

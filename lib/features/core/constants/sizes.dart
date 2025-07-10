@@ -26,6 +26,7 @@ class AppFontSizes {
   static final fontSize12 = 12.0.sp;
   static final fontSize13 = 13.0.sp;
   static final fontSize14 = 14.0.sp;
+  static final fontSize15 = 15.0.sp;
   static final fontSize16 = 16.0.sp;
   static final fontSize17 = 17.0.sp;
   static final fontSize20 = 20.0.sp;
@@ -41,18 +42,20 @@ class AppRadiuses {
   static final radius30 = 30.0.r;
   static final radius13 = 13.0.r;
   static final radius12 = 12.0.r;
-
+  static final radius100 = 100.r;
   static final radius20 = 20.r;
 }
 
 class AppButtonWidths {
-  static final width207 = 207.0.w;
   static final width133 = 133.0.w;
+  static final width100 = 100.0.w;
+  static final width207 = 207.0.w;
 }
 
 class AppButtonHeights {
-  static final height45 = 45.0.h;
+  static final height26 = 26.0.h;
   static final height36 = 36.0.h;
+  static final height45 = 45.0.h;
 }
 
 class AppVerticalPaddingds {

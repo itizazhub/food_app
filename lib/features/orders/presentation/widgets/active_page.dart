@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
+import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:food_app/features/core/widgets/custom_filled_button.dart';
 import 'package:food_app/features/orders/presentation/providers/order_provider.dart';
 import 'package:food_app/features/orders/presentation/screens/order_details.dart';
@@ -37,14 +39,18 @@ class _ActivePageState extends ConsumerState<ActivePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${order.orderId}"),
-                      Text("${order.orderDate}"),
+                      Text("${order.orderId}",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.textStyleAppBodyTitle2),
+                      Text("${order.orderDate}",
+                          style: AppTextStyles.textStyleAppBodyTitle2),
                       const SizedBox(height: 8),
                       CustomFilledButton(
                         text: "Cancel",
-                        height: 30,
-                        widht: 100,
-                        fontSize: 14,
+                        height: 30.h,
+                        widht: 100.w,
+                        fontSize: 14.sp,
                         isLoading: isLoading,
                         callBack: () async {
                           setState(() {
@@ -67,14 +73,16 @@ class _ActivePageState extends ConsumerState<ActivePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text("\$${(order.total).toString()}"),
-                      Text("${(order.items.length).toString()} items"),
+                      Text("\$${(order.total).toString()}",
+                          style: AppTextStyles.textStyleAppBodyTitle2),
+                      Text("${(order.items.length).toString()} items",
+                          style: AppTextStyles.textStyleAppBodyTitle2),
                       const SizedBox(height: 8),
                       CustomFilledButton(
                         text: "Details",
-                        height: 30,
-                        widht: 100,
-                        fontSize: 14,
+                        height: 30.h,
+                        widht: 100.w,
+                        fontSize: 14.sp,
                         callBack: () async {
                           Navigator.of(context).push(
                             MaterialPageRoute<void>(

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:food_app/features/core/constants/sizes.dart';
 
 void showRightDrawer({
   required BuildContext context,
@@ -12,17 +14,21 @@ void showRightDrawer({
     transitionDuration: const Duration(milliseconds: 500),
     pageBuilder: (_, __, ___) => Align(
       alignment: Alignment.centerRight,
-      child: Container(
-        decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 233, 83, 34),
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(50), bottomLeft: Radius.circular(50))),
-        width: MediaQuery.of(context).size.width * 0.75,
-        height: double.infinity,
-        padding: const EdgeInsets.all(16),
-        child: Material(
-          color: const Color.fromARGB(255, 233, 83, 34),
-          child: child,
+      child: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+              color: AppColors.orangeDark,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.r),
+                  bottomLeft: Radius.circular(40.r))),
+          width: 330.w,
+          height: double.infinity,
+          padding: EdgeInsets.symmetric(
+              horizontal: AppHorizentalPaddingds.padding32),
+          child: Material(
+            color: AppColors.orangeDark,
+            child: child,
+          ),
         ),
       ),
     ),

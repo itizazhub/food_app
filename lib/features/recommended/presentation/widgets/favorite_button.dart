@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:food_app/features/auth/domain/entities/user.dart';
+import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/favorites/domain/entities/favorite.dart';
 import 'package:food_app/features/favorites/presentation/providers/favorite_provider.dart';
 import 'package:food_app/features/products/domain/entities/product.dart';
@@ -49,11 +50,11 @@ class FavoriteButton extends ConsumerWidget {
             )
           : CircleAvatar(
               radius: 12,
-              backgroundColor: Colors.white.withOpacity(0.5),
+              backgroundColor: AppColors.orangeLight,
               child: Icon(
                 isFavorite ? Icons.favorite : Icons.favorite_border,
                 size: 14,
-                color: isFavorite ? Colors.red : Colors.black,
+                color: AppColors.orangeDark,
               ),
             ),
     );

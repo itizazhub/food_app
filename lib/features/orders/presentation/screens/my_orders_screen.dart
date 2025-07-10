@@ -173,32 +173,32 @@ class _MyOrdersScreenState extends ConsumerState<MyOrdersScreen> {
                             children: [
                               CustomFilledButton(
                                 text: "Active",
-                                fontSize: 17,
+                                fontSize: 17.sp,
                                 widht: 104.w,
                                 height: 28.h,
                                 backgroundColor: _currentPage == 0
-                                    ? Colors.orange
-                                    : Colors.grey,
+                                    ? AppColors.orangeDark
+                                    : AppColors.orangeLight,
                                 callBack: () => _goToPage(0),
                               ),
                               CustomFilledButton(
                                 text: "Completed",
-                                fontSize: 17,
+                                fontSize: 17.sp,
                                 widht: 104.w,
                                 height: 28.h,
                                 backgroundColor: _currentPage == 1
-                                    ? Colors.orange
-                                    : Colors.grey,
+                                    ? AppColors.orangeDark
+                                    : AppColors.orangeLight,
                                 callBack: () => _goToPage(1),
                               ),
                               CustomFilledButton(
                                 text: "Cancelled",
-                                fontSize: 17,
+                                fontSize: 17.sp,
                                 widht: 104.w,
                                 height: 28.h,
                                 backgroundColor: _currentPage == 2
-                                    ? Colors.orange
-                                    : Colors.grey,
+                                    ? AppColors.orangeDark
+                                    : AppColors.orangeLight,
                                 callBack: () => _goToPage(2),
                               ),
                             ],

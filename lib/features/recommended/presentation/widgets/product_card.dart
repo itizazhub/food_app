@@ -8,6 +8,7 @@ import 'package:food_app/features/auth/domain/entities/user.dart';
 import 'package:food_app/features/core/constants/sizes.dart';
 import 'package:food_app/features/core/theme/text_styles.dart';
 import 'package:food_app/features/core/widgets/custom_icon.dart';
+import 'package:food_app/features/recommended/presentation/widgets/cart_button.dart';
 import 'package:food_app/features/recommended/presentation/widgets/favorite_button.dart';
 import 'package:food_app/features/products/presentation/screens/product_screen.dart';
 
@@ -133,15 +134,7 @@ class ProductCard extends StatelessWidget {
                     maxLines: 2,
                   ),
                 ),
-                const CircleAvatar(
-                  radius: 10,
-                  backgroundColor: Color.fromARGB(255, 233, 83, 34),
-                  foregroundColor: Color.fromARGB(255, 248, 248, 248),
-                  child: Icon(
-                    Icons.shopping_cart,
-                    size: 12,
-                  ),
-                )
+                CartButton(product: product, user: currentUser),
               ],
             )
           ],
